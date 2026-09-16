@@ -4,9 +4,9 @@ export const projects = [
     type: 'AI Assistant',
     description: 'AI-powered university assistant that helps students find and understand university information through conversational AI, document processing, OCR, and voice interaction.',
     technologies: ['Node.js', 'Express.js', 'JavaScript', 'Groq AI', 'OCR', 'Voice'],
-    live: 'https://bzu-ai-assistant-production.up.railway.app/',
+    live: 'https://bzu-ai-assistant-production-8cc9.up.railway.app/',
     github: 'https://github.com/sajjadhaider1016-dot/BZU-AI-Assistant',
-    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fbzu-ai-assistant-production.up.railway.app%2F?w=1400',
+    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fbzu-ai-assistant-production-8cc9.up.railway.app%2F?w=1400',
     problem: 'University information is spread across documents and pages, making quick answers difficult to find.',
     solution: 'A conversational assistant that combines AI with document and voice workflows to make university information easier to access.',
     result: 'A deployed, interactive assistant with a live public interface.'
