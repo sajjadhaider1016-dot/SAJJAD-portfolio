@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: china_vibes
+      POSTGRES_PASSWORD: china_vibes
+      POSTGRES_DB: china_vibes
+    ports:
+      - "5432:5432"
+    volumes:
+      - china_vibes_pg:/var/lib/postgresql/data
+
+volumes:
+  china_vibes_pg:

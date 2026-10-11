@@ -1,0 +1,63 @@
+export const skillGroups = [
+  {
+    id: "frontend",
+    title: "Frontend",
+    description: "Interfaces that feel considered, fast, and production-ready.",
+    skills: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"],
+  },
+  {
+    id: "backend",
+    title: "Backend",
+    description: "Server-side systems, APIs, and authentication flows.",
+    skills: ["Node.js", "Express.js", "REST APIs", "Authentication Systems"],
+  },
+  {
+    id: "databases",
+    title: "Databases",
+    description: "Structured data and query-driven application logic.",
+    skills: ["PostgreSQL", "SQLite", "MongoDB"],
+  },
+  {
+    id: "ai",
+    title: "Artificial Intelligence",
+    description: "AI applications, agents, and intelligent automation.",
+    skills: [
+      "AI Chatbots",
+      "AI Agents",
+      "Prompt Engineering",
+      "Automation Systems",
+      "Groq Integration",
+      "Gemini AI",
+      "LLM Applications",
+      "Python",
+      "Machine Learning",
+      "OCR & Document Processing",
+    ],
+  },
+  {
+    id: "programming",
+    title: "Programming",
+    description: "Language fundamentals and software design.",
+    skills: ["C++", "Object-Oriented Programming"],
+  },
+  {
+    id: "tools",
+    title: "Tools",
+    description: "Version control, containers, and deployment.",
+    skills: ["Git", "GitHub", "Docker", "Vercel"],
+  },
+  {
+    id: "product-and-business",
+    title: "Product & Business",
+    description: "Applied services and product work across digital platforms.",
+    skills: [
+      "Meta Account Recovery",
+      "Data Recovery",
+      "Digital Marketing",
+      "SEO",
+      "Cybersecurity",
+      "IT Consulting",
+      "Custom Software Development",
+    ],
+  },
+] as const;

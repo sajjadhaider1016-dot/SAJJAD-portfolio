@@ -1,25 +1,53 @@
-# Sajjad Haider — Professional Portfolio
+# Sajjad Haider — Portfolio
 
-A polished Next.js portfolio focused on AI, development and digital work.
+Premium personal site for **Sajjad Haider**, AI & Full-Stack Developer.
+
+## Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
 
 ## Run locally
 
 ```bash
 npm install
-npm run build
 npm run dev
 ```
 
-## Before publishing
+Open [http://localhost:3000](http://localhost:3000).
 
-- Replace `sajjadhaider1016@gmail.com` in `app/page.tsx` with sajjadhaider1016@gmail.com.
-- Project links in `lib/data.ts` are the exact live/GitHub links supplied for this portfolio.
-- If you want a CV button later, add your PDF to `public/resume.pdf`.
+## Production
 
+```bash
+npm run lint
+npm run build
+npm start
+```
 
-## Contact
-- Email: sajjadhaider1016@gmail.com
-- WhatsApp: +92 333 7379195 (https://wa.me/923337379195)
+Deploy on Vercel by importing this repository.
 
-## BZU AI Assistant preview
-The featured project preview uses a live screenshot endpoint for the provided BZU AI Assistant URL. The project link itself remains the Railway deployment: https://bzu-ai-assistant-production.up.railway.app/
+## Edit content
+
+Most copy and links live in:
+
+- `src/data/site.ts` — name, email, GitHub, LinkedIn, CV path
+- `src/data/projects.ts` — project cards, live URLs, features
+- `src/data/skills.ts`
+- `src/data/content.ts` — about, services, achievements, education
+
+## CV
+
+Place your real CV at:
+
+```
+public/CV.pdf
+```
+
+The **Download CV** buttons already point to `/CV.pdf`. The file currently in that path is a **placeholder PDF only** — replace it with your actual CV. Do not rely on generated CV content.
+
+## Notes
+
+- BZU AI Assistant details come from the public GitHub repo description plus the live Railway app (auth, university chat topics, OCR / PDF-DOCX / voice / history).
+- Recoveriest details come from the live product at [recoveriest-app.vercel.app](https://recoveriest-app.vercel.app/). Implementation stack beyond Vercel was not verified from source — add it in `src/data/projects.ts` when you want it listed.
+- LinkedIn: [linkedin.com/in/sajjadhaider56](https://www.linkedin.com/in/sajjadhaider56/)
