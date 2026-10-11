@@ -9,7 +9,6 @@ import type { Metadata } from "next";
 import { Leadership } from "@/components/Leadership";
 import { Hero } from "@/components/Hero";
 import { PortfolioFrame } from "@/components/PortfolioFrame";
-import { FeaturedWork } from "@/components/FeaturedWork";
 import { Projects } from "@/components/Projects";
 import { Services } from "@/components/Services";
 import { Skills } from "@/components/Skills";
@@ -26,7 +25,6 @@ export default function Home() {
     <PortfolioFrame>
       <Hero />
       <About />
-      <FeaturedWork />
       <Projects />
       <Education />
       <Achievements />
