@@ -4,6 +4,8 @@ import { Hero } from "@/components/Hero";
 import { PortfolioFrame } from "@/components/PortfolioFrame";
 import { Projects } from "@/components/Projects";
 import { ExperienceHighlights } from "@/components/ExperienceHighlights";
+import { Services } from "@/components/Services";
+import { Skills } from "@/components/Skills";
 
 export const metadata: Metadata = {
   title: "Sajjad Haider | AI & Full-Stack Developer",
@@ -16,8 +18,10 @@ export default function Home() {
     <PortfolioFrame>
       <Hero />
       <About />
-      <Projects limit={3} />
+      <Projects limit={3} featuredSlug="study-buddy" excludeSlugs={["docedit"]} />
       <ExperienceHighlights limit={1} />
+      <Skills />
+      <Services />
     </PortfolioFrame>
   );
 }

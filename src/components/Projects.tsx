@@ -7,12 +7,27 @@ import { SectionHeading } from "./SectionHeading";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-export function Projects({ limit }: { limit?: number }) {
+export function Projects({
+  limit,
+  featuredSlug,
+  excludeSlugs = [],
+}: {
+  limit?: number;
+  featuredSlug?: string;
+  excludeSlugs?: string[];
+}) {
   const featured = projects.find((project) => project.slug === "docedit");
   const prominent = projects.filter((project) => project.prominent && project.slug !== "docedit");
   const rest = projects.filter((project) => !project.prominent);
   const allProjects = [...(featured ? [featured] : []), ...prominent, ...rest];
-  const visibleProjects = typeof limit === "number" ? allProjects.slice(0, limit) : allProjects;
+  const availableProjects = allProjects.filter((project) => !excludeSlugs.includes(project.slug));
+  const orderedProjects = featuredSlug
+    ? [
+        ...availableProjects.filter((project) => project.slug === featuredSlug),
+        ...availableProjects.filter((project) => project.slug !== featuredSlug),
+      ]
+    : availableProjects;
+  const visibleProjects = typeof limit === "number" ? orderedProjects.slice(0, limit) : orderedProjects;
 
   return (
     <section id="projects" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -30,7 +45,7 @@ export function Projects({ limit }: { limit?: number }) {
             key={project.slug}
             project={project}
             index={i}
-            layout={project.slug === featured?.slug ? "featured" : "default"}
+            layout={project.slug === (featuredSlug ?? featured?.slug) ? "featured" : "default"}
           />
         ))}
       </div>
