@@ -85,6 +85,12 @@ export function ProjectCard({
           <h3 className="mt-5 font-display text-3xl font-semibold tracking-tight sm:text-4xl">{project.title}<span className="project-title-mark text-accent">.</span></h3>
           {project.subtitle ? <p className="mt-1 text-sm text-accent">{project.subtitle}</p> : null}
           <p className="mt-3 text-sm leading-6 text-muted">{project.description}</p>
+          {project.buildFocus ? (
+            <p className="mt-3 max-w-xl border-l-2 border-accent/35 pl-3 text-sm leading-6 text-text/80">
+              <span className="mr-2 text-[10px] font-semibold tracking-[0.12em] text-accent uppercase">Build scope</span>
+              {project.buildFocus}
+            </p>
+          ) : null}
 
           {project.technologies.length > 0 ? (
             <div className="mt-4 flex flex-wrap gap-1.5">

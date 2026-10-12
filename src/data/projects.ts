@@ -9,6 +9,7 @@ export const projects: Project[] = [
     productType: "Full-Stack Application",
     description:
       "Collaborative document editor inspired by Google Docs featuring authentication, document sharing, rich-text editing, autosave functionality, TXT/Markdown import, and PostgreSQL integration.",
+    buildFocus: "Sign-in, shared-document permissions, rich-text editing, file imports, autosave, and PostgreSQL persistence.",
     features: [
       "User authentication",
       "Seeded demo accounts",
@@ -82,6 +83,7 @@ export const projects: Project[] = [
     productType: "AI Application",
     description:
       "AI-powered university assistant designed to help students access academic information through conversational AI and intelligent search capabilities.",
+    buildFocus: "University question flows, PDF/DOCX support, image OCR, voice input, and saved chat history.",
     features: [
       "Account sign-in and registration",
       "Conversational AI for university questions",
@@ -136,6 +138,7 @@ export const projects: Project[] = [
     productType: "Digital Platform",
     description:
       "Account recovery and support platform focused on helping users resolve account access and platform recovery issues efficiently.",
+    buildFocus: "Service pages, recovery case categories, a guided inquiry path, and clear anti-scam safeguards.",
     features: [
       "Public product site for Instagram and Facebook recovery consulting",
       "Case types covering disabled, suspended, hacked, and restricted accounts",
@@ -169,46 +172,49 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-chatbots",
-    title: "AI Chatbots",
-    category: "AI Development",
+    title: "Customer Support AI Copilot",
+    category: "AI / Customer Support",
     description:
-      "Custom AI chatbot solutions designed for customer support, lead generation, and business automation.",
+      "A Grok-powered support copilot that classifies customer intent and priority, reads sentiment, drafts a reply, suggests next steps, and flags cases for human escalation.",
+    buildFocus: "Python and Flask orchestration, business-context grounding, structured AI output, and escalation guidance.",
     features: [
-      "Conversational interfaces",
-      "AI-powered customer support experiences",
-      "Intelligent responses",
-      "Business automation through chat",
-      "AI-assisted workflows",
-      "User interaction design",
+      "Intent classification",
+      "Priority assessment",
+      "Customer sentiment analysis",
+      "Ready-to-send reply drafting",
+      "Recommended next steps",
+      "Human escalation decision and reason",
+      "Business-specific context grounding",
     ],
-    technologies: ["AI applications", "Conversational UI", "JavaScript", "Node.js"],
+    technologies: ["Python", "Flask", "Grok API", "Llama"],
     image: "chatbots",
-    github: "https://github.com/sajjadhaider1016-dot/Customer-Support-AI",
+    github: "https://github.com/sajjadhaider1016-dot/Customer-Support-AI-Grok",
     featured: false,
     year: "2025–2026",
     links: [
       {
         kind: "github",
         label: "GitHub",
-        href: "https://github.com/sajjadhaider1016-dot/Customer-Support-AI",
+        href: "https://github.com/sajjadhaider1016-dot/Customer-Support-AI-Grok",
       },
     ],
   },
   {
     slug: "ai-agents-automation",
-    title: "AI Agents & Automation",
-    category: "AI / Automation",
+    title: "ContentPilot AI",
+    category: "AI Content & Marketing Assistant",
     description:
-      "Workflow automation systems and intelligent AI agents that streamline repetitive business processes.",
+      "A Flask and Groq-powered assistant that turns a brief into platform-ready content for different audiences, tones, languages, and formats.",
+    buildFocus: "Prompt and output orchestration for content variants, repurposing, and copy-ready marketing assets.",
     features: [
-      "AI agents",
-      "Workflow automation",
-      "Task automation",
-      "Business process automation",
-      "Intelligent workflows",
-      "AI-assisted productivity",
+      "Platform-specific content generation",
+      "Audience and tone controls",
+      "English, Urdu, and Roman Urdu output",
+      "Social posts, captions, blogs, emails, ads, and scripts",
+      "SEO content and content repurposing",
+      "Multiple variants with copy actions",
     ],
-    technologies: ["AI agents", "Automation", "AI-native workflows"],
+    technologies: ["Python", "Flask", "Groq API", "Llama 3.3 70B"],
     image: "agents",
     github: "https://github.com/sajjadhaider1016-dot/ContentPilot-AI",
     featured: false,
@@ -229,6 +235,7 @@ export const projects: Project[] = [
     productType: "Student Productivity",
     description:
       "A student-focused study companion created to support more organized, productive study time.",
+    buildFocus: "A student-focused study experience, shown through the product’s live interface preview.",
     features: [],
     technologies: [],
     image: "study-buddy",
@@ -242,6 +249,7 @@ export const projects: Project[] = [
     category: "Desktop Application · C++",
     description:
       "A downloadable desktop application for managing university course registrations and student academic records, built with object-oriented C++.",
+    buildFocus: "Menu-driven student records and course-registration flows in a downloadable C++ application.",
     features: [
       "Object-oriented programming",
       "Course registration logic",
@@ -267,6 +275,7 @@ export const projects: Project[] = [
     category: "Academic / C++",
     description:
       "Interactive racing game developed using C++ and object-oriented programming concepts.",
+    buildFocus: "Keyboard-controlled movement, race state, and the core C++ game loop.",
     features: ["Windowed C++ application", "Keyboard-controlled movement", "Basic game loop"],
     technologies: ["C++"],
     image: "cpp-race",

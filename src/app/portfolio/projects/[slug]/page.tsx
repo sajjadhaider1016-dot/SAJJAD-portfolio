@@ -42,6 +42,12 @@ export default async function ProjectPage({ params }: Props) {
       <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight">{project.title}</h1>
       {project.subtitle ? <p className="mt-2 text-lg text-muted">{project.subtitle}</p> : null}
       <p className="mt-5 max-w-3xl text-base leading-7 text-muted">{project.description}</p>
+      {project.buildFocus ? (
+        <section className="mt-8 max-w-4xl border-l-2 border-accent/50 pl-5">
+          <h2 className="font-display text-lg font-semibold">Build scope</h2>
+          <p className="mt-2 text-sm leading-7 text-muted">{project.buildFocus}</p>
+        </section>
+      ) : null}
 
       {slug === "docedit" ? (
         <p className="mt-4 rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3 text-sm">

@@ -4,9 +4,10 @@ import { experiences } from "@/data/content";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
-type ExperienceHighlightsProps = { detailed?: boolean };
+type ExperienceHighlightsProps = { detailed?: boolean; limit?: number };
 
-export function ExperienceHighlights({ detailed = false }: ExperienceHighlightsProps) {
+export function ExperienceHighlights({ detailed = false, limit }: ExperienceHighlightsProps) {
+  const visibleExperiences = typeof limit === "number" ? experiences.slice(0, limit) : experiences;
   return (
     <section id="experience" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <Reveal>
@@ -25,7 +26,7 @@ export function ExperienceHighlights({ detailed = false }: ExperienceHighlightsP
       </Reveal>
 
       <div className="experience-timeline relative mt-12">
-        {experiences.map((item, i) => (
+        {visibleExperiences.map((item, i) => (
           <Reveal key={`${item.organization}-${item.role}`} delay={i * 110}>
             <article className="experience-card group relative grid gap-4 border-b border-border py-7 sm:grid-cols-[minmax(10rem,.34fr)_1fr] sm:gap-10 sm:py-10">
               <div className="experience-date flex items-start gap-3 sm:pt-2">

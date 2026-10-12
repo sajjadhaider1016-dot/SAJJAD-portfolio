@@ -51,7 +51,7 @@ function PreviewWindow({ title, children, className = "" }: { title: string; chi
       <div className="project-mock-toolbar">
         <span className="project-mock-lights" aria-hidden="true"><i /><i /><i /></span>
         <span>{title}</span>
-        <span className="project-mock-toolbar-status">PROJECT PREVIEW</span>
+        <span className="project-mock-toolbar-status">CONCEPT PREVIEW</span>
       </div>
       {children}
     </div>
@@ -60,17 +60,17 @@ function PreviewWindow({ title, children, className = "" }: { title: string; chi
 
 function ChatbotPreview() {
   return (
-    <PreviewWindow title="Customer Support AI" className="chat">
+    <PreviewWindow title="Customer Support AI Copilot" className="chat">
       <div className="project-chat-shell">
         <aside className="project-chat-sidebar"><span className="project-chat-brand">S</span><span className="project-chat-side-line active" /><span className="project-chat-side-line" /><span className="project-chat-side-line short" /><span className="project-chat-side-spacer" /><span className="project-chat-avatar">SH</span></aside>
         <div className="project-chat-main">
-          <div className="project-chat-top"><div><strong>Support assistant</strong><small><i /> Ready to help</small></div><span>•••</span></div>
+          <div className="project-chat-top"><div><strong>Case analysis</strong><small><i /> Draft ready for review</small></div><span>GROK</span></div>
           <div className="project-chat-messages">
-            <div className="project-chat-question"><span className="project-chat-bot">AI</span><p>Hi there. What can I help you with today?</p></div>
-            <div className="project-chat-answer"><p>I need help getting started.</p></div>
-            <div className="project-chat-question"><span className="project-chat-bot">AI</span><p>Of course. Tell me a little about what you’re trying to do.</p></div>
+            <div className="project-copilot-signals"><span>INTENT <b>Billing</b></span><span>PRIORITY <b>High</b></span><span>SENTIMENT <b>Frustrated</b></span></div>
+            <div className="project-copilot-draft"><small>SUGGESTED REPLY</small><p>Thanks for letting us know. I’ll review the charge and help resolve this.</p></div>
+            <div className="project-copilot-next"><span>Next step</span><b>Review account activity</b><span className="project-copilot-escalation">Human review recommended</span></div>
           </div>
-          <div className="project-chat-composer"><span>Write a message…</span><b>↗</b></div>
+          <div className="project-chat-composer"><span>Reply is ready to edit</span><b>↗</b></div>
         </div>
       </div>
     </PreviewWindow>
@@ -79,15 +79,15 @@ function ChatbotPreview() {
 
 function AgentsPreview() {
   return (
-    <PreviewWindow title="Workflow automation" className="agents">
-      <div className="project-flow-head"><span>WORKFLOW</span><span className="project-flow-live"><i /> ACTIVE</span></div>
+    <PreviewWindow title="ContentPilot AI" className="agents">
+      <div className="project-flow-head"><span>CONTENT WORKFLOW</span><span className="project-flow-live"><i /> READY</span></div>
       <div className="project-flow-canvas">
         <svg viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"><path d="M120 90h112M288 90h112M456 90h48" /></svg>
-        <div className="project-flow-node"><span className="project-flow-icon">↳</span><small>TRIGGER</small><strong>New request</strong></div>
-        <div className="project-flow-node project-flow-node-ai"><span className="project-flow-icon">✳</span><small>AI AGENT</small><strong>Process task</strong></div>
-        <div className="project-flow-node"><span className="project-flow-icon">✓</span><small>OUTPUT</small><strong>Ready to review</strong></div>
+        <div className="project-flow-node"><span className="project-flow-icon">↳</span><small>BRIEF</small><strong>Audience + goal</strong></div>
+        <div className="project-flow-node project-flow-node-ai"><span className="project-flow-icon">✳</span><small>GROQ / LLAMA</small><strong>Shape the voice</strong></div>
+        <div className="project-flow-node"><span className="project-flow-icon">✓</span><small>CONTENT</small><strong>Ready to refine</strong></div>
       </div>
-      <div className="project-flow-footer"><span>3 steps in this workflow</span><span>Last run · just now</span></div>
+      <div className="project-flow-footer"><span>Platform-ready variants</span><span>English · Urdu · Roman Urdu</span></div>
     </PreviewWindow>
   );
 }

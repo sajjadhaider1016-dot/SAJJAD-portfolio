@@ -14,6 +14,7 @@ export type Project = {
   category: string;
   productType?: string;
   description: string;
+  buildFocus?: string;
   features: string[];
   technologies: string[];
   image: string;

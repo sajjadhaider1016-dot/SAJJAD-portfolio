@@ -1322,3 +1322,13 @@ html.dark .portfolio-site .project-visual-panel { background: transparent; }
   .project-terminal-prompt span { animation: none; }
   .project-flow-node,.project-race-track { transition: none; }
 }
+.project-chat-top > span { color: var(--accent); font-size: .48rem; font-weight: 700; letter-spacing: .12em; }
+.project-copilot-signals { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .3rem; }
+.project-copilot-signals > span { display: grid; gap: .2rem; padding: .4rem .45rem; border: 1px solid var(--border); color: var(--muted); font-size: .4rem; letter-spacing: .08em; }
+.project-copilot-signals b { overflow: hidden; color: var(--text); font-size: clamp(.46rem,.75vw,.6rem); font-weight: 600; letter-spacing: 0; text-overflow: ellipsis; white-space: nowrap; }
+.project-copilot-draft { padding: .5rem .6rem; border-left: 2px solid var(--accent); background: color-mix(in srgb,var(--accent) 6%,var(--bg-elevated)); }
+.project-copilot-draft small { color: var(--accent); font-size: .42rem; font-weight: 700; letter-spacing: .12em; }
+.project-copilot-draft p { margin: .25rem 0 0; color: var(--text); font-size: clamp(.49rem,.82vw,.64rem); line-height: 1.45; }
+.project-copilot-next { display: grid; grid-template-columns: auto 1fr; gap: .2rem .5rem; align-items: center; color: var(--muted); font-size: .46rem; }
+.project-copilot-next b { color: var(--text); font-size: clamp(.48rem,.78vw,.62rem); font-weight: 600; }
+.project-copilot-escalation { grid-column: 1 / -1; color: #9f7a42; font-size: .45rem; }
