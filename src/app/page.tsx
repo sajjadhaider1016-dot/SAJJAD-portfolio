@@ -6,6 +6,10 @@ import { Projects } from "@/components/Projects";
 import { ExperienceHighlights } from "@/components/ExperienceHighlights";
 import { Services } from "@/components/Services";
 import { Skills } from "@/components/Skills";
+import { Education } from "@/components/Education";
+import { Achievements } from "@/components/Achievements";
+import { Leadership } from "@/components/Leadership";
+import { Contact } from "@/components/Contact";
 
 export const metadata: Metadata = {
   title: "Sajjad Haider | AI & Full-Stack Developer",
@@ -22,6 +26,10 @@ export default function Home() {
       <ExperienceHighlights limit={1} />
       <Skills />
       <Services />
+      <Education />
+      <Achievements />
+      <Leadership />
+      <Contact />
     </PortfolioFrame>
   );
 }

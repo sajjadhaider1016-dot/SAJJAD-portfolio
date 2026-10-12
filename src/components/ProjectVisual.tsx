@@ -92,6 +92,34 @@ function AgentsPreview() {
   );
 }
 
+function BzuAssistantPreview() {
+  return (
+    <PreviewWindow title="BZU AI Assistant" className="bzu">
+      <div className="bzu-preview-shell">
+        <aside className="bzu-preview-sidebar">
+          <div className="bzu-preview-brand">
+            <Image src="/projects/bzu-logo.png" alt="Bahauddin Zakariya University logo" width={38} height={38} />
+            <span>BZU<br /><small>STUDENT ASSISTANT</small></span>
+          </div>
+          <div className="bzu-preview-nav"><span className="active">⌂ <i>New conversation</i></span><span>▤ <i>Admissions</i></span><span>⌕ <i>Departments</i></span><span>◷ <i>Fees & notices</i></span></div>
+          <span className="bzu-preview-history">YOUR CHATS</span>
+          <span className="bzu-preview-history-item">Finding university information</span>
+        </aside>
+        <div className="bzu-preview-main">
+          <div className="bzu-preview-top"><span>University AI Assistant</span><span className="bzu-preview-online"><i /> READY TO HELP</span></div>
+          <div className="bzu-preview-conversation">
+            <div className="bzu-preview-welcome"><Image src="/projects/bzu-logo.png" alt="" width={34} height={34} /><div><strong>How can I help with BZU?</strong><small>Ask a question or share a university document.</small></div></div>
+            <div className="bzu-preview-question"><span>SH</span><p>Where can I find information about admissions?</p></div>
+            <div className="bzu-preview-answer"><b>AI</b><p>I can help you find admission details, programs, deadlines, and related university information. You can also upload a notice or document for help understanding it.</p></div>
+          </div>
+          <div className="bzu-preview-compose"><span>Ask about admissions, departments, fees…</span><b>↑</b></div>
+          <div className="bzu-preview-tools"><span>＋ Upload document</span><span>◉ Voice input</span><small>AI answers may need verification.</small></div>
+        </div>
+      </div>
+    </PreviewWindow>
+  );
+}
+
 function CoursePreview() {
   return (
     <PreviewWindow title="Course Registration System" className="course">
@@ -124,7 +152,7 @@ function RacingPreview() {
 
 export function ProjectVisual({ kind }: { kind: string }) {
   if (kind === "docedit") return <LiveWebsitePreview src="https://docedit-submission.vercel.app/" title="Live DocEdit application preview" />;
-  if (kind === "bzu") return <LiveWebsitePreview src="https://bzu-ai-assistant-production-8cc9.up.railway.app/" title="Live BZU AI Assistant preview" />;
+  if (kind === "bzu") return <BzuAssistantPreview />;
   if (kind === "recoveriest") return <LiveProjectPreview kind="recoveriest" alt="Live Recoveriest homepage project preview" />;
   if (kind === "chatbots") return <ChatbotPreview />;
   if (kind === "agents") return <AgentsPreview />;
