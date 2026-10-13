@@ -10,6 +10,9 @@ import { Education } from "@/components/Education";
 import { Achievements } from "@/components/Achievements";
 import { Leadership } from "@/components/Leadership";
 import { Contact } from "@/components/Contact";
+import { WhatIBuild } from "@/components/WhatIBuild";
+import { GitHubShowcase } from "@/components/GitHubShowcase";
+import { Exploring } from "@/components/Exploring";
 
 export const metadata: Metadata = {
   title: "Sajjad Haider | AI & Full-Stack Developer",
@@ -22,13 +25,16 @@ export default function Home() {
     <PortfolioFrame>
       <Hero />
       <About />
-      <Projects limit={3} featuredSlug="study-buddy" excludeSlugs={["docedit"]} />
-      <ExperienceHighlights limit={1} />
+      <Projects featuredSlug="study-buddy" />
+      <ExperienceHighlights detailed />
       <Skills />
       <Services />
+      <WhatIBuild />
       <Education />
       <Achievements />
       <Leadership />
+      <GitHubShowcase />
+      <Exploring />
       <Contact />
     </PortfolioFrame>
   );
