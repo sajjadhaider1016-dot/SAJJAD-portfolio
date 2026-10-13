@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Plus_Jakarta_Sans } from "next/font/google";
 import { ToastProvider } from "@/components/store/ToastProvider";
+import { site } from "@/data/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +16,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(site.url),
   title: {
     default: "Sajjad Haider | AI & Full-Stack Developer",
     template: "%s | Sajjad Haider",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sajjad Haider | AI & Full-Stack Developer",
     description: "AI chatbots, agents, automation systems, and modern full-stack products by Sajjad Haider.",
+    url: site.url,
     type: "website",
     locale: "en_PK",
     siteName: "Sajjad Haider",

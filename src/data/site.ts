@@ -9,7 +9,7 @@ export const site = {
   githubUser: "sajjadhaider1016-dot",
   linkedin: "https://www.linkedin.com/in/sajjadhaider56/",
   cvPath: "/CV.pdf",
-  url: "https://sajjadhaider.dev",
+  url: "https://sajjadhaider-portfolio.vercel.app",
   profileImage: "/images/sajjad-haider.jpg",
   heroBadge: "Available for internships, freelance & product work",
   headline: "AI & Full-Stack Developer",

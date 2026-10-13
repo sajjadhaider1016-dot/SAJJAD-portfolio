@@ -1,12 +1,18 @@
 import type { MetadataRoute } from "next";
+import { navItems, site } from "@/data/site";
 import { projects } from "@/data/projects";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+
   return [
-    { url: "https://sajjadhaider.dev", lastModified: new Date() },
+    ...navItems.map((item) => ({
+      url: new URL(item.href, site.url).toString(),
+      lastModified,
+    })),
     ...projects.map((project) => ({
-      url: `https://sajjadhaider.dev/portfolio/projects/${project.slug}`,
-      lastModified: new Date(),
+      url: `${site.url}/portfolio/projects/${project.slug}`,
+      lastModified,
     })),
   ];
 }
