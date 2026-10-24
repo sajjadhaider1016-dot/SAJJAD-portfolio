@@ -32,11 +32,18 @@ export function Skills() {
           </Reveal>
         ))}
       </div>
-      <div id="certifications" className="mt-20 scroll-mt-24">
+    </section>
+  );
+}
+
+export function Certifications() {
+  return (
+      <section id="certifications" className="mx-auto mt-8 max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
             eyebrow="Certifications"
-            title="Learning backed by credentials."
+            title="Credentials and continued learning."
+            description="A dated, issuer-labeled record of completed courses and certificates."
           />
         </Reveal>
         <div className="certification-list mt-10 border-t border-border">
@@ -51,7 +58,6 @@ export function Skills() {
             </Reveal>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
   );
 }

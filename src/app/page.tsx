@@ -5,7 +5,7 @@ import { PortfolioFrame } from "@/components/PortfolioFrame";
 import { Projects } from "@/components/Projects";
 import { ExperienceHighlights } from "@/components/ExperienceHighlights";
 import { Services } from "@/components/Services";
-import { Skills } from "@/components/Skills";
+import { Certifications, Skills } from "@/components/Skills";
 import { Education } from "@/components/Education";
 import { Achievements } from "@/components/Achievements";
 import { Leadership } from "@/components/Leadership";
@@ -28,10 +28,11 @@ export default function Home() {
       <Projects featuredSlug="study-buddy" />
       <ExperienceHighlights detailed />
       <Skills />
-      <Services />
-      <WhatIBuild />
+      <Certifications />
       <Education />
       <Achievements />
+      <Services />
+      <WhatIBuild />
       <Leadership />
       <GitHubShowcase />
       <Exploring />

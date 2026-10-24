@@ -4,24 +4,6 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import Image from "next/image";
 import { useRef } from "react";
 
-function LiveWebsitePreview({ src, title }: { src: string; title: string }) {
-  return (
-    <div role="img" aria-label={title} className="live-project-preview relative isolate aspect-[1.42] w-full overflow-hidden bg-[#141824]">
-      <iframe
-        src={src}
-        title={title}
-        loading="lazy"
-        referrerPolicy="strict-origin-when-cross-origin"
-        sandbox="allow-scripts allow-same-origin"
-        tabIndex={-1}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full border-0 bg-white"
-      />
-      <div className="live-project-light pointer-events-none absolute inset-0" aria-hidden="true" />
-    </div>
-  );
-}
-
 function LiveProjectPreview({ kind, alt }: { kind: "study-buddy" | "recoveriest"; alt: string }) {
   const reduce = useReducedMotion();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -35,7 +17,7 @@ function LiveProjectPreview({ kind, alt }: { kind: "study-buddy" | "recoveriest"
 
   return (
     <div ref={previewRef} className={`live-project-preview live-project-preview-${kind} relative isolate aspect-[1.42] w-full overflow-hidden bg-[#141824]`}>
-      <motion.div className="live-project-mask absolute inset-0 overflow-hidden" initial={false} whileInView={{ clipPath: "inset(0 0 0% 0)" }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 1.25, ease: [0.76, 0, 0.24, 1] }}>
+      <motion.div className="live-project-mask absolute inset-0 overflow-hidden" initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }} whileInView={{ clipPath: "inset(0 0 0% 0)" }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: reduce ? 0 : 1.15, ease: [.22, 1, .36, 1] }}>
         <motion.div className="absolute -inset-[6%]" style={reduce ? undefined : { y: imageY, scale: imageScale }}>
           <Image src={src} alt={alt} fill sizes="(max-width: 680px) 100vw, (max-width: 1200px) 50vw, 720px" className="live-project-image object-cover object-top" priority={kind === "study-buddy"} />
         </motion.div>
@@ -55,6 +37,32 @@ function PreviewWindow({ title, children, className = "" }: { title: string; chi
       </div>
       {children}
     </div>
+  );
+}
+
+function DocEditPreview() {
+  return (
+    <PreviewWindow title="DocEdit · Workspace" className="docedit">
+      <div className="docedit-preview-shell">
+        <aside className="docedit-preview-sidebar">
+          <div className="docedit-preview-brand"><b>D</b><span>DocEdit</span></div>
+          <span className="docedit-preview-nav-active">My documents</span>
+          <span className="docedit-preview-nav-item">Shared with me</span>
+          <span className="docedit-preview-nav-item">Recent</span>
+          <div className="docedit-preview-user"><i>SH</i><span>Sajjad Haider<small>Personal workspace</small></span></div>
+        </aside>
+        <div className="docedit-preview-main">
+          <div className="docedit-preview-top"><span>MY DOCUMENTS</span><b>＋ New document</b></div>
+          <div className="docedit-preview-search">⌕ <span>Search documents</span></div>
+          <div className="docedit-preview-grid">
+            <article><i className="docedit-file-icon">D</i><strong>Product notes</strong><span>Edited just now <b>Shared</b></span></article>
+            <article><i className="docedit-file-icon docedit-file-blue">D</i><strong>Project outline</strong><span>Edited recently <b>Private</b></span></article>
+            <article><i className="docedit-file-icon docedit-file-gold">M</i><strong>Meeting summary</strong><span>Markdown file <b>Shared</b></span></article>
+          </div>
+          <div className="docedit-preview-status"><i /> Changes saved automatically <span>PostgreSQL workspace</span></div>
+        </div>
+      </div>
+    </PreviewWindow>
   );
 }
 
@@ -151,7 +159,7 @@ function RacingPreview() {
 }
 
 export function ProjectVisual({ kind }: { kind: string }) {
-  if (kind === "docedit") return <LiveWebsitePreview src="https://docedit-submission.vercel.app/" title="Live DocEdit application preview" />;
+  if (kind === "docedit") return <DocEditPreview />;
   if (kind === "bzu") return <BzuAssistantPreview />;
   if (kind === "recoveriest") return <LiveProjectPreview kind="recoveriest" alt="Live Recoveriest homepage project preview" />;
   if (kind === "chatbots") return <ChatbotPreview />;

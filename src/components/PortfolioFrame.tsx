@@ -5,16 +5,16 @@ import { PageTransition } from "./PageTransition";
 import { ScrollProgress } from "./ScrollProgress";
 import { MotionDirector } from "./MotionDirector";
 import { ThemeProvider } from "./ThemeProvider";
-import { PortfolioIntro } from "./PortfolioIntro";
+import { WorldTourExperience } from "./WorldTourExperience";
 
 export function PortfolioFrame({ children }: { children: ReactNode }) {
   return (
     <PageTransition>
       <ThemeProvider>
-        <div className="portfolio-site min-h-screen">
+        <div className="portfolio-site world-tour-enabled min-h-screen">
           <ScrollProgress />
-          <PortfolioIntro />
           <MotionDirector />
+          <WorldTourExperience />
           <Navbar />
           <main id="main" className="min-h-[calc(100vh-10rem)]">{children}</main>
           <Footer />

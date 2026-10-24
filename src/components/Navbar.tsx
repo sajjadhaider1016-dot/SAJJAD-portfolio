@@ -96,7 +96,7 @@ export function Navbar() {
             </button>
             <button
               type="button"
-              className="nav-icon grid h-9 w-9 place-items-center rounded-full text-muted lg:hidden"
+              className="nav-icon nav-menu-toggle grid h-9 w-9 place-items-center rounded-full text-muted"
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label="Toggle menu"

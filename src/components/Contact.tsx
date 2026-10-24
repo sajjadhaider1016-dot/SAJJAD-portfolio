@@ -35,9 +35,10 @@ export function Contact() {
             technical consultation, let&apos;s connect.
           </p>
 
-          <form className="mt-10 grid gap-4 sm:grid-cols-2" onSubmit={onSubmit}>
+          <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem]">
+          <form className="grid gap-4 sm:grid-cols-2" onSubmit={onSubmit}>
             <label className="grid gap-2 text-sm">
-              Name
+              Your name
               <input
                 required
                 name="name"
@@ -46,7 +47,7 @@ export function Contact() {
               />
             </label>
             <label className="grid gap-2 text-sm">
-              Email
+              Work email
               <input
                 required
                 type="email"
@@ -56,10 +57,11 @@ export function Contact() {
               />
             </label>
             <label className="grid gap-2 text-sm sm:col-span-2">
-              Subject
+              What should we discuss?
               <input
                 required
                 name="subject"
+                placeholder="Role, project, or collaboration"
                 className="rounded-2xl border border-border bg-surface px-4 py-3 text-text outline-none focus:border-accent"
               />
             </label>
@@ -68,7 +70,8 @@ export function Contact() {
               <textarea
                 required
                 name="message"
-                rows={6}
+                rows={5}
+                placeholder="A little context helps me respond with the right next steps."
                 className="resize-y rounded-2xl border border-border bg-surface px-4 py-3 text-text outline-none focus:border-accent"
               />
             </label>
@@ -86,11 +89,20 @@ export function Contact() {
             </div>
           </form>
 
+          <aside className="flex flex-col justify-between gap-8 border-t border-border pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-7" aria-label="Recruiter contact details">
+            <div>
+              <p className="text-[11px] font-semibold tracking-[0.18em] text-accent uppercase">For recruiters & collaborators</p>
+              <p className="mt-3 text-sm leading-6 text-muted">{site.heroBadge}. Send a short note about the role or project and I’ll follow up by email.</p>
+            </div>
+            <div className="grid gap-3 text-sm">
+              <a className="inline-flex items-center gap-2 font-medium text-text transition hover:text-accent" href={`mailto:${site.email}`}><Mail className="h-4 w-4 text-accent" />{site.email}</a>
+              <a className="inline-flex items-center gap-2 font-medium text-text transition hover:text-accent" href={site.cvPath} download><Download className="h-4 w-4 text-accent" />Download resume</a>
+              <a className="inline-flex items-center gap-2 font-medium text-text transition hover:text-accent" href={site.linkedin} target="_blank" rel="noreferrer"><IconLinkedin className="h-4 w-4 text-accent" />LinkedIn profile</a>
+            </div>
+          </aside>
+          </div>
+
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button href={`mailto:${site.email}`} variant="secondary">
-              <Mail className="h-4 w-4" />
-              Email
-            </Button>
             <Button href={`https://wa.me/${site.whatsapp}`} variant="secondary">
               <MessageCircle className="h-4 w-4" />
               WhatsApp
@@ -98,14 +110,6 @@ export function Contact() {
             <Button href={site.github} variant="secondary">
               <IconGithub className="h-4 w-4" />
               GitHub
-            </Button>
-            <Button href={site.linkedin} variant="secondary">
-              <IconLinkedin className="h-4 w-4" />
-              LinkedIn
-            </Button>
-            <Button href={site.cvPath} variant="secondary" download>
-              <Download className="h-4 w-4" />
-              Resume
             </Button>
           </div>
         </div>

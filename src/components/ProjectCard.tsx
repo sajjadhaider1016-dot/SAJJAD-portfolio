@@ -42,14 +42,15 @@ export function ProjectCard({
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = (event.clientX - bounds.left) / bounds.width;
     const y = (event.clientY - bounds.top) / bounds.height;
-    pointerXValue.set((x - 0.5) * 8);
-    pointerYValue.set((y - 0.5) * -8);
+    pointerXValue.set((x - 0.5) * 5);
+    pointerYValue.set((y - 0.5) * -5);
     glareXValue.set(x * 100);
     glareYValue.set(y * 100);
   }
 
   return (
     <Reveal
+      id={`project-${project.slug}`}
       className={cn(
         "project-showcase group overflow-hidden border border-border bg-surface transition duration-500 hover:border-accent/40",
         layout === "featured" && "project-showcase-featured",
@@ -61,14 +62,22 @@ export function ProjectCard({
           onPointerMove={movePreview}
           onPointerLeave={() => { pointerXValue.set(0); pointerYValue.set(0); glareXValue.set(50); glareYValue.set(50); }}
         >
-          <motion.div className="project-visual-stage w-full" style={{ rotateX: pointerY, rotateY: pointerX, transformPerspective: 1100 }}>
-            <Link href={`/portfolio/projects/${project.slug}`} className="project-preview-link group/preview relative block" aria-label={`Open ${project.title} project details`}>
-              <ProjectVisual kind={project.image} />
-              <motion.span className="project-preview-glare" aria-hidden="true" style={{ background: glare }} />
-              <span className="project-preview-hint absolute bottom-3 right-3 inline-flex items-center gap-2 bg-[#c6d47e] px-3 py-2 text-[10px] font-semibold tracking-[0.1em] text-[#11130d] uppercase">
-                Project details <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/preview:translate-x-0.5 group-hover/preview:-translate-y-0.5" />
-              </span>
-            </Link>
+          <motion.div
+            className="project-visual-reveal w-full"
+            initial={reduce ? false : { opacity: .78, scale: .985 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: .2, margin: "0px 0px -4% 0px" }}
+            transition={{ duration: reduce ? 0 : .95, delay: reduce ? 0 : Math.min(index * .07, .28), ease: [.76, 0, .24, 1] }}
+          >
+            <motion.div className="project-visual-stage w-full" style={{ rotateX: pointerY, rotateY: pointerX, transformPerspective: 1100 }}>
+              <Link href={`/portfolio/projects/${project.slug}`} className="project-preview-link group/preview relative block" aria-label={`Open ${project.title} project details`}>
+                <ProjectVisual kind={project.image} />
+                <motion.span className="project-preview-glare" aria-hidden="true" style={{ background: glare }} />
+                <span className="project-preview-hint absolute bottom-3 right-3 inline-flex items-center gap-2 bg-[#c6d47e] px-3 py-2 text-[10px] font-semibold tracking-[0.1em] text-[#11130d] uppercase">
+                  Project details <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/preview:translate-x-0.5 group-hover/preview:-translate-y-0.5" />
+                </span>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
         <div className={cn("project-content flex flex-col justify-center p-6 sm:p-9 lg:p-12", index % 2 === 0 && layout !== "featured" && "lg:order-1")}>

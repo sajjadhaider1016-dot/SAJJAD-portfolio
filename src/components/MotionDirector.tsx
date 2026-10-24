@@ -31,7 +31,12 @@ export function MotionDirector() {
           const bounds = section.getBoundingClientRect();
           if (bounds.bottom < -100 || bounds.top > viewport + 100) return;
           const progress = Math.max(0, Math.min(1, (viewport - bounds.top) / (viewport + bounds.height)));
-          section.style.setProperty("--scroll-shift", `${((.5 - progress) * 46).toFixed(1)}px`);
+          const depth = .5 - progress;
+          // CSS calc() cannot multiply two values consistently across browsers,
+          // so write the final units for the perspective transform directly.
+          section.style.setProperty("--scroll-z", `${(depth * 24).toFixed(2)}px`);
+          section.style.setProperty("--scroll-rotate", `${(depth * 1.15).toFixed(3)}deg`);
+          section.style.setProperty("--scroll-shift", `${(depth * 34).toFixed(1)}px`);
         });
       });
     };
@@ -61,7 +66,10 @@ export function MotionDirector() {
         delete section.dataset.motionState;
         delete section.dataset.scrollMotion;
         section.style.removeProperty("--section-order");
+        section.style.removeProperty("--scroll-z");
+        section.style.removeProperty("--scroll-rotate");
         section.style.removeProperty("--scroll-shift");
+        section.style.removeProperty("--scroll-depth");
       });
     };
   }, [pathname]);
