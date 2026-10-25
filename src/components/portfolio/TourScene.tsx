@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useEffect, useMemo, useRef } from "react";
 import type { MutableRefObject } from "react";
@@ -79,12 +79,13 @@ function Ground() {
 }
 
 function Architecture({ stops, projectStops }: { stops: Stop[]; projectStops: ProjectStop[] }) {
-  const ring = useMemo(() => new THREE.TorusGeometry(1.55, .075, 10, 64), []);
+  const ring = useMemo(() => new THREE.TorusGeometry(1.55, .032, 8, 96), []);
+  const portalRing = useMemo(() => new THREE.TorusGeometry(1.55, .022, 8, 160), []);
+  const portalArc = useMemo(() => new THREE.TorusGeometry(1.55, .042, 10, 120, Math.PI * .82), []);
   const plaqueTextures = useMemo(() => stops.map((stop) => labelTexture(stop.label ?? "Portfolio")), [stops]);
   const displayTextures = useMemo(() => stops.map((stop) => displayTexture(stop.heading ?? stop.label, stop.summary)), [stops]);
   const projectTextures = useMemo(() => projectStops.map((stop) => displayTexture(stop.label, stop.summary, stop.detail)), [projectStops]);
   const gates = useRef<Array<THREE.Group | null>>([]);
-  const orbitals = useRef<Array<THREE.Group | null>>([]);
   const beacons = useRef<Array<THREE.Mesh | null>>([]);
   const features = useRef<Array<THREE.Group | null>>([]);
   const selectedScale = useMemo(() => new THREE.Vector3(1.045, 1.045, 1), []);
@@ -104,8 +105,6 @@ function Architecture({ stops, projectStops }: { stops: Stop[]; projectStops: Pr
       const restingScale = stops[index].kind === "project" ? galleryPreviewScale : quietLandmarkScale;
       gate.scale.lerp(selected ? selectedScale : restingScale, ease);
       gate.position.y = stops[index].y + Math.sin(performance.now() * .00055 + index * .8) * (selected ? .12 : .035);
-      const orbital = orbitals.current[index];
-      if (orbital) { orbital.rotation.z += delta * (selected ? .34 : .17); orbital.rotation.y = Math.sin(performance.now() * .00032 + index) * .18; }
       const feature = features.current[index];
       if (feature) {
         const time = performance.now() * .001;
@@ -132,11 +131,20 @@ function Architecture({ stops, projectStops }: { stops: Stop[]; projectStops: Pr
   return <>
     {stops.map((stop, index) => <group key={stop.id} ref={(node) => { gates.current[index] = node; }} position={[stop.x, stop.y, stop.z]}>
       {stop.kind !== "project" && <>
-        {!["experience", "skills", "services", "education", "achievements", "github", "contact"].includes(stop.id) && <mesh geometry={ring} scale={stop.id === "contact" ? [1.7, 1.7, 1] : [1.2, 1.42, 1]}>
-          <meshStandardMaterial color={stop.id === "contact" ? "#c59a68" : "#9b8975"} roughness={.3} metalness={.72} emissive={stop.id === "contact" ? "#77522e" : "#51402e"} emissiveIntensity={.72} />
-        </mesh>}
-        {!["skills", "experience", "services", "education", "achievements", "github", "contact"].includes(stop.id) && <group ref={(node) => { orbitals.current[index] = node; }} rotation={[.2 + index * .03, .1, .42]}>
-          <mesh geometry={ring} scale={[1.48, 1.64, .76]}><meshStandardMaterial color="#b5815d" roughness={.26} metalness={.82} emissive="#70432b" emissiveIntensity={.3} transparent opacity={.55} /></mesh>
+        {stop.id === "home" && <group position={[0, -.32, -.48]}>
+          <mesh geometry={portalRing} rotation={[.04, -.08, -.12]} scale={[1.64, 1.42, .72]}>
+            <meshStandardMaterial color="#b6a58d" roughness={.34} metalness={.82} emissive="#70523a" emissiveIntensity={.14} />
+          </mesh>
+          <mesh geometry={portalRing} rotation={[-.12, .18, .28]} scale={[1.5, 1.31, .66]}>
+            <meshStandardMaterial color="#8b8274" roughness={.4} metalness={.72} transparent opacity={.34} />
+          </mesh>
+          <mesh geometry={portalArc} rotation={[.04, -.08, 2.78]} scale={[1.64, 1.42, .72]}>
+            <meshStandardMaterial color="#d59a72" roughness={.28} metalness={.82} emissive="#a35d39" emissiveIntensity={.34} />
+          </mesh>
+          {[.42, 3.56].map((angle, marker) => <mesh key={marker} position={[Math.cos(angle) * 2.58, Math.sin(angle) * 2.22, .025]}>
+            <sphereGeometry args={[.035, 12, 12]} />
+            <meshBasicMaterial color={marker ? "#b4a38b" : "#d59a72"} />
+          </mesh>)}
         </group>}
         {stop.id !== "contact" && <>
           <mesh position={[-1.5, -2.45, 0]} castShadow receiveShadow><boxGeometry args={[.18, 2.05, .2]} /><meshStandardMaterial color="#645141" roughness={.42} metalness={.62} /></mesh>
@@ -169,7 +177,7 @@ function Architecture({ stops, projectStops }: { stops: Stop[]; projectStops: Pr
       {stop.id === "contact" && <group ref={(node) => { features.current[index] = node; }} position={[0, -.36, .48]}>
         {[0, 1, 2].map((tier) => <mesh key={tier} position={[0, -.62 + tier * .34, 0]}><cylinderGeometry args={[1.15 - tier * .15, 1.36 - tier * .12, .12, 9]} /><meshStandardMaterial color={tier === 2 ? "#d5b17d" : "#554536"} roughness={.3} metalness={.74} emissive="#6e4329" emissiveIntensity={.38} /></mesh>)}
         <mesh position={[0, .22, 0]}><dodecahedronGeometry args={[.52, 0]} /><meshStandardMaterial color="#c9a778" roughness={.2} metalness={.84} emissive="#b26739" emissiveIntensity={.82} /></mesh>
-        {[0, 1, 2].map((orbit) => <mesh key={orbit} geometry={ring} position={[0, .18, 0]} rotation={[.48 + orbit * .5, orbit * .6, orbit * .42]} scale={[1.05 + orbit * .28, 1.05 + orbit * .28, .7]}><meshStandardMaterial color="#d2a273" roughness={.25} metalness={.8} emissive="#8a5735" emissiveIntensity={.55} transparent opacity={.72} /></mesh>)}
+        <mesh geometry={ring} position={[0, .18, 0]} rotation={[.35, .12, .2]} scale={[1.2, 1.2, .78]}><meshStandardMaterial color="#c39a70" roughness={.34} metalness={.66} emissive="#805537" emissiveIntensity={.36} transparent opacity={.72} /></mesh>
       </group>}
       {stop.id === "services" && <group ref={(node) => { features.current[index] = node; }} position={[0, -.35, .45]}>
         {[-.76, 0, .76].map((x, pillar) => <group key={x} position={[x, pillar === 1 ? .12 : -.08, 0]}>
@@ -278,6 +286,8 @@ function Atmosphere() {
 }
 
 function CameraTravel({ stops, pointer }: { stops: Stop[]; pointer: MutableRefObject<THREE.Vector2> }) {
+  const { size } = useThree();
+  const mobile = size.width < 700;
   const desired = useRef(new THREE.Vector3(0, 1.8, 7));
   const look = useRef(new THREE.Vector3(0, 1, -2));
   const targetLook = useRef(new THREE.Vector3());
@@ -295,26 +305,35 @@ function CameraTravel({ stops, pointer }: { stops: Stop[]; pointer: MutableRefOb
     const t = THREE.MathUtils.smoothstep((progress - left.progress) / span, 0, 1);
     const arc = Math.sin(t * Math.PI);
     const pose = (stop: Stop, cameraOut: THREE.Vector3, focusOut: THREE.Vector3) => {
-      const xSide = stop.kind === "project" ? (stop.x < 0 ? -1 : 1) * .7 : stop.id.length % 2 ? -1 : 1;
+      const xSide = mobile ? 0 : stop.kind === "project" ? (stop.x < 0 ? -1 : 1) * .7 : stop.id.length % 2 ? -1 : 1;
       const lift = stop.id === "experience" ? 2.5 : stop.id === "skills" ? .45 : stop.id === "education" ? 1.4 : stop.id === "contact" ? 2 : stop.kind === "project" ? 1.25 : 1.65;
-      const distance = stop.id === "projects" ? 15 : stop.id === "contact" ? 10 : stop.kind === "project" ? 7.4 : 10.8;
-      cameraOut.set(stop.x + xSide * (stop.kind === "project" ? .6 : 2.25), 1.65 + lift, stop.z + distance);
+      const distance = mobile
+        ? stop.id === "projects" ? 17 : stop.kind === "project" ? 10.6 : stop.id === "home" ? 12.5 : stop.id === "contact" ? 12 : 13
+        : stop.id === "projects" ? 15 : stop.id === "contact" ? 10 : stop.kind === "project" ? 7.4 : 10.8;
+      cameraOut.set(stop.x + xSide * (mobile ? 0 : stop.kind === "project" ? .6 : 2.25), mobile ? 1.45 + lift * .58 : 1.65 + lift, stop.z + distance);
       focusOut.set(stop.x + (stop.kind === "project" ? 0 : -xSide * .32), stop.y - (stop.id === "experience" ? .9 : .42), stop.z - (stop.kind === "project" ? .8 : 1.15));
     };
     pose(left, viewA.current, focusA.current);
     pose(right, viewB.current, focusB.current);
     const flybySide = (left.x <= right.x ? 1 : -1) * (left.kind === "project" || right.kind === "project" ? 3 : 1.6);
-    desired.current.set(THREE.MathUtils.lerp(viewA.current.x, viewB.current.x, t) + pointer.current.x * 1.05 + arc * flybySide, THREE.MathUtils.lerp(viewA.current.y, viewB.current.y, t) + pointer.current.y * .5 + arc * (left.id === "experience" || right.id === "experience" ? 2.2 : 1.1), THREE.MathUtils.lerp(viewA.current.z, viewB.current.z, t) + arc * (left.kind === "project" || right.kind === "project" ? 2.6 : 1.8));
+    const pointerStrength = mobile ? .12 : 1;
+    desired.current.set(
+      THREE.MathUtils.lerp(viewA.current.x, viewB.current.x, t) + pointer.current.x * 1.05 * pointerStrength + arc * flybySide * (mobile ? .42 : 1),
+      THREE.MathUtils.lerp(viewA.current.y, viewB.current.y, t) + pointer.current.y * .5 * pointerStrength + arc * (left.id === "experience" || right.id === "experience" ? 2.2 : mobile ? .48 : 1.1),
+      THREE.MathUtils.lerp(viewA.current.z, viewB.current.z, t) + arc * (left.kind === "project" || right.kind === "project" ? mobile ? 1.2 : 2.6 : mobile ? .75 : 1.8),
+    );
     targetLook.current.set(THREE.MathUtils.lerp(focusA.current.x, focusB.current.x, t) + arc * flybySide * .23, THREE.MathUtils.lerp(focusA.current.y, focusB.current.y, t), THREE.MathUtils.lerp(focusA.current.z, focusB.current.z, t));
     const ease = 1 - Math.exp(-1.35 * delta);
     camera.position.lerp(desired.current, ease);
     look.current.lerp(targetLook.current, ease);
-    const drift = Math.sin(clock.elapsedTime * .16) * .025;
+    const drift = mobile ? 0 : Math.sin(clock.elapsedTime * .16) * .025;
     camera.lookAt(look.current.x + drift, look.current.y, look.current.z);
     camera.rotation.z = THREE.MathUtils.damp(camera.rotation.z, Math.sin(progress * Math.PI * 2) * .018 + pointer.current.x * -.008, 1.2, delta);
     if (camera instanceof THREE.PerspectiveCamera) {
-      const targetFov = left.kind === "project" || right.kind === "project" ? 39 : left.id === "home" || right.id === "home" ? 48 : 45;
-      camera.fov = THREE.MathUtils.damp(camera.fov, targetFov, 1.2, delta);
+      const targetFov = mobile
+        ? left.kind === "project" || right.kind === "project" ? 56 : left.id === "home" || right.id === "home" ? 50 : 53
+        : left.kind === "project" || right.kind === "project" ? 39 : left.id === "home" || right.id === "home" ? 48 : 45;
+      camera.fov = THREE.MathUtils.damp(camera.fov, targetFov, mobile ? 2 : 1.2, delta);
       camera.updateProjectionMatrix();
     }
   });
@@ -323,7 +342,7 @@ function CameraTravel({ stops, pointer }: { stops: Stop[]; pointer: MutableRefOb
 
 export function TourScene({ stops, projectStops }: { stops: Stop[]; projectStops: ProjectStop[] }) {
   const pointer = useRef(new THREE.Vector2());
-  return <Canvas className="world-tour-canvas" shadows dpr={[1, 1.35]} camera={{ position: [0, 2.2, 7], fov: 46, near: .1, far: 160 }} gl={{ antialias: false, powerPreference: "low-power", toneMapping: THREE.ACESFilmicToneMapping }} onPointerMove={(event) => { pointer.current.set((event.clientX / window.innerWidth - .5) * 2, -(event.clientY / window.innerHeight - .5) * 2); }} onPointerLeave={() => pointer.current.set(0, 0)}>
+  return <Canvas className="world-tour-canvas" shadows dpr={[1, 1.25]} camera={{ position: [0, 2.2, 7], fov: 46, near: .1, far: 160 }} gl={{ antialias: false, powerPreference: "low-power", toneMapping: THREE.ACESFilmicToneMapping }} onPointerMove={(event) => { if (event.pointerType === "touch") return; pointer.current.set((event.clientX / window.innerWidth - .5) * 2, -(event.clientY / window.innerHeight - .5) * 2); }} onPointerLeave={() => pointer.current.set(0, 0)}>
     <color attach="background" args={["#100e0c"]} />
     <fog attach="fog" args={["#100e0c", 15, 105]} />
     <ambientLight intensity={.82} />

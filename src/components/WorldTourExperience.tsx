@@ -215,7 +215,7 @@ export function WorldTourExperience() {
         <div className="tour-location"><Compass size={15} aria-hidden="true" /><span>{labels[activeId] ?? projectLandmarks.find((item) => item.id === activeId)?.label ?? "Portfolio"}</span><span className="tour-position">{String(activeIndex + 1).padStart(2, "0")} / {String(destinations.length).padStart(2, "0")}</span></div>
         <div className="tour-progress" aria-hidden="true"><span style={{ transform: `scaleX(${destinations.length > 1 ? activeIndex / (destinations.length - 1) : 0})` }} /></div>
         <nav id="tour-destination-list" className="tour-destinations" aria-label="Jump to destination" hidden={!mapOpen}>
-          {destinationGroups.map((group) => <div key={group.title} className="tour-destination-group"><p>{group.title}</p><div>{group.ids.map((id) => <button key={id} type="button" aria-current={activeId === id ? "location" : undefined} onClick={() => goTo(id, router.push)}>{labels[id] ?? projectLandmarks.find((project) => project.id === id)?.label ?? id}</button>)}</div></div>)}
+          {destinationGroups.map((group) => <div key={group.title} className="tour-destination-group"><p>{group.title}</p><div>{group.ids.map((id) => <button key={id} type="button" aria-current={activeId === id ? "location" : undefined} onClick={() => { setMapOpen(false); goTo(id, router.push); }}>{labels[id] ?? projectLandmarks.find((project) => project.id === id)?.label ?? id}</button>)}</div></div>)}
         </nav>
         <div className="tour-step-controls">
           <button type="button" aria-label="Previous destination" disabled={activeIndex <= 0} onClick={() => goTo(destinations[Math.max(0, activeIndex - 1)], router.push)}><ArrowUp size={15} /></button>

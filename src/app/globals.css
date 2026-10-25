@@ -1979,14 +1979,14 @@ html.dark .portfolio-site h3 { color: var(--text); }
 
 /* Full-length world tour: the WebGL environment remains spatially present while
    semantic portfolio sections stay in the document and drive camera travel. */
-.portfolio-route:has(.world-tour-enabled) { position: relative; z-index: 1; background: transparent !important; pointer-events: none; }
-.world-tour-enabled { position: relative; isolation: isolate; background: transparent !important; pointer-events: none; }
+.portfolio-route:has(.world-tour-enabled) { position: relative; z-index: auto; background: transparent !important; pointer-events: none; }
+.world-tour-enabled { position: relative; isolation: auto; background: transparent !important; pointer-events: none; }
 body:has(.world-tour-enabled) { background: #100e0c; }
 .world-tour { position: static; pointer-events: none; }
 .world-tour-canvas,
 .world-tour-fallback {
   position: fixed !important;
-  z-index: 0;
+  z-index: 2;
   top: 4.2rem;
   right: 0;
   bottom: 0;
@@ -1995,6 +1995,10 @@ body:has(.world-tour-enabled) { background: #100e0c; }
   height: calc(100svh - 4.2rem) !important;
   pointer-events: auto;
 }
+.world-tour[data-immersive="false"] .world-tour-canvas,
+.world-tour[data-immersive="false"] .world-tour-fallback,
+.world-tour[data-page="contact"] .world-tour-canvas,
+.world-tour[data-page="contact"] .world-tour-fallback { z-index: 0; }
 .world-tour-enabled main,
 .world-tour-enabled main > section,
 .world-tour-enabled footer { pointer-events: none; }
@@ -2153,41 +2157,65 @@ body:has(.world-tour[data-page="portfolio"][data-active-id="contact"][data-immer
 .tour-step-controls { flex-wrap: wrap; }
 @media (max-width: 700px) {
   .world-tour-canvas,
-  .world-tour-fallback { top: 3.9rem; height: calc(100svh - 3.9rem) !important; }
-  .world-tour-controls { bottom: .65rem; left: .65rem; width: min(15rem, calc(100vw - 1.3rem)); padding: .65rem; gap: .45rem; }
-  .tour-destinations { max-height: 8rem; }
-  .tour-destinations button { padding: .27rem .34rem; font-size: .56rem; }
-  .world-tour-enabled .hero-experience { min-height: max(740px, calc(100svh - 3.9rem)); }
+  .world-tour-fallback { top: 4rem; height: calc(100svh - 4rem) !important; }
+  .world-tour-controls {
+    right: .55rem;
+    bottom: max(.55rem, env(safe-area-inset-bottom));
+    left: .55rem;
+    width: auto;
+    max-height: 43svh;
+    padding: .5rem .58rem;
+    gap: .35rem;
+  }
+  .tour-location { font-size: .68rem; }
+  .tour-destinations { max-height: min(20svh, 9rem); gap: .45rem; }
+  .tour-destination-group > p { font-size: .58rem; }
+  .tour-destination-group > div { gap: .25rem; }
+  .tour-destinations button { min-height: 1.9rem; padding: .32rem .42rem; font-size: .65rem; }
+  .world-tour-enabled .hero-experience { min-height: max(760px, calc(100svh - 4rem)); }
   .world-tour-note { right: .65rem; bottom: .65rem; max-width: 12rem; font-size: .58rem; }
-  .tour-story-panel { right: .65rem; bottom: 9.2rem; left: .65rem; width: auto; max-height: 33svh; padding: .8rem; gap: .35rem; }
-  .tour-story-panel:has(.tour-project-index) { max-height: 43svh; padding: .8rem; }
-  .tour-story-panel:has(.tour-recruiter-card) { max-height: 43svh; }
+  .tour-story-panel { top: calc(4.65rem + env(safe-area-inset-top)); right: .55rem; bottom: auto; left: .55rem; width: auto; max-height: 27svh; padding: .62rem .72rem; gap: .3rem; border-color: rgb(215 201 183 / 14%); background: linear-gradient(105deg, rgb(21 19 17 / 72%), rgb(16 15 14 / 38%)); box-shadow: 0 12px 34px rgb(0 0 0 / 20%); backdrop-filter: blur(8px); }
+  .tour-story-panel:has(.tour-project-index),
+  .tour-story-panel:has(.tour-recruiter-card),
   .tour-story-panel:has(.tour-structured-list),
-  .tour-story-panel:has(.tour-topic-list) { max-height: 48svh; }
+  .tour-story-panel:has(.tour-topic-list) { max-height: 30svh; padding: .62rem .72rem; }
+  body:has(.tour-destinations:not([hidden])) .tour-story-panel { display: none; }
   body:has(.world-tour[data-page="portfolio"][data-active-id="contact"][data-immersive="false"]) .world-tour-controls { top: 4.5rem; right: .65rem; width: min(12rem, calc(100vw - 1.3rem)); }
   .world-tour[data-active-id="contact"] .world-tour-controls { top: 4.5rem; right: .65rem; width: min(12rem, calc(100vw - 1.3rem)); }
-  .tour-story-panel h1 { font-size: clamp(1.5rem, 7vw, 2.1rem); }
-  .tour-story-summary { margin-top: .35rem; font-size: .76rem; }
+  .tour-story-panel h1 { font-size: clamp(1.35rem, 5.6vw, 1.7rem); }
+  .tour-story-summary { margin-top: .22rem; font-size: .71rem; line-height: 1.42; }
   .tour-structured-list { margin-top: .25rem; padding-top: .25rem; }
   .tour-structured-list article { gap: .45rem; padding: .38rem 0; }
-  .tour-structured-list h2 { font-size: .68rem; }
-  .tour-structured-list p { font-size: .57rem; }
-  .tour-record-status { padding: .14rem .3rem; font-size: .5rem; }
-  .tour-skill-overview article { grid-template-columns: minmax(5.5rem, .42fr) minmax(0, 1fr); gap: .4rem; }
+  .tour-structured-list h2 { font-size: .72rem; }
+  .tour-structured-list p { font-size: .65rem; }
+  .tour-record-status { padding: .16rem .34rem; font-size: .56rem; }
+  .tour-skill-overview article { grid-template-columns: minmax(5.7rem, .42fr) minmax(0, 1fr); gap: .45rem; }
   .tour-structured-list > button,
-  .tour-topic-list > button { margin-top: .35rem; padding: .38rem .48rem; font-size: .58rem; }
+  .tour-topic-list > button { min-height: 2.35rem; margin-top: .35rem; padding: .42rem .55rem; font-size: .65rem; }
   .tour-topic-list { gap: .25rem; margin-top: .3rem; padding-top: .35rem; }
-  .tour-topic-list > span { padding: .22rem .35rem; font-size: .53rem; }
-  .tour-story-kicker { margin-bottom: .25rem; font-size: .56rem; }
+  .tour-topic-list > span { padding: .24rem .38rem; font-size: .61rem; }
+  .tour-story-kicker { margin-bottom: .2rem; font-size: .58rem; }
   .tour-recruiter-card { margin-top: .3rem; padding-top: .4rem; }
-  .tour-card-focus { font-size: .65rem; }
+  .tour-card-focus { font-size: .7rem; }
   .tour-project-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem; margin-top: .35rem; padding-top: .4rem; }
   .tour-project-index button { min-height: 2.75rem; padding: .38rem .42rem; }
-  .tour-project-index button span { font-size: .62rem; }
-  .tour-project-index button small { font-size: .52rem; }
+  .tour-project-index button span { font-size: .68rem; }
+  .tour-project-index button small { font-size: .59rem; }
   .tour-story-actions { justify-content: flex-start; gap: .3rem; margin-top: .25rem; }
-  .tour-story-actions a { min-height: 1.9rem; padding: .35rem .45rem; font-size: .58rem; }
-  .tour-step-controls .tour-content-toggle { flex-basis: 6rem; }
+  .tour-story-actions a { min-height: 2.15rem; padding: .38rem .52rem; font-size: .65rem; }
+  .tour-step-controls { display: grid; grid-template-columns: 2.1rem 2.1rem minmax(0, 1fr) minmax(0, 1fr); gap: .28rem; }
+  .tour-step-controls > button { min-width: 0; min-height: 2rem; height: auto; }
+  .tour-step-controls .tour-content-toggle { flex-basis: auto; min-width: 0; padding-inline: .35rem; font-size: .62rem; }
+  .tour-step-controls .tour-skip { grid-column: 1 / -1; justify-content: center; min-height: 1.7rem; margin-left: 0; }
+}
+@media (max-width: 380px) {
+  .tour-story-panel { max-height: 28svh; }
+  .tour-story-panel:has(.tour-project-index),
+  .tour-story-panel:has(.tour-recruiter-card),
+  .tour-story-panel:has(.tour-structured-list),
+  .tour-story-panel:has(.tour-topic-list) { max-height: 31svh; }
+  .tour-story-panel h1 { font-size: 1.38rem; }
+  .tour-story-summary { font-size: .7rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tour-destinations button,
