@@ -4,6 +4,28 @@ import { FormEvent, useState } from "react";
 
 type Status = { kind: "success" | "error"; message: string; emailDraft?: string } | null;
 
+type ContactPayload = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
+function createEmailDraft(payload: ContactPayload) {
+  const body = `From: ${payload.name} <${payload.email}>\n\n${payload.message}`;
+  return `mailto:sajjadhaider1016@gmail.com?subject=${encodeURIComponent(payload.subject || "Portfolio inquiry")}&body=${encodeURIComponent(body)}`;
+}
+
+function deliveryError(status: number) {
+  if (status === 403) {
+    return "Web3Forms rejected this site’s request. You can still send your message by email; the site domain may need approval in Web3Forms.";
+  }
+  if (status === 429) {
+    return "The contact form is temporarily rate-limited. Please wait a little and try again, or send your message by email.";
+  }
+  return "The message could not be delivered. You can open a prefilled email draft instead.";
+}
+
 export default function ContactForm() {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<Status>(null);
@@ -12,28 +34,38 @@ export default function ContactForm() {
     event.preventDefault();
     if (busy) return;
     const form = event.currentTarget;
-    const payload = Object.fromEntries(new FormData(form).entries());
+    const payload = Object.fromEntries(new FormData(form).entries()) as ContactPayload;
     setBusy(true);
     setStatus(null);
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-      if (response.status === 503) {
-        const subject = String(payload.subject || "Portfolio inquiry");
-        const message = `From: ${payload.name} <${payload.email}>\n\n${payload.message}`;
-        const emailDraft = `mailto:sajjadhaider1016@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-        setStatus({ kind: "error", message: "Online delivery is not connected yet. Open this prefilled email and press Send to deliver your message.", emailDraft });
-        return;
+      const configResponse = await fetch("/api/contact", { cache: "no-store" });
+      const config = await configResponse.json().catch(() => null) as { accessKey?: unknown } | null;
+
+      if (!configResponse.ok || typeof config?.accessKey !== "string" || !config.accessKey) {
+        throw new Error("Online delivery is not configured. Open a prefilled email draft to send your message.");
       }
-      if (!response.ok) throw new Error(result.error || "The message could not be sent.");
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: config.accessKey,
+          ...payload,
+          subject: `[Portfolio] ${payload.subject}`,
+          from_name: "Sajjad Haider Portfolio",
+          botcheck: "",
+        }),
+      });
+      const result = await response.json().catch(() => null) as { success?: unknown } | null;
+      if (!response.ok || result?.success !== true) throw new Error(deliveryError(response.status));
       form.reset();
       setStatus({ kind: "success", message: "Your message has been sent. Thank you for reaching out." });
     } catch (error) {
-      setStatus({ kind: "error", message: error instanceof Error ? error.message : "The message could not be sent. Please email directly." });
+      setStatus({
+        kind: "error",
+        message: error instanceof Error ? error.message : "The message could not be delivered. You can send it by email instead.",
+        emailDraft: createEmailDraft(payload),
+      });
     } finally {
       setBusy(false);
     }

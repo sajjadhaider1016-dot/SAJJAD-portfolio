@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Email delivery
 
-The contact form sends through Web3Forms. Create an access key for `sajjadhaider1016@gmail.com` at [web3forms.com](https://web3forms.com/); Web3Forms sends the key to that inbox. Add it as `WEB3FORMS_ACCESS_KEY` in `.env.local` for local development and in the Vercel project's Production environment, then redeploy. The access key is a public form identifier according to Web3Forms, but this project keeps it in a server environment variable.
+The contact form sends directly from the visitor's browser to Web3Forms. Create an access key for `sajjadhaider1016@gmail.com` at [web3forms.com](https://web3forms.com/); Web3Forms sends the key to that inbox. Add it as `WEB3FORMS_ACCESS_KEY` in `.env.local` for local development and in the Vercel project's Production environment, then redeploy. The server route returns this public form identifier to the browser; Web3Forms documents browser-side submissions as the supported approach for this API.
 
 If the key is missing or delivery fails, the form offers a prefilled email draft instead of showing a false success.
 
@@ -31,7 +31,7 @@ If the key is missing or delivery fails, the form offers a prefilled email draft
 
 ```text
 app/
-  api/contact/route.ts    Validates and sends contact messages
+  api/contact/route.ts    Exposes the configured public Web3Forms form key
   page.tsx                Portfolio entry point
   layout.tsx              Metadata and document shell
   styles.css              Paper, timber, and responsive interface system
