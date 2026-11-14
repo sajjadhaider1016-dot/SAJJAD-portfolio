@@ -52,7 +52,6 @@ function About() {
       <p className="eyebrow">About me</p>
       <h2>Intelligent products.<br /><em>Practical engineering.</em></h2>
       <div className="profile-row">
-        <div className="portrait-placeholder"><Image src="/identity/sajjad-haider.jpg" alt="Sajjad Haider" width={720} height={1200} sizes="128px" priority className="portrait-photo" /><small className="photo-caption">Sajjad Haider</small></div>
         <div><p className="lead">I’m Sajjad Haider, an AI &amp; Full-Stack Developer with an academic foundation in Artificial Intelligence.</p><p>I work across the product: shaping a clear interface, connecting application logic and data, and applying AI where it can make a practical difference.</p></div>
       </div>
       <div className="copy-block">

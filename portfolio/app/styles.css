@@ -595,8 +595,7 @@ body { font-size: 16px; }
 .capability-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 30px; padding: 20px 0 10px; border-top: 1px solid rgba(82,72,58,.22); }
 .capability-strip span { color: #665b4d; font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; }
 .mode-portfolio .section-about { background: #fbf9f3; }
-.mode-portfolio .profile-row { grid-template-columns: minmax(180px, .62fr) 1.38fr; align-items: start; gap: clamp(28px, 5vw, 70px); margin: 35px 0 45px; }
-.mode-portfolio .portrait-placeholder { width: min(100%, 280px); aspect-ratio: 4/5; }
+.mode-portfolio .profile-row { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 0; max-width: 860px; margin: 35px 0 45px; }
 .mode-portfolio .profile-row .lead { font-size: 20px; line-height: 1.65; }
 .mode-portfolio .profile-row p:last-child { font-size: 15px; line-height: 1.8; }
 .mode-portfolio .copy-block { padding: 26px 0; }

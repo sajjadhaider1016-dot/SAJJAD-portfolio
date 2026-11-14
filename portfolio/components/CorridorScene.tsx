@@ -7,6 +7,7 @@ import { achievements, certifications, education, experience, links, projects, s
 type Props = {
   active: SectionId;
   welcome: boolean;
+  welcomeReset: number;
   movement: string[];
   onChoose: (id: SectionId) => void;
   onReady: () => void;
@@ -274,12 +275,33 @@ function welcomeTexture() {
 function addWelcomeInstallation(world: THREE.Group) {
   const installation = new THREE.Group();
   installation.name = "3D portfolio welcome typography";
+  const portraitX = -1.68;
+  const portraitY = 1.88;
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.12, 1.76, 0.08), new THREE.MeshBasicMaterial({ color: "#8e6647", transparent: true, depthWrite: false }));
+  frame.position.set(portraitX, portraitY, 0);
+  installation.add(frame);
+  const mat = new THREE.Mesh(new THREE.PlaneGeometry(0.98, 1.62), new THREE.MeshBasicMaterial({ color: "#f7f3ea", transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+  mat.position.set(portraitX, portraitY, 0.046);
+  installation.add(mat);
+  const portraitMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", transparent: true, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+  const portrait = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 1.5), portraitMaterial);
+  portrait.position.set(portraitX, portraitY, 0.051);
+  portrait.name = "Sajjad Haider portrait in the 3D welcome lobby";
+  installation.add(portrait);
+  new THREE.TextureLoader().load("/identity/sajjad-haider.jpg", (texture) => {
+    if (!portrait.parent) { texture.dispose(); return; }
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 4;
+    portraitMaterial.map = texture;
+    portraitMaterial.needsUpdate = true;
+  });
   const heroMaterial = new THREE.MeshBasicMaterial({ map: welcomeTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
   const heroText = new THREE.Mesh(new THREE.PlaneGeometry(5.25, 2.625), heroMaterial);
-  heroText.position.set(0, 2.58, 0.02);
+  heroText.position.set(0.9, 2.58, 0.02);
+  heroText.scale.set(0.68, 0.72, 1);
   installation.add(heroText);
   const accent = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.018, 0.025), new THREE.MeshBasicMaterial({ color: "#a76543", transparent: true, depthWrite: false }));
-  accent.position.set(0, 3.52, 0.04);
+  accent.position.set(0.9, 3.48, 0.04);
   installation.add(accent);
   world.add(installation);
   return installation;
@@ -545,16 +567,18 @@ function addExhibitionRoom(
   world.add(sconce);
 }
 
-export default function CorridorScene({ active, welcome, movement, onChoose, onReady, onError }: Props) {
+export default function CorridorScene({ active, welcome, welcomeReset, movement, onChoose, onReady, onError }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hoveredDoor, setHoveredDoor] = useState<SectionId | null>(null);
   const activeRef = useRef(active);
   const welcomeRef = useRef(welcome);
+  const welcomeResetRef = useRef(welcomeReset);
   const movementRefLatest = useRef(movement);
   const chooseRef = useRef(onChoose);
   const readyRef = useRef(onReady);
   const errorRef = useRef(onError);
   useEffect(() => { chooseRef.current = onChoose; }, [onChoose]);
+  useEffect(() => { welcomeResetRef.current = welcomeReset; }, [welcomeReset]);
   useEffect(() => { readyRef.current = onReady; }, [onReady]);
   useEffect(() => { errorRef.current = onError; }, [onError]);
 
@@ -928,6 +952,7 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
     const movementRef = { current: movement };
     let previousActive = active;
     let previousWelcome = welcome;
+    let previousWelcomeReset = welcomeReset;
     let welcomeDismissed = false;
     let welcomeOpacity = welcome ? 1 : 0;
     const movementVelocity = new THREE.Vector3();
@@ -937,22 +962,25 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
       const dt = Math.min(timer.getDelta(), 0.05);
       const nextActive = activeRef.current;
       const nextWelcome = welcomeRef.current;
-      if (nextActive !== previousActive || nextWelcome !== previousWelcome) {
+      const nextWelcomeReset = welcomeResetRef.current;
+      if (nextActive !== previousActive || nextWelcome !== previousWelcome || nextWelcomeReset !== previousWelcomeReset) {
         const leavingWelcome = previousWelcome && !nextWelcome;
-        if (!previousWelcome && nextWelcome) welcomeDismissed = false;
+        const returningToWelcome = nextWelcome && (!previousWelcome || nextWelcomeReset !== previousWelcomeReset);
+        if (returningToWelcome) welcomeDismissed = false;
         previousActive = nextActive;
         transitionFrom = active;
         active = nextActive;
         previousWelcome = nextWelcome;
+        previousWelcomeReset = nextWelcomeReset;
         dragYaw = 0;
         dragPitch = 0;
         cursorLookTarget.set(0, 0);
         movementVelocity.set(0, 0, 0);
-        // The welcome lobby opens onto the corridor (stage 1); changing rooms exits the old room first (stage 0).
-        transitionStage = leavingWelcome ? 1 : 0;
+        // The lobby is a distinct destination: room selection returns there before revealing the hero.
+        transitionStage = leavingWelcome ? 1 : returningToWelcome ? 3 : 0;
         cameraHasArrived = false;
       }
-      const welcomeTargetOpacity = nextWelcome && !welcomeDismissed ? 1 : 0;
+      const welcomeTargetOpacity = nextWelcome && !welcomeDismissed && cameraHasArrived ? 1 : 0;
       welcomeOpacity += (welcomeTargetOpacity - welcomeOpacity) * (1 - Math.exp(-(reduced.matches ? 16 : 7.5) * dt));
       welcomeInstallation.visible = welcomeOpacity > 0.008;
       for (const material of welcomeMaterials) material.opacity = welcomeOpacity;
@@ -984,7 +1012,9 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
         const fromDoor = doorRecords[fromIndex];
         let desired = new THREE.Vector3(0, 1.62, 2.2);
         let yaw = 0;
-        if (transitionStage === 0 && fromDoor) {
+        if (transitionStage === 3) {
+          desired.set(0, 1.62, 6.4);
+        } else if (transitionStage === 0 && fromDoor) {
           // Leave the current room through its open portal before walking along the hall.
           desired = new THREE.Vector3(0, 1.62, fromDoor.z);
           yaw = 0;
