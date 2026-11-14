@@ -309,6 +309,16 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
 .mode-tour .mode-switch { min-height: 42px; cursor: pointer; }
 .mode-switch { cursor: pointer; }
 
+/* Portfolio details are rendered on the exhibition walls inside each 3D room. */
+.mode-tour .destination-map { width: 260px; background: rgba(249,247,240,.97); }
+.mode-tour .map-heading { font-family: var(--display); font-size: 18px; }
+.mode-tour .destination-map nav button { min-height: 44px; font-size: 13px; }
+@media (max-width: 760px) {
+  .mode-tour .destination-map { top: 76px; left: 12px; right: 12px; bottom: auto; width: auto; max-height: min(56svh, 420px); }
+  .mode-tour .destination-map.is-closed { transform: translateY(calc(-100% - 92px)); }
+  .mode-tour .destination-map nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mode-tour .destination-map nav button { grid-template-columns: 25px minmax(0, 1fr) 12px; }
+}
 @media (max-width: 760px) {
   .mode-portfolio.portfolio-world { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; grid-template-areas: "head" "nav" "content" "foot"; gap: 14px; padding: 12px 14px 0; }
   .mode-portfolio .world-header { padding-bottom: 12px; }

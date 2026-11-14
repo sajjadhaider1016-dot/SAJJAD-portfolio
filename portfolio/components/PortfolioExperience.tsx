@@ -42,8 +42,6 @@ export default function PortfolioExperience() {
     setMovement([]);
     setMenuOpen(false);
     if (mode === "portfolio") document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    const card = document.querySelector(".section-scroll");
-    if (card instanceof HTMLElement) card.scrollTop = 0;
   }, [mode]);
 
   const enter = useCallback(() => {
@@ -139,14 +137,14 @@ export default function PortfolioExperience() {
         </> : <div className="header-tools"><span className="available-status"><i />Interactive 3D experience</span><button type="button" className="menu-toggle mode-switch" onClick={returnToWebsite}>← Return to website</button><button type="button" className="menu-toggle" aria-expanded={menuOpen} aria-controls="tour-room-menu" onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? "Close rooms" : "Choose a room"}</button></div>}
       </header>
 
-      {mode === "tour" && <aside id="tour-room-menu" className={`destination-map ${menuOpen ? "is-open" : "is-closed"}`} aria-label="Choose a portfolio room">
-        <div className="map-heading"><span>House plan</span><small>10 rooms</small></div>
+      {mode === "tour" && <aside id="tour-room-menu" className={`destination-map ${menuOpen ? "is-open" : "is-closed"}`} aria-label="Choose a portfolio destination">
+        <div className="map-heading"><span>Destinations</span><small>10 rooms</small></div>
         <nav>
           {sections.map((section) => <button type="button" className={active === section.id ? "active" : ""} key={section.id} onClick={() => goTo(section.id)} aria-current={active === section.id ? "page" : undefined}>
             <span className="destination-number">{section.number}</span><span>{section.label}</span><span className="destination-arrow" aria-hidden="true">↗</span>
           </button>)}
         </nav>
-        <div className="map-foot"><span className="pencil-line" />Select a room to visit directly</div>
+        <div className="map-foot"><span className="pencil-line" />Choose a room to enter</div>
       </aside>}
 
       <div className={`content-anchor ${mode === "tour" ? "tour-details-hidden" : ""}`} id="portfolio-content">

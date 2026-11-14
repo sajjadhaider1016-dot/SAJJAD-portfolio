@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { sections, projects, experience, education, skillGroups, services, certifications, achievements, links, type SectionId } from "@/data/portfolio";
+import { achievements, certifications, education, experience, links, projects, sections, services, skillGroups, type SectionId } from "@/data/portfolio";
 
 type Props = {
   active: SectionId;
@@ -74,70 +74,118 @@ function labelTexture(title: string, index: string) {
   return texture;
 }
 
-function roomDetailsTexture(id: SectionId, title: string, index: string) {
-  type Card = { label?: string; title: string; detail: string; extra?: string };
-  const content: Record<SectionId, Card[]> = {
-    home: [{ label: "PROFILE", title: "AI & Full-Stack Developer", detail: "Building intelligent digital experiences through AI, automation, and modern web technologies.", extra: "Available for remote opportunities" }],
-    about: [{ label: "INTRODUCTION", title: "Sajjad Haider", detail: "I build AI applications, automation systems, and complete web products—from early ideas to useful, deployed software.", extra: "Focus: applied AI · full-stack products · useful automation" }, { label: "WORKING PHILOSOPHY", title: "Practical, thoughtful engineering", detail: "I care about carrying an idea all the way into software people can use, with considered interfaces and reliable implementation.", extra: "Direction: AI product development and modern full-stack engineering" }],
-    projects: projects.map((p) => ({ label: p.eyebrow, title: p.title, detail: p.description, extra: `Built: ${p.contribution}  ·  ${p.tech.length ? p.tech.join(" · ") : "Technologies not listed"}` })),
-    experience: experience.map((item) => ({ label: item.date, title: `${item.role} · ${item.org}`, detail: item.description, extra: item.points.slice(0, 2).join("  ·  ") })),
-    education: education.map((item) => ({ label: item.status, title: item.title, detail: item.place, extra: item.detail })),
-    skills: skillGroups.map((group) => ({ label: "CAPABILITIES", title: group.title, detail: group.detail, extra: group.skills.join("  ·  ") })),
-    services: services.map((service) => ({ label: "SERVICE", title: service.title, detail: service.description, extra: "Discuss a project in the Contact room" })),
-    certifications: certifications.map(([org, name, date, credential]) => ({ label: `${org} · ${date}`, title: name, detail: "Professional learning credential", extra: `Credential ID  ${credential}` })),
-    achievements: achievements.map((item) => ({ label: "RECOGNITION", title: item.title, detail: item.detail, extra: "" })),
-    contact: [{ label: "EMAIL", title: links.email, detail: "For project inquiries and professional collaboration.", extra: "" }, { label: "GITHUB", title: links.githubProfile.replace("https://github.com/", ""), detail: "Public repositories and development work.", extra: "" }, { label: "LINKEDIN", title: links.linkedin.replace("https://", ""), detail: "Professional profile.", extra: "" }, { label: "AVAILABILITY", title: "Open to remote opportunities", detail: "Use the portfolio contact form to send a project inquiry.", extra: "" }],
-  };
-  const canvas = document.createElement("canvas");
-  canvas.width = 1024; canvas.height = 1024;
-  const ctx = canvas.getContext("2d")!;
-  const cards = content[id];
-  ctx.fillStyle = "#f7f4ec"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ede7db"; ctx.fillRect(0, 0, canvas.width, 150);
-  ctx.strokeStyle = "#9a7b58"; ctx.lineWidth = 3; ctx.strokeRect(12, 12, 1000, 1000);
-  ctx.fillStyle = "#8b6848"; ctx.font = "600 18px Arial"; ctx.fillText(`SAJJAD HAIDER     /     ROOM ${index}`, 42, 48);
-  ctx.fillStyle = "#292b28"; ctx.font = "700 42px Arial"; ctx.fillText(title.toUpperCase(), 40, 105);
-  ctx.fillStyle = "#777064"; ctx.font = "500 17px Arial"; ctx.fillText(`${cards.length.toString().padStart(2, "0")}  NOTES  ·  SELECT A DOOR TO CONTINUE`, 42, 133);
+type RoomItem = { title: string; body: string; meta?: string };
 
-  const columns = ["projects", "skills", "certifications", "achievements", "services"].includes(id) ? 2 : 1;
-  const gap = 14; const left = 38; const top = 170; const bottom = 990;
-  const cardWidth = (canvas.width - left * 2 - gap * (columns - 1)) / columns;
-  const rows = Math.ceil(cards.length / columns);
-  const cardHeight = Math.min(rows <= 2 ? 300 : 200, (bottom - top - gap * Math.max(0, rows - 1)) / Math.max(rows, 1));
+function roomItems(id: SectionId): { introduction: string; items: RoomItem[] } {
+  if (id === "home") return { introduction: "AI & Full-Stack Developer · building practical AI products and complete digital experiences.", items: [
+    { title: "AI product development", body: "AI applications, intelligent assistants, and machine learning features grounded in useful tasks." },
+    { title: "Full-stack engineering", body: "Responsive interfaces, connected backend systems, APIs, and data workflows." },
+    { title: "Automation", body: "Practical workflows that connect software and AI to reduce repetitive work." },
+    { title: "Open to opportunities", body: "Available for remote internships, freelance, and product work." },
+  ] };
+  if (id === "about") return { introduction: "I turn practical problems into useful software, combining my AI background with full-stack product work.", items: [
+    { title: "Background", body: "I study Artificial Intelligence at Bahauddin Zakariya University and build complete software products alongside my studies." },
+    { title: "Technical interests", body: "Applied AI, language model integrations, document workflows, intelligent assistants, and automation." },
+    { title: "How I work", body: "I start with the user and the problem, build in clear steps, and choose technology that fits the job." },
+    { title: "Current direction", body: "Growing as an AI product engineer, building dependable software where modern web systems and machine intelligence meet." },
+  ] };
+  if (id === "projects") return { introduction: "Nine products and experiments. Select a project display in this gallery to explore its live preview.", items: projects.map((project) => ({
+    title: project.title,
+    body: [project.description, project.features.length ? `Features: ${project.features.join(" · ")}` : "", project.contribution ? `Role: ${project.contribution}` : ""].filter(Boolean).join(" "),
+    meta: [project.category, project.tech.join(" · "), project.live ? "Live preview available" : "", project.github ? "Public source available" : ""].filter(Boolean).join("  /  "),
+  })) };
+  if (id === "experience") return { introduction: "Applied AI learning, independent product building, and entrepreneurial work.", items: experience.map((job) => ({ title: `${job.role} · ${job.org}`, body: `${job.date}. ${job.description} ${job.points.join(" · ")}`, meta: job.tags.join(" · ") })) };
+  if (id === "education") return { introduction: "Academic foundations in artificial intelligence and core studies.", items: education.map((item) => ({ title: item.title, body: item.detail, meta: `${item.place}  /  ${item.status}` })) };
+  if (id === "skills") return { introduction: "A practical toolkit across the product lifecycle, from interface to deployment.", items: skillGroups.map((group) => ({ title: group.title, body: group.detail, meta: group.skills.join(" · ") })) };
+  if (id === "services") return { introduction: "Product and engineering support for useful, complete digital systems.", items: services.map((service) => ({ title: service.title, body: `${service.description} ${service.outcome}`, meta: service.technologies.join(" · ") })) };
+  if (id === "certifications") return { introduction: "Verified course credentials, with issuer, completion date, and credential ID.", items: certifications.map(([issuer, name, date, credential]) => ({ title: name, body: `Completed ${date}`, meta: `${issuer}  /  Credential ID ${credential}` })) };
+  if (id === "achievements") return { introduction: "Academic recognition, competitive sport, and community service.", items: achievements.map((item) => ({ title: item.title, body: item.detail })) };
+  return { introduction: "For recruiters, collaborators, and project inquiries.", items: [
+    { title: "Email", body: links.email, meta: "Open your mail app to get in touch." },
+    { title: "GitHub", body: "github.com/sajjadhaider1016-dot", meta: "Source code and public projects." },
+    { title: "LinkedIn", body: links.linkedin.replace("https://", ""), meta: "Professional profile." },
+    { title: "WhatsApp", body: links.whatsapp.replace("https://", ""), meta: "Open a direct conversation." },
+  ] };
+}
+
+function roomDetailsTexture(id: SectionId, title: string, index: string) {
+  const size = window.innerWidth < 760 ? 1024 : 1536;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+  const { introduction, items } = roomItems(id);
+  const scale = size / 1536;
+  const px = (value: number) => value * scale;
   const wrap = (text: string, maxWidth: number, font: string) => {
     ctx.font = font;
-    const lines: string[] = []; let line = "";
-    for (const word of text.split(/\s+/)) {
-      const next = line ? `${line} ${word}` : word;
-      if (ctx.measureText(next).width > maxWidth && line) { lines.push(line); line = word; }
-      else line = next;
+    const lines: string[] = [];
+    for (const paragraph of text.split("\n")) {
+      let line = "";
+      for (const word of paragraph.split(/\s+/)) {
+        const candidate = line ? `${line} ${word}` : word;
+        if (line && ctx.measureText(candidate).width > maxWidth) { lines.push(line); line = word; }
+        else line = candidate;
+      }
+      if (line) lines.push(line);
     }
-    if (line) lines.push(line);
     return lines;
   };
-  cards.forEach((card, i) => {
-    const column = i % columns; const row = Math.floor(i / columns);
-    const x = left + column * (cardWidth + gap); const y = top + row * (cardHeight + gap);
-    ctx.fillStyle = "#fffdf8"; ctx.fillRect(x, y, cardWidth, cardHeight);
-    ctx.strokeStyle = "#d5cbbb"; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, cardWidth, cardHeight);
-    ctx.fillStyle = "#a06e47"; ctx.fillRect(x, y, 4, cardHeight);
-    let textY = y + 20;
-    if (card.label) { ctx.fillStyle = "#8a7054"; ctx.font = "600 13px Arial"; ctx.fillText(card.label.toUpperCase().slice(0, 68), x + 16, textY); textY += 23; }
-    ctx.fillStyle = "#302c26";
-    const titleLines = wrap(card.title, cardWidth - 32, "700 19px Arial").slice(0, 2);
-    ctx.font = "700 19px Arial";
-    for (const line of titleLines) { ctx.fillText(line, x + 16, textY); textY += 23; }
-    ctx.fillStyle = "#625b50";
-    const detailLines = wrap(card.detail, cardWidth - 32, "400 15px Arial"); ctx.font = "400 15px Arial";
-    const detailLimit = id === "projects" ? 3 : columns === 1 ? 3 : 2;
-    for (const line of detailLines.slice(0, detailLimit)) { if (textY < y + cardHeight - 12) ctx.fillText(line, x + 16, textY); textY += 19; }
-    if (card.extra && textY < y + cardHeight - 6) {
-      ctx.fillStyle = "#7c6348";
-      const extraLines = wrap(card.extra, cardWidth - 32, "500 13px Arial"); ctx.font = "500 13px Arial";
-      for (const line of extraLines.slice(0, Math.max(1, Math.floor((y + cardHeight - textY - 7) / 16)))) { ctx.fillText(line, x + 16, textY); textY += 16; }
+
+  ctx.fillStyle = "#f7f3ea"; ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = "#eee5d7"; ctx.fillRect(0, 0, size, px(326));
+  ctx.strokeStyle = "#a28260"; ctx.lineWidth = px(4); ctx.strokeRect(px(22), px(22), size - px(44), size - px(44));
+  ctx.fillStyle = "#876448"; ctx.font = `600 ${px(20)}px Arial`; ctx.fillText(`SAJJAD HAIDER     /     ROOM ${index}`, px(76), px(98));
+  ctx.fillStyle = "#302c26"; ctx.font = `600 ${px(66)}px Arial`;
+  const titleLines = wrap(title.toUpperCase(), px(1370), `600 ${px(66)}px Arial`).slice(0, 2);
+  titleLines.forEach((line, lineIndex) => ctx.fillText(line, px(76), px(194 + lineIndex * 76)));
+  ctx.fillStyle = "#665e53"; ctx.font = `400 ${px(23)}px Arial`;
+  const introY = 215 + titleLines.length * 76;
+  const introLines = wrap(introduction, px(1360), `400 ${px(23)}px Arial`).slice(0, 2);
+  introLines.forEach((line, lineIndex) => ctx.fillText(line, px(76), px(introY + 37 + lineIndex * 33)));
+  const ruleY = introY + 70 + introLines.length * 33;
+  ctx.strokeStyle = "#c9bdac"; ctx.lineWidth = px(2); ctx.beginPath(); ctx.moveTo(px(76), px(ruleY)); ctx.lineTo(size - px(76), px(ruleY)); ctx.stroke();
+
+  const columns = 2;
+  const gutter = px(36);
+  const margin = px(76);
+  const columnWidth = (size - margin * 2 - gutter) / columns;
+  const bodyTop = px(ruleY + 32);
+  const bottom = size - px(72);
+  const rows = Math.ceil(items.length / columns);
+  const rowHeight = (bottom - bodyTop) / rows;
+  items.forEach((item, itemIndex) => {
+    const col = itemIndex % columns;
+    const row = Math.floor(itemIndex / columns);
+    const x = margin + col * (columnWidth + gutter);
+    const y = bodyTop + row * rowHeight;
+    const pad = px(18);
+    const titleFont = `600 ${px(25)}px Arial`;
+    const bodyFont = `400 ${px(id === "projects" ? 17 : 19)}px Arial`;
+    const metaFont = `500 ${px(16)}px Arial`;
+    ctx.fillStyle = "rgba(255,255,255,.52)"; ctx.fillRect(x, y, columnWidth, rowHeight - px(15));
+    ctx.strokeStyle = "rgba(133,105,77,.25)"; ctx.lineWidth = px(1); ctx.strokeRect(x, y, columnWidth, rowHeight - px(15));
+    let cursorY = y + pad + px(28);
+    ctx.fillStyle = "#39332c";
+    const titleText = `${String(itemIndex + 1).padStart(2, "0")}  ${item.title}`;
+    const titleLinesItem = wrap(titleText, columnWidth - pad * 2, titleFont).slice(0, 2);
+    titleLinesItem.forEach((line) => { ctx.font = titleFont; ctx.fillText(line, x + pad, cursorY); cursorY += px(32); });
+    const availableTextHeight = y + rowHeight - px(63) - cursorY;
+    const bodyLineHeight = px(id === "projects" ? 23 : 26);
+    const bodyLines = wrap(item.body, columnWidth - pad * 2, bodyFont);
+    const metaLines = item.meta ? wrap(item.meta, columnWidth - pad * 2, metaFont) : [];
+    const maxBodyLines = Math.max(1, Math.floor((availableTextHeight - (metaLines.length ? px(34) : 0)) / bodyLineHeight));
+    ctx.fillStyle = "#625a50"; ctx.font = bodyFont;
+    bodyLines.slice(0, maxBodyLines).forEach((line, lineIndex) => ctx.fillText(line, x + pad, cursorY + px(22) + lineIndex * bodyLineHeight));
+    cursorY += bodyLines.slice(0, maxBodyLines).length * bodyLineHeight + px(11);
+    if (item.meta && cursorY < y + rowHeight - px(30)) {
+      ctx.fillStyle = "#926747"; ctx.font = metaFont;
+      const maxMetaLines = Math.max(1, Math.floor((y + rowHeight - px(26) - cursorY) / px(21)));
+      metaLines.slice(0, maxMetaLines).forEach((line, lineIndex) => ctx.fillText(line, x + pad, cursorY + px(18) + lineIndex * px(21)));
     }
   });
-  const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4; return texture;
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
+  return texture;
 }
 
 function box(parent: THREE.Object3D, size: [number, number, number], position: [number, number, number], material: THREE.Material, cast = true) {
@@ -234,23 +282,60 @@ function addExhibitionRoom(
   box(world, [0.18, 4.2, 4.5], [side * 8.22, 2.08, z], wall, false);
   box(world, [4.9, 4.2, 0.18], [x, 2.08, z + 2.25], wall, false);
   box(world, [4.9, 4.2, 0.18], [x, 2.08, z - 2.25], wall, false);
+  const ceiling = new THREE.MeshStandardMaterial({ color: "#e8e2d6", roughness: 0.94 });
+  const reveal = new THREE.MeshStandardMaterial({ color: "#c7b9a5", roughness: 0.82 });
+  const roomMetal = new THREE.MeshStandardMaterial({ color: "#9c8060", metalness: 0.34, roughness: 0.62 });
+  const coveMetal = new THREE.MeshStandardMaterial({ color: "#9c8060", emissive: "#9c653d", emissiveIntensity: 0.12, metalness: 0.22, roughness: 0.6 });
+  box(world, [4.92, 0.14, 4.62], [x, 4.12, z], ceiling, false);
+  for (const edge of [-1, 1]) {
+    box(world, [0.13, 0.12, 4.58], [side * (5.86 + edge * 2.28), 3.92, z], reveal, false);
+    box(world, [4.74, 0.12, 0.12], [x, 3.92, z + edge * 2.18], reveal, false);
+  }
+  // A softly lit ceiling cove and restrained brass inlay make each side room feel finished.
+  box(world, [0.035, 0.025, 3.6], [side * 7.85, 3.83, z], coveMetal, false);
   const wood = new THREE.MeshStandardMaterial({ color: "#a97a52", roughness: 0.9 });
   const trim = new THREE.MeshStandardMaterial({ color: "#94704f", roughness: 0.84 });
   const stone = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.98 });
   const brass = new THREE.MeshStandardMaterial({ color: "#9e815f", metalness: 0.45, roughness: 0.5 });
-  const board = new THREE.Mesh(new THREE.BoxGeometry(0.13, 3.22, 3.15), trim);
-  board.position.set(side * 8.1, 2.1, z);
+  const board = new THREE.Mesh(new THREE.BoxGeometry(0.16, 3.48, 3.52), trim);
+  board.position.set(side * 8.08, 2.08, z);
   board.castShadow = true;
   world.add(board);
-  const display = new THREE.Mesh(new THREE.PlaneGeometry(2.98, 3.08), new THREE.MeshBasicMaterial({ map: roomDetailsTexture(section.id, section.label, section.number), side: THREE.DoubleSide }));
+  const display = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 3.28), new THREE.MeshBasicMaterial({ map: roomDetailsTexture(section.id, section.label, section.number), side: THREE.DoubleSide }));
   display.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-  display.position.set(side * 8.025, 2.1, z);
+  display.position.set(side * 7.99, 2.12, z);
   world.add(display);
 
+  box(world, [0.09, 0.045, 3.42], [side * 7.88, 3.52, z], roomMetal, false);
+  for (const offset of [-1.12, 1.12]) {
+    const pictureLight = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.46, 12), roomMetal);
+    pictureLight.rotation.z = Math.PI / 2;
+    pictureLight.position.set(side * 7.72, 3.66, z + offset);
+    world.add(pictureLight);
+  }
+
   if (section.id === "projects") {
-    for (const offset of [-1.12, 0, 1.12]) {
-      box(world, [0.62, 0.72, 0.62], [side * 5.45, 0.36, z + offset], stone);
-      box(world, [0.74, 0.8, 0.16], [side * 5.45, 1.15, z + offset], wood);
+    for (const [offset, projectIndex] of [[-1.15, 0], [0, 1], [1.15, 2]] as const) {
+      box(world, [0.78, 0.58, 0.78], [side * 5.55, 0.29, z + offset], stone);
+      box(world, [0.06, 0.83, 0.62], [side * 5.55, 0.98, z + offset], wood);
+      const canvasPanel = box(world, [0.035, 0.67, 0.49], [side * 5.505, 1.02, z + offset], new THREE.MeshStandardMaterial({ color: ["#e5e0d5", "#d8e3e4", "#e5d6c4"][projectIndex], roughness: 0.74 }), false);
+      canvasPanel.userData.sectionId = section.id;
+      box(world, [0.025, 0.035, 0.34], [side * 5.48, 1.14, z + offset], roomMetal, false);
+      box(world, [0.025, 0.025, 0.25], [side * 5.48, 0.94, z + offset], trim, false);
+      const previewPaths = ["/projects/veyra-live.png", "/projects/study-buddy-live.png", "/projects/docedit-live.png"];
+      const previewMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", side: THREE.DoubleSide, toneMapped: false });
+      const preview = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.29), previewMaterial);
+      preview.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+      preview.position.set(side * 5.46, 1.05, z + offset);
+      preview.userData.sectionId = section.id;
+      world.add(preview);
+      new THREE.TextureLoader().load(previewPaths[projectIndex], (texture) => {
+        if (!preview.parent) { texture.dispose(); return; }
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = 4;
+        previewMaterial.map = texture;
+        previewMaterial.needsUpdate = true;
+      });
     }
   } else if (section.id === "experience") {
     box(world, [0.09, 1.48, 0.09], [side * 5.3, 1.55, z - 1.05], brass, false);
@@ -437,6 +522,8 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       leaf.userData.sectionId = section.id;
       hinge.add(leaf);
       const doorMat = panelMat.clone();
+      const doorFinishes = ["#9a6d4d", "#a77a55", "#86664c", "#b07e56", "#8f7258"];
+      doorMat.color.set(doorFinishes[i % doorFinishes.length]);
       const slab = box(leaf, [0.11, 2.28, 1.12], [0, 1.17, 0.56], doorMat);
       slab.name = "door-slab";
       slab.userData.sectionId = section.id;
@@ -458,6 +545,11 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       handle.position.set(side * -0.12, 1.05, 0.23);
       handle.userData.sectionId = section.id;
       leaf.add(handle);
+      for (const hingeY of [0.27, 1.15, 2.03]) {
+        const hingePin = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.13, 10), metal);
+        hingePin.position.set(side * -0.08, hingeY, 0.04);
+        leaf.add(hingePin);
+      }
       frame.add(hinge);
       world.add(frame);
       doorRecords.push({ id: section.id, side, z, hinge });
@@ -788,7 +880,10 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
         if (o instanceof THREE.Mesh) {
           o.geometry.dispose();
           const materials = Array.isArray(o.material) ? o.material : [o.material];
-          materials.forEach((material) => material.dispose());
+          materials.forEach((material) => {
+            if ("map" in material && material.map instanceof THREE.Texture) material.map.dispose();
+            material.dispose();
+          });
         }
       });
       host.removeChild(renderer.domElement);
