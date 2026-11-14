@@ -153,7 +153,7 @@ export default function PortfolioExperience() {
         <div className="map-foot"><span className="pencil-line" />Choose a room to enter</div>
       </aside>}
 
-      <div className={`content-anchor ${mode === "tour" && !roomDetailsVisible ? "tour-details-hidden" : ""}`} id="portfolio-content">
+      <div className={`content-anchor ${mode === "tour" ? "tour-details-hidden" : ""}`} id="portfolio-content">
         <SectionPanel section={active} enter={enter} navigate={goTo} allSections={mode === "portfolio"} />
       </div>
 
