@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { achievements, certifications, education, experience, links, projects, sections, services, skillGroups, type SectionId } from "@/data/portfolio";
+import { sections, type SectionId } from "@/data/portfolio";
 
 type Props = {
   active: SectionId;
@@ -72,120 +72,6 @@ function labelTexture(title: string, index: string) {
   ctx.fillText(title.toUpperCase().slice(0, 22), 28, 103);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
-type RoomItem = { title: string; body: string; meta?: string };
-
-function roomItems(id: SectionId): { introduction: string; items: RoomItem[] } {
-  if (id === "home") return { introduction: "AI & Full-Stack Developer · building practical AI products and complete digital experiences.", items: [
-    { title: "AI product development", body: "AI applications, intelligent assistants, and machine learning features grounded in useful tasks." },
-    { title: "Full-stack engineering", body: "Responsive interfaces, connected backend systems, APIs, and data workflows." },
-    { title: "Automation", body: "Practical workflows that connect software and AI to reduce repetitive work." },
-    { title: "Open to opportunities", body: "Available for remote internships, freelance, and product work." },
-  ] };
-  if (id === "about") return { introduction: "I turn practical problems into useful software, combining my AI background with full-stack product work.", items: [
-    { title: "Background", body: "I study Artificial Intelligence at Bahauddin Zakariya University and build complete software products alongside my studies." },
-    { title: "Technical interests", body: "Applied AI, language model integrations, document workflows, intelligent assistants, and automation." },
-    { title: "How I work", body: "I start with the user and the problem, build in clear steps, and choose technology that fits the job." },
-    { title: "Current direction", body: "Growing as an AI product engineer, building dependable software where modern web systems and machine intelligence meet." },
-  ] };
-  if (id === "projects") return { introduction: `${projects.length} products and experiments. Select a project display in this gallery to explore its details and live preview.`, items: projects.map((project) => ({
-    title: project.title,
-    body: [project.description, project.features.length ? `Features: ${project.features.join(" · ")}` : "", project.contribution ? `Role: ${project.contribution}` : ""].filter(Boolean).join(" "),
-    meta: [project.category, project.tech.join(" · "), project.live ? "Live preview available" : "", project.github ? "Public source available" : ""].filter(Boolean).join("  /  "),
-  })) };
-  if (id === "experience") return { introduction: "Applied AI learning, independent product building, and entrepreneurial work.", items: experience.map((job) => ({ title: `${job.role} · ${job.org}`, body: `${job.date}. ${job.description} ${job.points.join(" · ")}`, meta: job.tags.join(" · ") })) };
-  if (id === "education") return { introduction: "Academic foundations in artificial intelligence and core studies.", items: education.map((item) => ({ title: item.title, body: item.detail, meta: `${item.place}  /  ${item.status}` })) };
-  if (id === "skills") return { introduction: "A practical toolkit across the product lifecycle, from interface to deployment.", items: skillGroups.map((group) => ({ title: group.title, body: group.detail, meta: group.skills.join(" · ") })) };
-  if (id === "services") return { introduction: "Product and engineering support for useful, complete digital systems.", items: services.map((service) => ({ title: service.title, body: `${service.description} ${service.outcome}`, meta: service.technologies.join(" · ") })) };
-  if (id === "certifications") return { introduction: "Verified course credentials, with issuer, completion date, and credential ID.", items: certifications.map(([issuer, name, date, credential]) => ({ title: name, body: `Completed ${date}`, meta: `${issuer}  /  Credential ID ${credential}` })) };
-  if (id === "achievements") return { introduction: "Academic recognition, competitive sport, and community service.", items: achievements.map((item) => ({ title: item.title, body: item.detail })) };
-  return { introduction: "For recruiters, collaborators, and project inquiries.", items: [
-    { title: "Email", body: links.email, meta: "Open your mail app to get in touch." },
-    { title: "GitHub", body: "github.com/sajjadhaider1016-dot", meta: "Source code and public projects." },
-    { title: "LinkedIn", body: links.linkedin.replace("https://", ""), meta: "Professional profile." },
-    { title: "WhatsApp", body: links.whatsapp.replace("https://", ""), meta: "Open a direct conversation." },
-  ] };
-}
-
-function roomDetailsTexture(id: SectionId, title: string, index: string) {
-  const size = window.innerWidth < 760 ? 1024 : 1536;
-  const canvas = document.createElement("canvas");
-  canvas.width = size; canvas.height = size;
-  const ctx = canvas.getContext("2d")!;
-  const { introduction, items } = roomItems(id);
-  const scale = size / 1536;
-  const px = (value: number) => value * scale;
-  const wrap = (text: string, maxWidth: number, font: string) => {
-    ctx.font = font;
-    const lines: string[] = [];
-    for (const paragraph of text.split("\n")) {
-      let line = "";
-      for (const word of paragraph.split(/\s+/)) {
-        const candidate = line ? `${line} ${word}` : word;
-        if (line && ctx.measureText(candidate).width > maxWidth) { lines.push(line); line = word; }
-        else line = candidate;
-      }
-      if (line) lines.push(line);
-    }
-    return lines;
-  };
-
-  ctx.fillStyle = "#f7f3ea"; ctx.fillRect(0, 0, size, size);
-  ctx.fillStyle = "#eee5d7"; ctx.fillRect(0, 0, size, px(326));
-  ctx.strokeStyle = "#a28260"; ctx.lineWidth = px(4); ctx.strokeRect(px(22), px(22), size - px(44), size - px(44));
-  ctx.fillStyle = "#876448"; ctx.font = `600 ${px(20)}px Arial`; ctx.fillText(`SAJJAD HAIDER     /     ROOM ${index}`, px(76), px(98));
-  ctx.fillStyle = "#302c26"; ctx.font = `600 ${px(66)}px Arial`;
-  const titleLines = wrap(title.toUpperCase(), px(1370), `600 ${px(66)}px Arial`).slice(0, 2);
-  titleLines.forEach((line, lineIndex) => ctx.fillText(line, px(76), px(194 + lineIndex * 76)));
-  ctx.fillStyle = "#665e53"; ctx.font = `400 ${px(23)}px Arial`;
-  const introY = 215 + titleLines.length * 76;
-  const introLines = wrap(introduction, px(1360), `400 ${px(23)}px Arial`).slice(0, 2);
-  introLines.forEach((line, lineIndex) => ctx.fillText(line, px(76), px(introY + 37 + lineIndex * 33)));
-  const ruleY = introY + 70 + introLines.length * 33;
-  ctx.strokeStyle = "#c9bdac"; ctx.lineWidth = px(2); ctx.beginPath(); ctx.moveTo(px(76), px(ruleY)); ctx.lineTo(size - px(76), px(ruleY)); ctx.stroke();
-
-  const columns = 2;
-  const gutter = px(36);
-  const margin = px(76);
-  const columnWidth = (size - margin * 2 - gutter) / columns;
-  const bodyTop = px(ruleY + 32);
-  const bottom = size - px(72);
-  const rows = Math.ceil(items.length / columns);
-  const rowHeight = (bottom - bodyTop) / rows;
-  items.forEach((item, itemIndex) => {
-    const col = itemIndex % columns;
-    const row = Math.floor(itemIndex / columns);
-    const x = margin + col * (columnWidth + gutter);
-    const y = bodyTop + row * rowHeight;
-    const pad = px(18);
-    const titleFont = `600 ${px(25)}px Arial`;
-    const bodyFont = `400 ${px(id === "projects" ? 17 : 19)}px Arial`;
-    const metaFont = `500 ${px(16)}px Arial`;
-    ctx.fillStyle = "rgba(255,255,255,.52)"; ctx.fillRect(x, y, columnWidth, rowHeight - px(15));
-    ctx.strokeStyle = "rgba(133,105,77,.25)"; ctx.lineWidth = px(1); ctx.strokeRect(x, y, columnWidth, rowHeight - px(15));
-    let cursorY = y + pad + px(28);
-    ctx.fillStyle = "#39332c";
-    const titleText = `${String(itemIndex + 1).padStart(2, "0")}  ${item.title}`;
-    const titleLinesItem = wrap(titleText, columnWidth - pad * 2, titleFont).slice(0, 2);
-    titleLinesItem.forEach((line) => { ctx.font = titleFont; ctx.fillText(line, x + pad, cursorY); cursorY += px(32); });
-    const availableTextHeight = y + rowHeight - px(63) - cursorY;
-    const bodyLineHeight = px(id === "projects" ? 23 : 26);
-    const bodyLines = wrap(item.body, columnWidth - pad * 2, bodyFont);
-    const metaLines = item.meta ? wrap(item.meta, columnWidth - pad * 2, metaFont) : [];
-    const maxBodyLines = Math.max(1, Math.floor((availableTextHeight - (metaLines.length ? px(34) : 0)) / bodyLineHeight));
-    ctx.fillStyle = "#625a50"; ctx.font = bodyFont;
-    bodyLines.slice(0, maxBodyLines).forEach((line, lineIndex) => ctx.fillText(line, x + pad, cursorY + px(22) + lineIndex * bodyLineHeight));
-    cursorY += bodyLines.slice(0, maxBodyLines).length * bodyLineHeight + px(11);
-    if (item.meta && cursorY < y + rowHeight - px(30)) {
-      ctx.fillStyle = "#926747"; ctx.font = metaFont;
-      const maxMetaLines = Math.max(1, Math.floor((y + rowHeight - px(26) - cursorY) / px(21)));
-      metaLines.slice(0, maxMetaLines).forEach((line, lineIndex) => ctx.fillText(line, x + pad, cursorY + px(18) + lineIndex * px(21)));
-    }
-  });
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
   return texture;
 }
 
@@ -302,7 +188,7 @@ function addExhibitionRoom(
   board.position.set(side * 8.08, 2.08, z);
   board.castShadow = true;
   world.add(board);
-  const display = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 3.28), new THREE.MeshBasicMaterial({ map: roomDetailsTexture(section.id, section.label, section.number), side: THREE.DoubleSide }));
+  const display = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 3.28), new THREE.MeshStandardMaterial({ color: "#f7f3ea", roughness: 0.96, side: THREE.DoubleSide }));
   display.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
   display.position.set(side * 7.99, 2.12, z);
   world.add(display);
