@@ -241,56 +241,20 @@ function roomDetailsTexture(sectionId: SectionId) {
   return texture;
 }
 
-function welcomeTexture() {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1400;
-  canvas.height = 700;
-  const ctx = canvas.getContext("2d")!;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#ffe0bd";
-  ctx.font = "600 30px Arial";
-  ctx.fillText("AI ENGINEER   /   FULL-STACK DEVELOPER", 700, 78);
-  ctx.fillStyle = "#fffdf8";
-  ctx.strokeStyle = "#4b382a";
-  ctx.lineWidth = 3;
-  ctx.font = "600 116px Arial";
-  ctx.strokeText("Sajjad Haider", 700, 230);
-  ctx.fillText("Sajjad Haider", 700, 230);
-  ctx.fillStyle = "#f0b184";
-  ctx.font = "italic 82px Georgia";
-  ctx.fillText("AI & Full-Stack Developer", 700, 342);
-  ctx.fillStyle = "#fff8ed";
-  ctx.font = "400 30px Arial";
-  ctx.fillText("Building intelligent digital experiences", 700, 414);
-  ctx.font = "400 25px Arial";
-  ctx.fillText("AI applications  ·  automation  ·  full-stack products", 700, 458);
-  ctx.fillStyle = "#ffe0bd";
-  ctx.font = "600 24px Arial";
-  ctx.fillText("Choose a room to explore  ·  Move forward or backward to begin", 700, 520);
-  ctx.strokeStyle = "#f0b184";
-  ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(570, 568); ctx.lineTo(830, 568); ctx.stroke();
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
-  return texture;
-}
-
 function addWelcomeInstallation(world: THREE.Group) {
   const installation = new THREE.Group();
-  installation.name = "3D portfolio welcome typography";
-  installation.position.z = 2.2;
-  const portraitX = -1.68;
-  const portraitY = 1.88;
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.12, 1.76, 0.08), new THREE.MeshBasicMaterial({ color: "#8e6647", transparent: true, depthWrite: false }));
+  installation.name = "3D portfolio welcome portrait";
+  installation.position.z = 3.15;
+  const portraitX = -0.8;
+  const portraitY = 1.16;
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.25, 1.96, 0.08), new THREE.MeshBasicMaterial({ color: "#8e6647", transparent: true, depthWrite: false }));
   frame.position.set(portraitX, portraitY, 0);
   installation.add(frame);
-  const mat = new THREE.Mesh(new THREE.PlaneGeometry(0.98, 1.62), new THREE.MeshBasicMaterial({ color: "#f7f3ea", transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+  const mat = new THREE.Mesh(new THREE.PlaneGeometry(1.12, 1.84), new THREE.MeshBasicMaterial({ color: "#f7f3ea", transparent: true, depthWrite: false, side: THREE.DoubleSide }));
   mat.position.set(portraitX, portraitY, 0.046);
   installation.add(mat);
   const portraitMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", transparent: true, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
-  const portrait = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 1.5), portraitMaterial);
+  const portrait = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 1.75), portraitMaterial);
   portrait.position.set(portraitX, portraitY, 0.051);
   portrait.name = "Sajjad Haider portrait in the 3D welcome lobby";
   installation.add(portrait);
@@ -301,14 +265,6 @@ function addWelcomeInstallation(world: THREE.Group) {
     portraitMaterial.map = texture;
     portraitMaterial.needsUpdate = true;
   });
-  const heroMaterial = new THREE.MeshBasicMaterial({ map: welcomeTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
-  const heroText = new THREE.Mesh(new THREE.PlaneGeometry(5.25, 2.625), heroMaterial);
-  heroText.position.set(0.82, 2.58, 0.02);
-  heroText.scale.set(0.72, 0.82, 1);
-  installation.add(heroText);
-  const accent = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.018, 0.025), new THREE.MeshBasicMaterial({ color: "#a76543", transparent: true, depthWrite: false }));
-  accent.position.set(0.82, 3.48, 0.04);
-  installation.add(accent);
   world.add(installation);
   return installation;
 }
@@ -576,6 +532,7 @@ function addExhibitionRoom(
 export default function CorridorScene({ active, welcome, welcomeReset, movement, onChoose, onReady, onError }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hoveredDoor, setHoveredDoor] = useState<SectionId | null>(null);
+  const [welcomeTextVisible, setWelcomeTextVisible] = useState(welcome);
   const activeRef = useRef(active);
   const welcomeRef = useRef(welcome);
   const welcomeResetRef = useRef(welcomeReset);
@@ -961,6 +918,12 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     let previousWelcomeReset = welcomeReset;
     let welcomeDismissed = false;
     let welcomeOpacity = welcome ? 1 : 0;
+    let welcomeTextShown = welcome;
+    const showWelcomeText = (visible: boolean) => {
+      if (welcomeTextShown === visible) return;
+      welcomeTextShown = visible;
+      setWelcomeTextVisible(visible);
+    };
     const movementVelocity = new THREE.Vector3();
     const loop = () => {
       raf = requestAnimationFrame(loop);
@@ -972,7 +935,8 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
       if (nextActive !== previousActive || nextWelcome !== previousWelcome || nextWelcomeReset !== previousWelcomeReset) {
         const leavingWelcome = previousWelcome && !nextWelcome;
         const returningToWelcome = nextWelcome && (!previousWelcome || nextWelcomeReset !== previousWelcomeReset);
-        if (returningToWelcome) welcomeDismissed = false;
+        if (returningToWelcome) { welcomeDismissed = false; showWelcomeText(false); }
+        if (leavingWelcome) showWelcomeText(false);
         previousActive = nextActive;
         transitionFrom = active;
         active = nextActive;
@@ -1083,9 +1047,9 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
       }
       if (nextWelcome && cameraHasArrived) {
         const distanceFromLobbyStart = Math.hypot(camera.position.x, camera.position.z - 6.4);
-        if (distanceFromLobbyStart < 0.72) welcomeDismissed = false;
-        else if (distanceFromLobbyStart > 1.15) welcomeDismissed = true;
-      }
+        if (distanceFromLobbyStart < 0.72) { welcomeDismissed = false; showWelcomeText(true); }
+        else if (distanceFromLobbyStart > 1.15) { welcomeDismissed = true; showWelcomeText(false); }
+      } else if (!nextWelcome) showWelcomeText(false);
       renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(loop);
@@ -1125,6 +1089,11 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
 
   const hoveredLabel = sections.find((section) => section.id === hoveredDoor)?.label;
   return <div ref={hostRef} className="scene-host" aria-hidden="false">
+    <div className={`tour-welcome-copy ${welcomeTextVisible ? "is-visible" : ""}`} aria-hidden={!welcomeTextVisible}>
+      <p className="tour-welcome-kicker">AI Engineer · Full-Stack Developer</p>
+      <h1>Sajjad Haider</h1>
+      <p className="tour-welcome-tagline">Building intelligent digital experiences.</p>
+    </div>
     {hoveredLabel && <div className="door-tooltip">Click to enter <strong>{hoveredLabel}</strong><span>↗</span></div>}
   </div>;
 }

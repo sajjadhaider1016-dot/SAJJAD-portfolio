@@ -38,6 +38,11 @@ a { color: inherit; }
 .scene-wrap, .scene-host, .scene-loading { position: absolute; inset: 0; }
 .scene-host { overflow: hidden; background: linear-gradient(180deg, #e9e6de 0%, #f3f0e8 70%, #b99370 100%); }
 .corridor-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+.tour-welcome-copy { position: absolute; z-index: 2; top: clamp(105px, 15vh, 172px); left: 50%; width: min(760px, calc(100% - 36px)); transform: translateX(-50%); text-align: center; color: #fffdf8; text-shadow: 0 3px 14px rgba(31,22,15,.98), 0 0 30px rgba(31,22,15,.8); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .38s ease, visibility .38s ease; }
+.tour-welcome-copy.is-visible { opacity: 1; visibility: visible; }
+.tour-welcome-kicker { margin: 0 0 7px; color: #ffe0bd; font: 700 clamp(10px, 1.2vw, 13px)/1.4 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+.tour-welcome-copy h1 { margin: 0 0 9px; color: #fffdf8; font: 700 clamp(42px, 8vw, 88px)/.98 var(--display); letter-spacing: -.055em; text-wrap: balance; }
+.tour-welcome-tagline { max-width: 34ch; margin: 0 auto; color: #fffaf2; font: 500 clamp(17px, 2.4vw, 26px)/1.35 var(--sans); text-wrap: balance; }
 .scene-loader { position: absolute; left: 50%; top: 50%; display: flex; align-items: center; gap: 10px; color: #62594e; font-size: 12px; letter-spacing: .04em; transform: translate(-50%, -50%); }
 .scene-loader span { width: 14px; height: 14px; border: 1px solid #a96e49; border-right-color: transparent; border-radius: 50%; animation: turn .8s linear infinite; }
 .scene-loading { display: grid; place-items: center; color: var(--ink-soft); font: 24px var(--serif); background: #eee9df; }
@@ -449,6 +454,10 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
 @media (max-width: 760px) {
   .mode-tour.portfolio-world { width: 100%; height: 100dvh; min-height: 0; }
   .mode-tour .world-header { top: max(8px, env(safe-area-inset-top)); left: 10px; right: 10px; gap: 8px; align-items: center; }
+  .tour-welcome-copy { top: max(76px, calc(env(safe-area-inset-top) + 66px)); width: calc(100% - 28px); }
+  .tour-welcome-kicker { margin-bottom: 5px; font-size: 9px; letter-spacing: .11em; }
+  .tour-welcome-copy h1 { margin-bottom: 6px; font-size: clamp(39px, 11vw, 52px); }
+  .tour-welcome-tagline { max-width: 28ch; font-size: clamp(16px, 4.8vw, 19px); line-height: 1.3; }
   .mode-tour .wordmark { gap: 7px; padding: 4px 6px 4px 4px; border-color: rgba(85,74,58,.2); background: rgba(249,247,240,.93); box-shadow: 0 3px 12px rgba(46,37,28,.08); }
   .mode-tour .monogram { width: 34px; height: 34px; font-size: 16px; }
   .mode-tour .wordmark-copy strong { font-size: 12px; }
