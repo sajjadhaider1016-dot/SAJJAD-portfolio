@@ -6,6 +6,7 @@ import { achievements, certifications, education, experience, links, projects, s
 
 type Props = {
   active: SectionId;
+  welcome: boolean;
   movement: string[];
   onChoose: (id: SectionId) => void;
   onReady: () => void;
@@ -172,9 +173,11 @@ function drawWrappedText(ctx: CanvasRenderingContext2D, text: string, x: number,
 
 function roomDetailsTexture(sectionId: SectionId) {
   const canvas = document.createElement("canvas");
-  canvas.width = 768;
-  canvas.height = 960;
+  canvas.width = 1024;
+  canvas.height = 1280;
   const ctx = canvas.getContext("2d")!;
+  // Draw at the established layout size, then rasterize at 1⅓× for crisp in-world type.
+  ctx.scale(4 / 3, 4 / 3);
   const accent = "#a76543";
   const ink = "#302c27";
   const muted = "#665e53";
@@ -235,6 +238,66 @@ function roomDetailsTexture(sectionId: SectionId) {
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
   return texture;
+}
+
+function welcomeTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 760;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "#f8f5ed";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#c9bba8";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
+  ctx.strokeStyle = "#a76543";
+  ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(76, 76); ctx.lineTo(294, 76); ctx.stroke();
+  ctx.fillStyle = "#a76543";
+  ctx.font = "600 25px Arial";
+  ctx.fillText("AN INTERACTIVE PORTFOLIO", 76, 128);
+  ctx.fillStyle = "#302c27";
+  ctx.font = "700 80px Arial";
+  ctx.fillText("Sajjad Haider", 72, 246);
+  ctx.fillStyle = "#a76543";
+  ctx.font = "600 32px Arial";
+  ctx.fillText("AI & FULL-STACK DEVELOPER", 78, 308);
+  ctx.fillStyle = "#554d43";
+  ctx.font = "400 27px Arial";
+  ctx.fillText("Building intelligent digital experiences through AI,", 78, 394);
+  ctx.fillText("automation, and modern web technologies.", 78, 434);
+  ctx.strokeStyle = "#d0c4b4";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(78, 502); ctx.lineTo(1120, 502); ctx.stroke();
+  ctx.fillStyle = "#302c27";
+  ctx.font = "700 24px Arial";
+  ctx.fillText("CHOOSE A ROOM TO BEGIN", 78, 562);
+  ctx.fillStyle = "#665e53";
+  ctx.font = "400 20px Arial";
+  ctx.fillText("Select Rooms above or click a door in the corridor.", 78, 606);
+  ctx.fillStyle = "#a76543";
+  ctx.font = "600 17px Arial";
+  ctx.fillText("HOME  ·  ABOUT  ·  PROJECTS  ·  EXPERIENCE  ·  AND MORE", 78, 694);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
+function addWelcomeInstallation(world: THREE.Group) {
+  const installation = new THREE.Group();
+  installation.name = "3D portfolio welcome installation";
+  const backing = new THREE.MeshStandardMaterial({ color: "#98704f", roughness: 0.82 });
+  box(installation, [4, 2.65, 0.17], [0, 2.05, 0], backing, false);
+  const face = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.84, 2.5),
+    new THREE.MeshBasicMaterial({ map: welcomeTexture(), side: THREE.DoubleSide, toneMapped: false }),
+  );
+  face.position.set(0, 2.05, 0.095);
+  installation.add(face);
+  box(installation, [4.42, 0.08, 0.22], [0, 0.49, 0], backing, false);
+  world.add(installation);
+  return installation;
 }
 
 function box(parent: THREE.Object3D, size: [number, number, number], position: [number, number, number], material: THREE.Material, cast = true) {
@@ -324,6 +387,7 @@ function addExhibitionRoom(
   z: number,
   floor: THREE.Material,
   wall: THREE.Material,
+  roomBoards: Map<SectionId, THREE.MeshBasicMaterial>,
 ) {
   const side = section.side;
   const x = side * 5.86;
@@ -351,7 +415,9 @@ function addExhibitionRoom(
   const boardWidth = 2.45;
   const boardHeight = 2.88;
   box(world, [0.14, boardHeight + 0.18, boardWidth + 0.18], [side * 8.08, boardCenterY, boardZ], trim);
-  const board = new THREE.Mesh(new THREE.PlaneGeometry(boardWidth, boardHeight), new THREE.MeshBasicMaterial({ map: roomDetailsTexture(section.id), side: THREE.DoubleSide, toneMapped: false }));
+  const boardMaterial = new THREE.MeshBasicMaterial({ color: "#f8f5ed", side: THREE.DoubleSide, toneMapped: false });
+  roomBoards.set(section.id, boardMaterial);
+  const board = new THREE.Mesh(new THREE.PlaneGeometry(boardWidth, boardHeight), boardMaterial);
   board.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
   board.position.set(side * 7.99, boardCenterY, boardZ);
   board.userData.sectionId = section.id;
@@ -477,10 +543,11 @@ function addExhibitionRoom(
   world.add(sconce);
 }
 
-export default function CorridorScene({ active, movement, onChoose, onReady, onError }: Props) {
+export default function CorridorScene({ active, welcome, movement, onChoose, onReady, onError }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hoveredDoor, setHoveredDoor] = useState<SectionId | null>(null);
   const activeRef = useRef(active);
+  const welcomeRef = useRef(welcome);
   const movementRefLatest = useRef(movement);
   const chooseRef = useRef(onChoose);
   const readyRef = useRef(onReady);
@@ -503,13 +570,15 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#f3f0e8");
-    scene.fog = new THREE.Fog("#f3f0e8", 20, 45);
-    const camera = new THREE.PerspectiveCamera(isMobile ? 68 : 61, 1, 0.1, 70);
-    camera.position.set(0, 1.62, 2.2);
+    scene.fog = new THREE.Fog("#f3f0e8", 34, 72);
+    const camera = new THREE.PerspectiveCamera(isMobile ? 66 : 61, 1, 0.1, 85);
+    camera.position.set(0, 1.62, 6.4);
     const world = new THREE.Group();
     scene.add(world);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.7));
-    renderer.shadowMap.enabled = true;
+    const welcomeInstallation = addWelcomeInstallation(world);
+    welcomeInstallation.visible = welcome;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+    renderer.shadowMap.enabled = !isMobile;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -539,9 +608,10 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     const panelMat = new THREE.MeshStandardMaterial({ color: "#ae7b51", roughness: 0.83 });
     const panelInset = new THREE.MeshStandardMaterial({ color: "#bb895d", roughness: 0.86 });
     const metal = new THREE.MeshStandardMaterial({ color: "#8d7654", metalness: 0.68, roughness: 0.35 });
+    const roomBoardMaterials = new Map<SectionId, THREE.MeshBasicMaterial>();
     // Carve ten real doorway openings from the corridor walls and frame compact rooms behind them.
     for (const side of [-1, 1] as const) {
-      let cursor = 3;
+      let cursor = 9;
       const doorsOnSide = sections.filter((section) => section.side === side);
       doorsOnSide.forEach((section) => {
         const sectionIndex = sections.findIndex((candidate) => candidate.id === section.id);
@@ -552,32 +622,36 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
         if (segmentLength > 0) box(world, [0.23, 4.2, segmentLength], [side * 3.43, 2.08, (cursor + openingTop) / 2], wallMat, false);
         box(world, [0.23, 1.58, 1.56], [side * 3.43, 3.41, z], wallMat, false);
         cursor = openingBottom;
-        addExhibitionRoom(world, section, z, new THREE.MeshStandardMaterial({ map: floorTex, color: "#cfac88", roughness: 0.86 }), wallMat);
+        addExhibitionRoom(world, section, z, new THREE.MeshStandardMaterial({ map: floorTex, color: "#cfac88", roughness: 0.86 }), wallMat, roomBoardMaterials);
       });
       if (cursor > -31) box(world, [0.23, 4.2, cursor + 31], [side * 3.43, 2.08, (cursor - 31) / 2], wallMat, false);
     }
-    box(world, [6.9, 0.1, 34], [0, -0.055, -14], new THREE.MeshStandardMaterial({ color: "#7f6048", roughness: 0.98 }), false);
+    box(world, [6.9, 0.1, 40], [0, -0.055, -11], new THREE.MeshStandardMaterial({ color: "#7f6048", roughness: 0.98 }), false);
     // individually laid boards make the timber floor read as a real material in motion
     const boardMat = new THREE.MeshStandardMaterial({ map: floorTex, color: "#d2aa81", roughness: 0.8 });
     const compactFloor = window.matchMedia("(max-width: 640px)").matches;
     const columns = compactFloor ? 8 : 16;
-    const rows = compactFloor ? 23 : 27;
+    const rows = compactFloor ? 29 : 31;
     const plankWidth = 6.24 / columns;
     const boardGeo = new THREE.BoxGeometry(plankWidth - 0.008, 0.075, 1.27);
+    const floorPlanks = new THREE.InstancedMesh(boardGeo, boardMat, columns * rows);
+    const plankMatrix = new THREE.Matrix4();
+    let plankIndex = 0;
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        const plank = new THREE.Mesh(boardGeo, boardMat);
-        plank.position.set(-3.12 + col * plankWidth + plankWidth / 2, 0.015, 2 - row * 1.29 + (row % 2 ? 0.25 : 0));
-        plank.receiveShadow = true;
-        plank.castShadow = true;
-        world.add(plank);
+        plankMatrix.makeTranslation(-3.12 + col * plankWidth + plankWidth / 2, 0.015, 5.8 - row * 1.29 + (row % 2 ? 0.25 : 0));
+        floorPlanks.setMatrixAt(plankIndex++, plankMatrix);
       }
     }
+    floorPlanks.instanceMatrix.needsUpdate = true;
+    floorPlanks.receiveShadow = !isMobile;
+    floorPlanks.castShadow = !isMobile;
+    world.add(floorPlanks);
     box(world, [0.12, 0.24, 34], [-3.28, 0.16, -14], skirting);
     box(world, [0.12, 0.24, 34], [3.28, 0.16, -14], skirting);
     box(world, [0.15, 0.1, 34], [-3.3, 3.92, -14], skirting, false);
     box(world, [0.15, 0.1, 34], [3.3, 3.92, -14], skirting, false);
-    box(world, [6.9, 0.18, 34], [0, 4.15, -14], new THREE.MeshStandardMaterial({ color: "#e9e5dc", roughness: 1 }), false);
+    box(world, [6.9, 0.18, 40], [0, 4.15, -11], new THREE.MeshStandardMaterial({ color: "#e9e5dc", roughness: 1 }), false);
 
     const doorRecords: { id: SectionId; side: -1 | 1; z: number; hinge: THREE.Group }[] = [];
     for (let i = 0; i < sections.length; i++) {
@@ -611,7 +685,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
         contour.position.set(side * -0.078, y, 0.56);
         leaf.add(contour);
       }
-      const plaque = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.24), new THREE.MeshBasicMaterial({ map: labelTexture(section.label, section.number), side: THREE.DoubleSide }));
+      const plaque = new THREE.Mesh(new THREE.PlaneGeometry(0.94, 0.31), new THREE.MeshBasicMaterial({ map: labelTexture(section.label, section.number), side: THREE.DoubleSide, toneMapped: false }));
       plaque.rotation.y = Math.PI / 2;
       plaque.position.set(side * -0.071, 2.14, 0.56);
       plaque.userData.sectionId = section.id;
@@ -819,8 +893,19 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     resize();
     readyRef.current();
 
-    let active = "home" as SectionId;
-    let cameraHasArrived = false;
+    let active = activeRef.current;
+    const loadedRoomBoards = new Set<SectionId>();
+    const ensureRoomBoard = (sectionId: SectionId) => {
+      if (loadedRoomBoards.has(sectionId)) return;
+      const material = roomBoardMaterials.get(sectionId);
+      if (!material) return;
+      material.map = roomDetailsTexture(sectionId);
+      material.color.set("#ffffff");
+      material.needsUpdate = true;
+      loadedRoomBoards.add(sectionId);
+    };
+    if (!welcome) ensureRoomBoard(active);
+    let cameraHasArrived = welcome;
     const timer = new THREE.Timer();
     timer.connect(document);
     let raf = 0;
@@ -829,21 +914,30 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     let transitionStage = 0;
     const movementRef = { current: movement };
     let previousActive = active;
+    let previousWelcome = welcome;
+    const movementVelocity = new THREE.Vector3();
     const loop = () => {
       raf = requestAnimationFrame(loop);
       timer.update();
       const dt = Math.min(timer.getDelta(), 0.05);
       const nextActive = activeRef.current;
-      if (nextActive !== previousActive) {
+      const nextWelcome = welcomeRef.current;
+      if (nextActive !== previousActive || nextWelcome !== previousWelcome) {
+        const leavingWelcome = previousWelcome && !nextWelcome;
         previousActive = nextActive;
         transitionFrom = active;
         active = nextActive;
+        previousWelcome = nextWelcome;
         dragYaw = 0;
         dragPitch = 0;
         cursorLookTarget.set(0, 0);
-        transitionStage = transitionFrom === "home" ? (active === "home" ? 3 : 1) : 0;
+        movementVelocity.set(0, 0, 0);
+        // The welcome lobby opens onto the corridor (stage 1); changing rooms exits the old room first (stage 0).
+        transitionStage = leavingWelcome ? 1 : 0;
         cameraHasArrived = false;
       }
+      welcomeInstallation.visible = nextWelcome;
+      if (!nextWelcome) ensureRoomBoard(active);
       movementRef.current = movementRefLatest.current;
       cursorLookCurrent.lerp(cursorLookTarget, Math.min(1, dt * 2.4));
       const selectedIndex = sections.findIndex((s) => s.id === active);
@@ -861,10 +955,10 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       }
       for (const door of doorRecords) {
         const isLeavingThroughDoor = door.id === transitionFrom && transitionStage === 0;
-        const goal = door.id === active || isLeavingThroughDoor ? -door.side * 1.02 : 0;
+        const goal = (!nextWelcome && door.id === active) || isLeavingThroughDoor ? -door.side * 1.02 : 0;
         door.hinge.rotation.y += (goal - door.hinge.rotation.y) * Math.min(1, dt * (reduced.matches ? 12 : 3.5));
       }
-      avatar.visible = active === "about";
+      avatar.visible = active === "about" && !nextWelcome;
       if (!cameraHasArrived && selectedIndex >= 0) {
         const d = doorRecords[selectedIndex];
         const fromIndex = sections.findIndex((section) => section.id === transitionFrom);
@@ -875,25 +969,21 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
           // Leave the current room through its open portal before walking along the hall.
           desired = new THREE.Vector3(0, 1.62, fromDoor.z);
           yaw = 0;
-        } else if (transitionStage === 1 && active !== "home") {
+        } else if (transitionStage === 1) {
           // Align with the selected doorway inside the corridor.
           desired = new THREE.Vector3(0, 1.62, d.z);
-        } else if (transitionStage === 2 && active !== "home") {
+        } else if (transitionStage === 2) {
           // Keep a portrait phone far enough from the display wall to frame the whole room panel.
-          desired = new THREE.Vector3(d.side * (isMobile ? 4.2 : 5.05), 1.62, d.z);
-          yaw = -d.side * Math.PI / 2;
-        } else if (active === "home") {
-          // Start and return inside the Home room, facing its information board.
-          desired = new THREE.Vector3(d.side * (isMobile ? 4.2 : 5.05), 1.62, d.z);
+          desired = new THREE.Vector3(d.side * (isMobile ? 4 : 5.05), 1.62, d.z);
           yaw = -d.side * Math.PI / 2;
         }
-        const transitionRate = reduced.matches ? 10 : isMobile ? 4.6 : 3.2;
+        const transitionRate = reduced.matches ? 10 : isMobile ? 4.5 : 3.35;
         camera.position.lerp(desired, 1 - Math.exp(-transitionRate * dt));
         camera.rotation.order = "YXZ";
         cameraYawTarget = yaw;
         if (camera.position.distanceTo(desired) < 0.08) {
-          if (transitionStage === 0 && fromDoor) transitionStage = active === "home" ? 3 : 1;
-          else if (transitionStage === 1 && active !== "home") transitionStage = 2;
+          if (transitionStage === 0 && fromDoor) transitionStage = 1;
+          else if (transitionStage === 1) transitionStage = 2;
           else cameraHasArrived = true;
         }
       }
@@ -907,8 +997,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       camera.rotation.x += (lookPitch - camera.rotation.x) * lookDamping;
 
       const keys = new Set(movementRef.current);
-      if (keys.size && cameraHasArrived) {
-        const pace = (isMobile ? 3.4 : 2.5) * dt;
+      if (keys.size && cameraHasArrived && !nextWelcome) {
         const forward = keys.has("w") || keys.has("arrowup");
         const backward = keys.has("s") || keys.has("arrowdown");
         const left = keys.has("a") || keys.has("arrowleft");
@@ -917,12 +1006,15 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
         forwardVector.y = 0;
         forwardVector.normalize();
         const rightVector = new THREE.Vector3().crossVectors(forwardVector, new THREE.Vector3(0, 1, 0)).normalize();
-        const movementVector = new THREE.Vector3();
-        if (forward) movementVector.add(forwardVector);
-        if (backward) movementVector.sub(forwardVector);
-        if (left) movementVector.sub(rightVector);
-        if (right) movementVector.add(rightVector);
-        if (movementVector.lengthSq() > 0) camera.position.addScaledVector(movementVector.normalize(), pace);
+        const targetVelocity = new THREE.Vector3();
+        if (forward) targetVelocity.add(forwardVector);
+        if (backward) targetVelocity.sub(forwardVector);
+        if (left) targetVelocity.sub(rightVector);
+        if (right) targetVelocity.add(rightVector);
+        if (targetVelocity.lengthSq() > 0) targetVelocity.normalize().multiplyScalar(isMobile ? 3.4 : 3);
+        const movementDamping = 1 - Math.exp(-(targetVelocity.lengthSq() > 0 ? 8 : 10) * dt);
+        movementVelocity.lerp(targetVelocity, movementDamping);
+        camera.position.addScaledVector(movementVelocity, dt);
         const currentRoom = sections[selectedIndex];
         if (currentRoom) {
           const roomEdge = isMobile ? 7.1 : 7.82;
@@ -968,6 +1060,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
   }, []);
 
   useEffect(() => { activeRef.current = active; }, [active]);
+  useEffect(() => { welcomeRef.current = welcome; }, [welcome]);
   useEffect(() => { movementRefLatest.current = movement; }, [movement]);
 
   const hoveredLabel = sections.find((section) => section.id === hoveredDoor)?.label;
