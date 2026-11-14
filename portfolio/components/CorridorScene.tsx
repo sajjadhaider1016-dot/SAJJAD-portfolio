@@ -265,6 +265,9 @@ function addWelcomeInstallation(world: THREE.Group) {
     portraitMaterial.map = texture;
     portraitMaterial.needsUpdate = true;
   });
+  const portraitStand = new THREE.MeshStandardMaterial({ color: "#8e6647", roughness: 0.82 });
+  box(installation, [1.42, 0.12, 0.34], [portraitX, 0.07, 0.12], portraitStand, false);
+  for (const offset of [-0.5, 0.5]) box(installation, [0.055, 0.34, 0.07], [portraitX + offset, 0.22, 0.08], portraitStand, false);
   world.add(installation);
   return installation;
 }
@@ -398,35 +401,41 @@ function addExhibitionRoom(
   world.add(pictureLight);
 
   if (section.id === "projects") {
-    // A gallery wall replaces the generic lounge furniture: three aligned, readable exhibits
-    // face the entrance while leaving the information board and the center aisle clear.
+    // Show the real available project screenshots in a balanced gallery visible from the room entrance.
     const galleryWood = new THREE.MeshStandardMaterial({ color: "#8f6848", roughness: 0.78 });
-    const galleryPaper = new THREE.MeshStandardMaterial({ color: "#f7f3ea", roughness: 0.94 });
-    const previewPaths = ["/projects/veyra-live.png", "/projects/study-buddy-live.png", "/projects/docedit-live.png"];
-    const previewTitles = ["VEYRA", "STUDY BUDDY", "DOCEDIT"];
-    const galleryXs = [4.55, 5.9, 7.25];
-    for (const projectIndex of [0, 1, 2]) {
+    const galleryPaper = new THREE.MeshBasicMaterial({ color: "#f7f3ea", side: THREE.DoubleSide, toneMapped: false });
+    const featured = projects.filter((project) => Boolean(project.screenshot));
+    // Keep the three-card row inside the narrower mobile camera frustum.
+    const galleryXs = [4.65, 5.85, 7.05, 5.25, 6.45];
+    const galleryYs = [2.48, 2.48, 2.48, 1.22, 1.22];
+    for (const projectIndex of featured.keys()) {
+      const project = featured[projectIndex];
       const displayX = side * galleryXs[projectIndex];
+      const displayY = galleryYs[projectIndex];
       const displayZ = z + 2.08;
-      box(world, [1.18, 1.26, 0.11], [displayX, 2.08, displayZ], galleryWood, false);
-      box(world, [1.08, 1.16, 0.035], [displayX, 2.08, displayZ - 0.073], galleryPaper, false);
+      box(world, [1.18, 1.02, 0.11], [displayX, displayY, displayZ], galleryWood, false);
+      const paper = new THREE.Mesh(new THREE.PlaneGeometry(1.08, 0.92), galleryPaper);
+      paper.position.set(displayX, displayY, displayZ - 0.078);
+      world.add(paper);
       const labelCanvas = document.createElement("canvas");
       labelCanvas.width = 512; labelCanvas.height = 96;
       const labelContext = labelCanvas.getContext("2d")!;
       labelContext.fillStyle = "#f7f3ea"; labelContext.fillRect(0, 0, 512, 96);
-      labelContext.fillStyle = "#463a30"; labelContext.font = "600 32px Arial"; labelContext.textAlign = "center";
-      labelContext.fillText(previewTitles[projectIndex], 256, 62);
+      labelContext.fillStyle = "#463a30"; labelContext.font = "600 25px Arial"; labelContext.textAlign = "center";
+      labelContext.fillText(project.title.toUpperCase(), 256, 62, 484);
       const labelTexture = new THREE.CanvasTexture(labelCanvas);
       labelTexture.colorSpace = THREE.SRGBColorSpace;
-      const label = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.18), new THREE.MeshBasicMaterial({ map: labelTexture, toneMapped: false, side: THREE.DoubleSide }));
-      label.position.set(displayX, 1.5, displayZ - 0.096);
+      const label = new THREE.Mesh(new THREE.PlaneGeometry(1.02, 0.17), new THREE.MeshBasicMaterial({ map: labelTexture, toneMapped: false, side: THREE.DoubleSide, depthWrite: false }));
+      label.position.set(displayX, displayY - 0.385, displayZ - 0.105);
+      label.renderOrder = 5;
       world.add(label);
-      const previewMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", side: THREE.DoubleSide, toneMapped: false });
-      const preview = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.72), previewMaterial);
-      preview.position.set(displayX, 2.17, displayZ - 0.098);
+      const previewMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", side: THREE.DoubleSide, toneMapped: false, depthWrite: false });
+      const preview = new THREE.Mesh(new THREE.PlaneGeometry(1.02, 0.64), previewMaterial);
+      preview.position.set(displayX, displayY + 0.12, displayZ - 0.105);
+      preview.renderOrder = 5;
       preview.userData.sectionId = section.id;
       world.add(preview);
-      new THREE.TextureLoader().load(previewPaths[projectIndex], (texture) => {
+      new THREE.TextureLoader().load(project.screenshot, (texture) => {
         if (!preview.parent) { texture.dispose(); return; }
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = 4;
@@ -434,13 +443,10 @@ function addExhibitionRoom(
         previewMaterial.needsUpdate = true;
       });
     }
-    box(world, [0.055, 0.05, 3.4], [side * 5.9, 0.035, z + 2.02], brass, false);
+    box(world, [0.055, 0.05, 3.4], [side * 5.85, 0.035, z + 2.02], brass, false);
     const galleryLight = new THREE.PointLight(0xffe4bf, 0.42, 5, 2);
-    galleryLight.position.set(side * 5.9, 3.42, z + 1.25);
+    galleryLight.position.set(side * 5.85, 3.42, z + 1.25);
     world.add(galleryLight);
-    // Low display bench at the back, outside the viewing lane.
-    box(world, [2.4, 0.12, 0.45], [side * 5.86, 0.48, z - 1.72], wood);
-    for (const xOffset of [-1.02, 1.02]) box(world, [0.08, 0.42, 0.08], [side * (5.86 + xOffset), 0.23, z - 1.72], trim, false);
   } else {
     // A slim console, lounge chair, and plant furnish the other rooms without crowding Projects.
     box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z + 1.65], wood);
@@ -992,9 +998,15 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
           // Align with the selected doorway inside the corridor.
           desired = new THREE.Vector3(0, 1.62, d.z);
         } else if (transitionStage === 2) {
-          // Keep a portrait phone far enough from the display wall to frame the whole room panel.
-          desired = new THREE.Vector3(d.side * (isMobile ? 4 : 5.05), 1.62, d.z);
-          yaw = -d.side * Math.PI / 2;
+          if (active === "projects") {
+            // Face the project gallery directly and back up enough to frame all five previews on mobile.
+            desired = new THREE.Vector3(d.side * 5.85, 1.62, d.z - 1.72);
+            yaw = Math.PI;
+          } else {
+            // Face each room's information board with enough distance for mobile readability.
+            desired = new THREE.Vector3(d.side * (isMobile ? 4 : 5.05), 1.62, d.z);
+            yaw = -d.side * Math.PI / 2;
+          }
         }
         const transitionRate = reduced.matches ? 10 : isMobile ? 4.5 : 3.35;
         camera.position.lerp(desired, 1 - Math.exp(-transitionRate * dt));
