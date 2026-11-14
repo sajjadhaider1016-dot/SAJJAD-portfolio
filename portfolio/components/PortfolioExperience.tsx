@@ -43,9 +43,9 @@ export default function PortfolioExperience() {
     setActive(id);
     setMovement([]);
     setMenuOpen(false);
-    if (mode === "tour" && window.matchMedia("(max-width: 760px)").matches) setMobileRoomDetails(active === id);
+    if (mode === "tour" && window.matchMedia("(max-width: 760px)").matches) setMobileRoomDetails(true);
     if (mode === "portfolio") document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [active, mode]);
+  }, [mode]);
 
   const roomArrived = useCallback(() => setMobileRoomDetails(true), []);
 
@@ -157,9 +157,7 @@ export default function PortfolioExperience() {
         <SectionPanel section={active} enter={enter} navigate={goTo} allSections={mode === "portfolio"} />
       </div>
 
-      {mode === "tour" && mobileRoomDetails && <div className="mobile-room-actions"><span>Room details · {sections.find((section) => section.id === active)?.label}</span><button type="button" onClick={() => setMobileRoomDetails(false)}>Explore 3D room <span aria-hidden="true">↗</span></button></div>}
-
-      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">Move · move cursor to look · drag for free look</span><span className="mobile-instructions">Drag to look · pad to walk</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); }} aria-label="Return to portfolio details">i</button></div>}
+      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">Move · move cursor to look · drag for free look</span><span className="mobile-instructions">Drag to look · pad to walk</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); setMobileRoomDetails(false); }} aria-label="Return to portfolio details">i</button></div>}
 
       {mode === "tour" && <div className={`touch-pad ${menuOpen ? "is-suspended" : ""}`} aria-label="Touch movement controls" aria-hidden={menuOpen}>
         <button type="button" aria-label="Move forward" onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); hold("w"); }} onPointerUp={() => release("w")} onPointerCancel={() => release("w")} onPointerLeave={() => release("w")}>↑</button>
