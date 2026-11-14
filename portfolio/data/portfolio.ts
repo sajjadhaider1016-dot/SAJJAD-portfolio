@@ -36,7 +36,7 @@ export const projects = [
     tech: [] as string[],
     github: "",
     live: "https://veyra-scwb.onrender.com/",
-    screenshot: "",
+    screenshot: "/projects/veyra-live.png",
   },
   {
     id: "study-buddy",
@@ -62,7 +62,7 @@ export const projects = [
     tech: ["Next.js 15", "TypeScript", "Tailwind CSS", "TipTap", "PostgreSQL"],
     github: `${github}/docedit-submission`,
     live: "https://docedit-submission.vercel.app/",
-    screenshot: "",
+    screenshot: "/projects/docedit-live.png",
   },
   {
     id: "bzu-ai-assistant",
@@ -75,7 +75,7 @@ export const projects = [
     tech: ["Node.js", "Express", "JavaScript", "Groq", "OCR", "PDF / DOCX"],
     github: `${github}/BZU-AI-Assistant`,
     live: "https://bzu-ai-assistant.vercel.app/",
-    screenshot: "",
+    screenshot: "/projects/bzu-ai-assistant-live.png",
   },
   {
     id: "recoveriest",
