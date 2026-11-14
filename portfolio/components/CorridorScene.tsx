@@ -75,6 +75,76 @@ function labelTexture(title: string, index: string) {
   return texture;
 }
 
+function roomArtworkTexture(sectionId: SectionId, variant: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 384;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d")!;
+  const accents = ["#a66b47", "#68745f", "#9a805a", "#718087", "#8c684e"];
+  const accent = accents[(sections.findIndex((section) => section.id === sectionId) + variant) % accents.length];
+  ctx.fillStyle = "#f4efe5";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#bcae9c";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(17, 17, 350, 478);
+  ctx.strokeStyle = "#766b5d";
+  ctx.lineWidth = 2;
+  ctx.lineCap = "round";
+
+  // Original pencil-style architectural studies, with no portfolio copy on the walls.
+  const shift = variant * 13;
+  ctx.beginPath();
+  ctx.moveTo(72 + shift, 382);
+  ctx.lineTo(72 + shift, 238);
+  ctx.quadraticCurveTo(72 + shift, 147, 164 + shift, 147);
+  ctx.quadraticCurveTo(256 + shift, 147, 256 + shift, 238);
+  ctx.lineTo(256 + shift, 382);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(93 + shift, 382);
+  ctx.lineTo(93 + shift, 244);
+  ctx.quadraticCurveTo(93 + shift, 169, 164 + shift, 169);
+  ctx.quadraticCurveTo(235 + shift, 169, 235 + shift, 244);
+  ctx.lineTo(235 + shift, 382);
+  ctx.stroke();
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(45, 402);
+  ctx.lineTo(337, 402);
+  ctx.moveTo(52, 422);
+  ctx.quadraticCurveTo(190, 398 + variant * 4, 331, 423);
+  ctx.stroke();
+
+  if (sectionId === "projects" || sectionId === "skills" || sectionId === "services") {
+    for (let index = 0; index < 3; index++) {
+      const x = 70 + index * 88;
+      const y = 72 + (index % 2) * 14;
+      ctx.strokeStyle = index === variant % 3 ? accent : "#958875";
+      ctx.strokeRect(x, y, 58, 42);
+      ctx.beginPath();
+      ctx.moveTo(x + 8, y + 55);
+      ctx.lineTo(x + 50, y + 55);
+      ctx.stroke();
+    }
+  } else {
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 3;
+    for (let index = 0; index < 4; index++) {
+      const y = 80 + index * 32;
+      ctx.beginPath();
+      ctx.arc(190 + ((index % 2) * 18), y, 5 + (index % 2), 0, Math.PI * 2);
+      ctx.moveTo(202, y);
+      ctx.lineTo(274, y);
+      ctx.stroke();
+    }
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
 function box(parent: THREE.Object3D, size: [number, number, number], position: [number, number, number], material: THREE.Material, cast = true) {
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
   mesh.position.set(...position);
@@ -184,21 +254,41 @@ function addExhibitionRoom(
   const trim = new THREE.MeshStandardMaterial({ color: "#94704f", roughness: 0.84 });
   const stone = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.98 });
   const brass = new THREE.MeshStandardMaterial({ color: "#9e815f", metalness: 0.45, roughness: 0.5 });
-  const board = new THREE.Mesh(new THREE.BoxGeometry(0.16, 3.48, 3.52), trim);
-  board.position.set(side * 8.08, 2.08, z);
-  board.castShadow = true;
-  world.add(board);
-  const display = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 3.28), new THREE.MeshStandardMaterial({ color: "#f7f3ea", roughness: 0.96, side: THREE.DoubleSide }));
-  display.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-  display.position.set(side * 7.99, 2.12, z);
-  world.add(display);
-
-  box(world, [0.09, 0.045, 3.42], [side * 7.88, 3.52, z], roomMetal, false);
-  for (const offset of [-1.12, 1.12]) {
-    const pictureLight = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.46, 12), roomMetal);
-    pictureLight.rotation.z = Math.PI / 2;
-    pictureLight.position.set(side * 7.72, 3.66, z + offset);
+  for (const [variant, offset] of [-1.1, 0, 1.1].entries()) {
+    const artworkZ = z + offset;
+    box(world, [0.12, 1.52, 0.94], [side * 8.08, 2.52, artworkZ], trim);
+    const art = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 1.34), new THREE.MeshStandardMaterial({ map: roomArtworkTexture(section.id, variant), roughness: 0.98, side: THREE.DoubleSide }));
+    art.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+    art.position.set(side * 7.99, 2.52, artworkZ);
+    world.add(art);
+    box(world, [0.045, 0.035, 0.86], [side * 7.88, 3.39, artworkZ], roomMetal, false);
+    const pictureLight = new THREE.PointLight(0xffe6c3, 0.16, 2.7, 2);
+    pictureLight.position.set(side * 7.55, 3.3, artworkZ);
     world.add(pictureLight);
+  }
+
+  // A slim timber console, lounge chair, and plant give each destination a lived-in scale.
+  box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z], wood);
+  for (const dx of [-0.43, 0.43]) for (const dz of [-0.58, 0.58]) {
+    box(world, [0.07, 0.78, 0.07], [side * (6.92 + dx), 0.4, z + dz], trim, false);
+  }
+  box(world, [0.85, 0.12, 0.82], [side * 4.62, 0.48, z - 1.32], stone);
+  box(world, [0.12, 0.74, 0.78], [side * 4.62, 0.88, z - 1.68], wood);
+  for (const dx of [-0.32, 0.32]) for (const dz of [-0.27, 0.27]) {
+    box(world, [0.075, 0.45, 0.075], [side * (4.62 + dx), 0.23, z - 1.32 + dz], trim, false);
+  }
+  const planter = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.28, 0.42, 16), stone);
+  planter.position.set(side * 7.42, 0.22, z + 1.62);
+  world.add(planter);
+  const foliage = new THREE.MeshStandardMaterial({ color: "#75816a", roughness: 0.96 });
+  for (let leaf = 0; leaf < 5; leaf++) {
+    const angle = (leaf / 5) * Math.PI * 2;
+    const sprig = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.88, 7), foliage);
+    sprig.position.set(side * 7.42 + Math.cos(angle) * 0.13, 0.82, z + 1.62 + Math.sin(angle) * 0.13);
+    sprig.rotation.z = Math.cos(angle) * 0.32;
+    sprig.rotation.x = Math.sin(angle) * 0.3;
+    sprig.castShadow = true;
+    world.add(sprig);
   }
 
   if (section.id === "projects") {
