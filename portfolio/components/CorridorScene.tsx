@@ -8,6 +8,7 @@ type Props = {
   active: SectionId;
   movement: string[];
   onChoose: (id: SectionId) => void;
+  onRoomArrive: () => void;
   onReady: () => void;
   onError: () => void;
 };
@@ -403,15 +404,17 @@ function addExhibitionRoom(
   world.add(sconce);
 }
 
-export default function CorridorScene({ active, movement, onChoose, onReady, onError }: Props) {
+export default function CorridorScene({ active, movement, onChoose, onRoomArrive, onReady, onError }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hoveredDoor, setHoveredDoor] = useState<SectionId | null>(null);
   const activeRef = useRef(active);
   const movementRefLatest = useRef(movement);
   const chooseRef = useRef(onChoose);
+  const arriveRef = useRef(onRoomArrive);
   const readyRef = useRef(onReady);
   const errorRef = useRef(onError);
   useEffect(() => { chooseRef.current = onChoose; }, [onChoose]);
+  useEffect(() => { arriveRef.current = onRoomArrive; }, [onRoomArrive]);
   useEffect(() => { readyRef.current = onReady; }, [onReady]);
   useEffect(() => { errorRef.current = onError; }, [onError]);
 
@@ -753,10 +756,26 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let transitionFrom: SectionId = "home";
     let transitionStage = 0;
+    let roomArrivalPending = false;
+    const movementRef = { current: movement };
+    let previousActive = active;
     const loop = () => {
       raf = requestAnimationFrame(loop);
       timer.update();
       const dt = Math.min(timer.getDelta(), 0.05);
+      const nextActive = activeRef.current;
+      if (nextActive !== previousActive) {
+        previousActive = nextActive;
+        transitionFrom = active;
+        active = nextActive;
+        dragYaw = 0;
+        dragPitch = 0;
+        cursorLookTarget.set(0, 0);
+        transitionStage = transitionFrom === "home" ? (active === "home" ? 3 : 1) : 0;
+        cameraHasArrived = false;
+        roomArrivalPending = true;
+      }
+      movementRef.current = movementRefLatest.current;
       cursorLookCurrent.lerp(cursorLookTarget, Math.min(1, dt * 2.4));
       const selectedIndex = sections.findIndex((s) => s.id === active);
       if (pointerLocked) {
@@ -791,12 +810,14 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
           // Align with the selected doorway inside the corridor.
           desired = new THREE.Vector3(0, 1.62, d.z);
         } else if (transitionStage === 2 && active !== "home") {
-          desired = new THREE.Vector3(d.side * (isMobile ? 6.15 : 5.05), 1.62, d.z);
+          // Keep a portrait phone far enough from the display wall to frame the whole room panel.
+          desired = new THREE.Vector3(d.side * 5.05, 1.62, d.z);
           yaw = -d.side * Math.PI / 2;
         } else if (active === "home") {
           desired = new THREE.Vector3(0, 1.62, 2.2);
         }
-        camera.position.lerp(desired, Math.min(1, dt * (reduced.matches ? 10 : 3.2)));
+        const transitionRate = reduced.matches ? 10 : isMobile ? 4.6 : 3.2;
+        camera.position.lerp(desired, 1 - Math.exp(-transitionRate * dt));
         camera.rotation.order = "YXZ";
         cameraYawTarget = yaw;
         if (camera.position.distanceTo(desired) < 0.08) {
@@ -804,6 +825,10 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
           else if (transitionStage === 1 && active !== "home") transitionStage = 2;
           else cameraHasArrived = true;
         }
+      }
+      if (cameraHasArrived && roomArrivalPending) {
+        roomArrivalPending = false;
+        if (isMobile) arriveRef.current();
       }
 
       camera.rotation.order = "YXZ";
@@ -845,28 +870,9 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       }
       renderer.render(scene, camera);
     };
-    const movementRef = { current: movement };
     raf = requestAnimationFrame(loop);
-
-    // This small adapter keeps the animation loop's latest UI state without rebuilding the scene.
-    let previousActive = active;
-    const stateTimer = window.setInterval(() => {
-      const nextActive = activeRef.current;
-      if (nextActive !== previousActive) {
-        previousActive = nextActive;
-        transitionFrom = active;
-        active = nextActive;
-        dragYaw = 0;
-        dragPitch = 0;
-        cursorLookTarget.set(0, 0);
-        transitionStage = transitionFrom === "home" ? (active === "home" ? 3 : 1) : 0;
-        cameraHasArrived = false;
-      }
-      movementRef.current = movementRefLatest.current;
-    }, 100);
     return () => {
       cancelAnimationFrame(raf);
-      clearInterval(stateTimer);
       observer.disconnect();
       timer.dispose();
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);

@@ -499,6 +499,38 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
   .mode-tour .touch-pad, .mode-tour .destination-map { transition: none; }
 }
 
+/* Mobile tour details use the room as a readable full-screen space, not a floating card. */
+@media (max-width: 760px) {
+  .mode-tour.has-mobile-room-details .content-anchor.tour-details-hidden { position: absolute; z-index: 4; inset: 0; display: block; width: 100%; height: 100%; overflow: hidden; background-color: #f4f0e7; background-image: linear-gradient(90deg, transparent 0, transparent 27px, rgba(118,96,70,.045) 28px, transparent 29px), linear-gradient(0deg, rgba(139,112,80,.07), transparent 1px); background-size: 84px 100%, 100% 100%; pointer-events: auto; }
+  .mode-tour.has-mobile-room-details .portfolio-sections, .mode-tour.has-mobile-room-details .section-card { width: 100%; height: 100%; min-height: 0; overflow: hidden; border: 0; background: transparent; box-shadow: none; }
+  .mode-tour.has-mobile-room-details .section-card::before, .mode-tour.has-mobile-room-details .panel-corner, .mode-tour.has-mobile-room-details .panel-page { display: none; }
+  .mode-tour.has-mobile-room-details .section-scroll { width: min(100%, 680px); height: 100%; margin: 0 auto; overflow-y: auto; overscroll-behavior: contain; padding: calc(75px + env(safe-area-inset-top)) clamp(19px, 6vw, 32px) calc(104px + env(safe-area-inset-bottom)); scrollbar-color: #a99b87 transparent; animation: mobile-room-arrive .34s cubic-bezier(.2,.7,.2,1) both; }
+  .mode-tour.has-mobile-room-details .section-scroll > .eyebrow { font-size: 10px; letter-spacing: .14em; }
+  .mode-tour.has-mobile-room-details .section-scroll > h2 { max-width: 17ch; margin-bottom: 17px; font-size: clamp(31px, 8.3vw, 40px); line-height: 1.08; }
+  .mode-tour.has-mobile-room-details .section-scroll > h1 { max-width: 12ch; margin-bottom: 17px; font-size: clamp(40px, 11vw, 54px); line-height: 1.02; }
+  .mode-tour.has-mobile-room-details .section-scroll > .lead { max-width: 54ch; margin-bottom: 22px; font-size: 16px; line-height: 1.72; }
+  .mode-tour.has-mobile-room-details .section-scroll > p:not(.eyebrow):not(.lead), .mode-tour.has-mobile-room-details .profile-row p:not(.lead), .mode-tour.has-mobile-room-details .copy-block p, .mode-tour.has-mobile-room-details .timeline-item > p:not(.eyebrow), .mode-tour.has-mobile-room-details .education-card p, .mode-tour.has-mobile-room-details .skill-group p, .mode-tour.has-mobile-room-details .service-row p, .mode-tour.has-mobile-room-details .achievement p, .mode-tour.has-mobile-room-details .project-detail > p, .mode-tour.has-mobile-room-details .project-detail ul { font-size: 15px !important; line-height: 1.72; }
+  .mode-tour.has-mobile-room-details .project-card summary { grid-template-columns: 1fr; min-height: 0; }
+  .mode-tour.has-mobile-room-details .project-preview { min-height: 175px; border-right: 0; border-bottom: 1px solid rgba(80,68,52,.17); }
+  .mode-tour.has-mobile-room-details .project-summary { min-height: 0; padding: 18px 43px 19px 18px; }
+  .mode-tour.has-mobile-room-details .project-summary strong { font-size: 21px; }
+  .mode-tour.has-mobile-room-details .project-summary .project-blurb { -webkit-line-clamp: unset; }
+  .mode-tour.has-mobile-room-details .project-detail { padding: 16px 18px 20px; }
+  .mode-tour.has-mobile-room-details .home-hero { grid-template-columns: minmax(0, 1fr); gap: 20px; min-height: 0; }
+  .mode-tour.has-mobile-room-details .hero-copy { min-width: 0; padding: 0; }
+  .mode-tour.has-mobile-room-details .hero-visual { width: min(100%, 270px); justify-self: start; margin: 0 auto 15px; }
+  .mode-tour.has-mobile-room-details .hero-coordinate { display: none; }
+  .mode-tour.has-mobile-room-details .capability-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .mode-tour.has-mobile-room-details .skills-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+  .mode-tour.has-mobile-room-details .mobile-room-actions { position: absolute; z-index: 7; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: calc(74px + env(safe-area-inset-bottom)); padding: 10px 17px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(82,72,58,.2); background: rgba(249,247,240,.98); box-shadow: 0 -8px 22px rgba(43,34,25,.06); }
+  .mode-tour.has-mobile-room-details .mobile-room-actions > span { overflow: hidden; color: #716555; font: 10px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+  .mode-tour.has-mobile-room-details .mobile-room-actions button { display: inline-flex; min-height: 48px; flex: 0 0 auto; align-items: center; justify-content: center; gap: 9px; padding: 0 15px; border: 0; background: #3e3932; color: #fbf8ef; font: 600 12px var(--sans); cursor: pointer; }
+  .mode-tour.has-mobile-room-details .mobile-room-actions button span { color: #c3835c; font-size: 17px; }
+  .mode-tour.has-mobile-room-details .movement-hint, .mode-tour.has-mobile-room-details .touch-pad { display: none; }
+}
+@keyframes mobile-room-arrive { from { opacity: .65; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .mode-tour.has-mobile-room-details .section-scroll { animation: none; } }
+
 /* Final editorial type scale and ordered project archive. */
 body { font-size: 16px; }
 .mode-portfolio .section-scroll > h2 { max-width: 20ch; font-size: clamp(34px, 4.2vw, 54px); line-height: 1.12; letter-spacing: -.035em; }

@@ -23,6 +23,7 @@ export default function PortfolioExperience() {
   const [active, setActive] = useState<SectionId>("home");
   const [movement, setMovement] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileRoomDetails, setMobileRoomDetails] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
   const [sceneFailed, setSceneFailed] = useState(false);
@@ -34,6 +35,7 @@ export default function PortfolioExperience() {
     setMoreOpen(false);
     setActive("home");
     setMode("portfolio");
+    setMobileRoomDetails(false);
     window.requestAnimationFrame(() => document.getElementById("section-home")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }, []);
 
@@ -41,13 +43,17 @@ export default function PortfolioExperience() {
     setActive(id);
     setMovement([]);
     setMenuOpen(false);
+    if (mode === "tour" && window.matchMedia("(max-width: 760px)").matches) setMobileRoomDetails(active === id);
     if (mode === "portfolio") document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [mode]);
+  }, [active, mode]);
+
+  const roomArrived = useCallback(() => setMobileRoomDetails(true), []);
 
   const enter = useCallback(() => {
     setMenuOpen(false);
     setMoreOpen(false);
     setMode("tour");
+    setMobileRoomDetails(window.matchMedia("(max-width: 760px)").matches);
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     const card = document.querySelector(".section-scroll");
     if (card instanceof HTMLElement) card.scrollTop = 0;
@@ -115,10 +121,10 @@ export default function PortfolioExperience() {
   }
 
   return (
-    <main className={`portfolio-world mode-${mode}`}>
+    <main className={`portfolio-world mode-${mode}${mobileRoomDetails ? " has-mobile-room-details" : ""}`}>
       <a className="skip-link" href="#portfolio-content">Skip to portfolio content</a>
       <div className="scene-wrap">
-        {mode === "tour" && <CorridorScene active={active} movement={movement} onChoose={goTo} onReady={() => setSceneReady(true)} onError={() => setSceneFailed(true)} />}
+        {mode === "tour" && <CorridorScene active={active} movement={movement} onChoose={goTo} onRoomArrive={roomArrived} onReady={() => setSceneReady(true)} onError={() => setSceneFailed(true)} />}
         {sceneFailed && <div className="scene-fallback" role="status"><span className="fallback-drawing" aria-hidden="true">⌂</span><p>The 3D scene is unavailable in this browser. You can still visit every section from the destinations menu.</p></div>}
         {!sceneReady && !sceneFailed && <div className="scene-loader" aria-hidden="true"><span />Preparing the illustrated world</div>}
       </div>
@@ -150,6 +156,8 @@ export default function PortfolioExperience() {
       <div className={`content-anchor ${mode === "tour" ? "tour-details-hidden" : ""}`} id="portfolio-content">
         <SectionPanel section={active} enter={enter} navigate={goTo} allSections={mode === "portfolio"} />
       </div>
+
+      {mode === "tour" && mobileRoomDetails && <div className="mobile-room-actions"><span>Room details · {sections.find((section) => section.id === active)?.label}</span><button type="button" onClick={() => setMobileRoomDetails(false)}>Explore 3D room <span aria-hidden="true">↗</span></button></div>}
 
       {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">Move · move cursor to look · drag for free look</span><span className="mobile-instructions">Drag to look · pad to walk</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); }} aria-label="Return to portfolio details">i</button></div>}
 
