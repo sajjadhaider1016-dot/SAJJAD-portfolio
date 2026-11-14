@@ -248,24 +248,27 @@ function welcomeTexture() {
   const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.textAlign = "center";
-  ctx.fillStyle = "#a76543";
+  ctx.fillStyle = "#ffe0bd";
   ctx.font = "600 30px Arial";
   ctx.fillText("AI ENGINEER   /   FULL-STACK DEVELOPER", 700, 78);
-  ctx.fillStyle = "#302c27";
+  ctx.fillStyle = "#fffdf8";
+  ctx.strokeStyle = "#4b382a";
+  ctx.lineWidth = 3;
   ctx.font = "600 116px Arial";
+  ctx.strokeText("Sajjad Haider", 700, 230);
   ctx.fillText("Sajjad Haider", 700, 230);
-  ctx.fillStyle = "#a76543";
+  ctx.fillStyle = "#f0b184";
   ctx.font = "italic 82px Georgia";
   ctx.fillText("AI & Full-Stack Developer", 700, 342);
-  ctx.fillStyle = "#554d43";
+  ctx.fillStyle = "#fff8ed";
   ctx.font = "400 30px Arial";
   ctx.fillText("Building intelligent digital experiences", 700, 414);
   ctx.font = "400 25px Arial";
   ctx.fillText("AI applications  ·  automation  ·  full-stack products", 700, 458);
-  ctx.fillStyle = "#8d6b52";
-  ctx.font = "500 24px Arial";
+  ctx.fillStyle = "#ffe0bd";
+  ctx.font = "600 24px Arial";
   ctx.fillText("Choose a room to explore  ·  Move forward or backward to begin", 700, 520);
-  ctx.strokeStyle = "#a76543";
+  ctx.strokeStyle = "#f0b184";
   ctx.lineWidth = 3;
   ctx.beginPath(); ctx.moveTo(570, 568); ctx.lineTo(830, 568); ctx.stroke();
   const texture = new THREE.CanvasTexture(canvas);
@@ -277,7 +280,7 @@ function welcomeTexture() {
 function addWelcomeInstallation(world: THREE.Group) {
   const installation = new THREE.Group();
   installation.name = "3D portfolio welcome typography";
-  installation.position.z = 1.2;
+  installation.position.z = 2.2;
   const portraitX = -1.68;
   const portraitY = 1.88;
   const frame = new THREE.Mesh(new THREE.BoxGeometry(1.12, 1.76, 0.08), new THREE.MeshBasicMaterial({ color: "#8e6647", transparent: true, depthWrite: false }));
@@ -1049,8 +1052,6 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
       camera.rotation.x += (lookPitch - camera.rotation.x) * lookDamping;
 
       const keys = new Set(movementRef.current);
-      const walkingForwardOrBackward = keys.has("w") || keys.has("s") || keys.has("arrowup") || keys.has("arrowdown");
-      if (nextWelcome && walkingForwardOrBackward) welcomeDismissed = true;
       if (keys.size && cameraHasArrived) {
         const forward = keys.has("w") || keys.has("arrowup");
         const backward = keys.has("s") || keys.has("arrowdown");
@@ -1079,6 +1080,11 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
           camera.position.z = THREE.MathUtils.clamp(camera.position.z, -31.8, nextWelcome ? 8.3 : 2.3);
         }
         camera.position.y = 1.62;
+      }
+      if (nextWelcome && cameraHasArrived) {
+        const distanceFromLobbyStart = Math.hypot(camera.position.x, camera.position.z - 6.4);
+        if (distanceFromLobbyStart < 0.72) welcomeDismissed = false;
+        else if (distanceFromLobbyStart > 1.15) welcomeDismissed = true;
       }
       renderer.render(scene, camera);
     };
