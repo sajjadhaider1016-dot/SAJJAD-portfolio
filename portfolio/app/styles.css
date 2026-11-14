@@ -293,7 +293,7 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
 .mode-portfolio .world-footer { position: relative; grid-area: foot; inset: auto; min-height: 48px; border-top: 1px solid var(--line); font-size: 9px; letter-spacing: .12em; }
 .mode-tour.portfolio-world { height: 100svh; min-height: 580px; overflow: hidden; display: block; padding: 0; background: #eee9df; }
 .mode-tour .scene-wrap { display: block; }
-.mode-tour .content-anchor.tour-details-hidden { display: none; }
+
 .mode-tour .world-header { top: 17px; left: 20px; right: 20px; align-items: center; }
 .mode-tour .wordmark-copy strong { font: 600 16px/1.2 var(--sans); letter-spacing: -.02em; }
 .mode-tour .wordmark-copy small { letter-spacing: .08em; }
@@ -498,47 +498,6 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
 @media (prefers-reduced-motion: reduce) {
   .mode-tour .touch-pad, .mode-tour .destination-map { transition: none; }
 }
-
-/* Tour content stays in a compact floating card so the 3D room remains the primary view. */
-.mode-tour.has-tour-room-details .content-anchor.tour-details-hidden { position: absolute; z-index: 4; top: auto; right: auto; bottom: clamp(82px, 9vh, 104px); left: clamp(18px, 3vw, 44px); display: block; width: min(420px, 32vw); height: min(50vh, 520px); overflow: hidden; pointer-events: none; }
-.mode-tour.has-tour-room-details .portfolio-sections { width: 100%; height: 100%; min-height: 0; }
-.mode-tour.has-tour-room-details .section-card { width: 100%; height: 100%; min-height: 0; overflow: hidden; border: 1px solid rgba(88,70,50,.34); background: rgba(249,247,240,.96); box-shadow: 0 18px 48px rgba(35,28,21,.2), 0 3px 10px rgba(35,28,21,.1); backdrop-filter: blur(3px); pointer-events: auto; }
-.mode-tour.has-tour-room-details .section-card::before { inset: 6px; border-color: rgba(105,90,69,.2); }
-.mode-tour.has-tour-room-details .panel-corner { display: block; }
-.mode-tour.has-tour-room-details .panel-page { display: flex; background: rgba(249,247,240,.98); }
-.mode-tour.has-tour-room-details .section-scroll { width: 100%; height: calc(100% - 36px); overflow-y: auto; overscroll-behavior: contain; padding: 22px clamp(18px, 2vw, 26px); scrollbar-color: #a99b87 transparent; animation: mobile-room-arrive .34s cubic-bezier(.2,.7,.2,1) both; }
-.mode-tour.has-tour-room-details .section-scroll > .eyebrow { font-size: 10px; letter-spacing: .14em; }
-.mode-tour.has-tour-room-details .section-scroll > h2 { max-width: 17ch; margin-bottom: 14px; font-size: clamp(27px, 2.5vw, 34px); line-height: 1.08; }
-.mode-tour.has-tour-room-details .section-scroll > h1 { max-width: 12ch; margin-bottom: 14px; font-size: clamp(35px, 3.2vw, 46px); line-height: 1.02; }
-.mode-tour.has-tour-room-details .section-scroll > .lead { margin-bottom: 18px; font-size: 14px; line-height: 1.65; }
-.mode-tour.has-tour-room-details .section-scroll > p:not(.eyebrow):not(.lead), .mode-tour.has-tour-room-details .profile-row p:not(.lead), .mode-tour.has-tour-room-details .copy-block p, .mode-tour.has-tour-room-details .timeline-item > p:not(.eyebrow), .mode-tour.has-tour-room-details .education-card p, .mode-tour.has-tour-room-details .skill-group p, .mode-tour.has-tour-room-details .service-row p, .mode-tour.has-tour-room-details .achievement p, .mode-tour.has-tour-room-details .project-detail > p, .mode-tour.has-tour-room-details .project-detail ul { font-size: 13px !important; line-height: 1.62; }
-.mode-tour.has-tour-room-details .home-hero { grid-template-columns: minmax(0, 1fr); gap: 14px; min-height: 0; }
-.mode-tour.has-tour-room-details .hero-copy { min-width: 0; padding: 0; }
-.mode-tour.has-tour-room-details .hero-copy h1 { max-width: 12ch; font-size: clamp(35px, 3.2vw, 46px); line-height: 1.02; }
-.mode-tour.has-tour-room-details .hero-visual { width: min(100%, 220px); justify-self: start; margin: 0 auto 12px; }
-.mode-tour.has-tour-room-details .hero-coordinate { display: none; }
-.mode-tour.has-tour-room-details .project-preview { min-height: 130px; }
-.mode-tour.has-tour-room-details .project-summary { min-height: 0; padding: 15px 38px 16px 15px; }
-.mode-tour.has-tour-room-details .project-summary strong { font-size: 19px; }
-.mode-tour.has-tour-room-details .project-detail { padding: 14px 15px 18px; }
-@media (max-width: 760px) {
-  .mode-tour.has-tour-room-details .content-anchor.tour-details-hidden { top: auto; right: auto; bottom: max(112px, calc(env(safe-area-inset-bottom) + 100px)); left: 12px; width: min(55vw, 280px); height: min(40svh, 300px); }
-  .mode-tour.has-tour-room-details .section-scroll { padding: 18px 17px 18px; }
-  .mode-tour.has-tour-room-details .section-scroll > h2 { font-size: clamp(25px, 7vw, 32px); }
-  .mode-tour.has-tour-room-details .section-scroll > h1, .mode-tour.has-tour-room-details .hero-copy h1 { font-size: clamp(31px, 9vw, 40px); }
-  .mode-tour.has-tour-room-details .section-scroll > .lead { font-size: 13px; }
-  .mode-tour.has-tour-room-details .project-card summary { grid-template-columns: 1fr; min-height: 0; }
-  .mode-tour.has-tour-room-details .project-preview { min-height: 135px; border-right: 0; border-bottom: 1px solid rgba(80,68,52,.17); }
-  .mode-tour.has-tour-room-details .project-summary { min-height: 0; padding: 15px 38px 16px 15px; }
-  .mode-tour.has-tour-room-details .project-summary .project-blurb { -webkit-line-clamp: unset; }
-  .mode-tour.has-tour-room-details .capability-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .mode-tour.has-tour-room-details .skills-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
-  .mode-tour.has-tour-room-details .movement-hint { left: 8px; max-width: calc(100vw - 170px); padding: 6px 8px; border-color: rgba(91,77,60,.2); background: rgba(249,247,240,.95); box-shadow: 0 3px 12px rgba(43,34,25,.08); color: #51483c; font-size: 9px; transform: none; }
-  .mode-tour.has-tour-room-details .movement-hint > button:last-child { display: none; }
-  .mode-tour.has-tour-room-details .touch-pad { right: 8px; }
-}
-@keyframes mobile-room-arrive { from { opacity: .65; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
-@media (prefers-reduced-motion: reduce) { .mode-tour.has-tour-room-details .section-scroll { animation: none; } }
 
 /* Final editorial type scale and ordered project archive. */
 body { font-size: 16px; }

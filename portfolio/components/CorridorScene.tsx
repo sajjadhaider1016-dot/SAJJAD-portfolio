@@ -2,13 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { sections, type SectionId } from "@/data/portfolio";
+import { achievements, certifications, education, experience, links, projects, sections, services, skillGroups, type SectionId } from "@/data/portfolio";
 
 type Props = {
   active: SectionId;
   movement: string[];
   onChoose: (id: SectionId) => void;
-  onRoomArrive: () => void;
   onReady: () => void;
   onError: () => void;
 };
@@ -75,78 +74,163 @@ function labelTexture(title: string, index: string) {
   return texture;
 }
 
-function roomArtworkTexture(sectionId: SectionId, variant: number) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 384;
-  canvas.height = 512;
-  const ctx = canvas.getContext("2d")!;
-  const accents = ["#a66b47", "#68745f", "#9a805a", "#718087", "#8c684e"];
-  const accent = accents[sections.findIndex((section) => section.id === sectionId) % accents.length];
-  const ink = "#776e61";
-  ctx.fillStyle = "#eee8dc";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#d0c4b2";
-  ctx.lineWidth = 2;
-  ctx.lineCap = "round";
-  // Give each destination a different quiet studio sketch instead of repeating
-  // the same oversized arch illustration on every room wall.
-  ctx.strokeStyle = ink;
-  ctx.lineWidth = 3;
-  if (sectionId === "projects") {
-    ctx.strokeRect(56, 86, 272, 214);
-    ctx.strokeRect(75, 105, 234, 164);
-    ctx.strokeStyle = accent;
-    ctx.lineWidth = 5;
-    ctx.beginPath(); ctx.moveTo(76, 315); ctx.lineTo(308, 315); ctx.stroke();
-    ctx.strokeStyle = ink;
-    for (let i = 0; i < 3; i++) {
-      const x = 92 + i * 70;
-      ctx.strokeRect(x, 150 + (i % 2) * 12, 45, 54);
-      ctx.beginPath(); ctx.moveTo(x, 219 + (i % 2) * 12); ctx.lineTo(x + 45, 219 + (i % 2) * 12); ctx.stroke();
-    }
-  } else if (sectionId === "experience") {
-    ctx.beginPath(); ctx.moveTo(88, 105); ctx.lineTo(88, 365); ctx.stroke();
-    for (let i = 0; i < 4; i++) {
-      const y = 130 + i * 70;
-      ctx.beginPath(); ctx.arc(88, y, 9, 0, Math.PI * 2); ctx.stroke();
-      ctx.strokeStyle = i === 0 ? accent : ink;
-      ctx.beginPath(); ctx.moveTo(118, y - 8); ctx.lineTo(292, y - 8); ctx.moveTo(118, y + 12); ctx.lineTo(253, y + 12); ctx.stroke();
-      ctx.strokeStyle = ink;
-    }
-  } else if (sectionId === "education" || sectionId === "certifications") {
-    for (let i = 0; i < 3; i++) {
-      const x = 85 + i * 72;
-      ctx.strokeStyle = i === 1 ? accent : ink;
-      ctx.beginPath(); ctx.arc(x + 34, 176, 28, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x + 10, 224); ctx.lineTo(x + 57, 224); ctx.moveTo(x + 15, 244); ctx.lineTo(x + 52, 244); ctx.stroke();
-    }
-    ctx.strokeStyle = accent;
-    ctx.beginPath(); ctx.moveTo(78, 320); ctx.lineTo(306, 320); ctx.stroke();
-  } else if (sectionId === "skills" || sectionId === "services") {
-    for (let row = 0; row < 2; row++) for (let col = 0; col < 3; col++) {
-      const x = 69 + col * 88; const y = 126 + row * 93;
-      ctx.strokeStyle = (row + col + variant) % 3 === 0 ? accent : ink;
-      ctx.strokeRect(x, y, 54, 48);
-      ctx.beginPath(); ctx.moveTo(x + 2, y + 61); ctx.lineTo(x + 52, y + 61); ctx.stroke();
-    }
-  } else if (sectionId === "achievements") {
-    ctx.strokeStyle = accent;
-    ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.arc(192, 210, 76, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.arc(192, 210, 58, 0, Math.PI * 2); ctx.stroke();
-    ctx.strokeStyle = ink;
-    ctx.beginPath(); ctx.moveTo(128, 326); ctx.lineTo(256, 326); ctx.moveTo(146, 348); ctx.lineTo(238, 348); ctx.stroke();
-  } else {
-    // A loose landscape study for the personal, home, and contact rooms.
-    ctx.beginPath(); ctx.moveTo(52, 345); ctx.lineTo(330, 345); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(62, 340); ctx.quadraticCurveTo(130, 240, 195, 330); ctx.quadraticCurveTo(264, 220, 325, 340); ctx.stroke();
-    ctx.strokeStyle = accent;
-    ctx.beginPath(); ctx.arc(254, 126, 36, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(70, 375); ctx.lineTo(310, 375); ctx.stroke();
+type BoardEntry = { title: string; detail?: string; meta?: string };
+
+function boardContent(sectionId: SectionId): { title: string; subtitle: string; entries: BoardEntry[]; columns?: 1 | 2 } {
+  if (sectionId === "home") return {
+    title: "Sajjad Haider",
+    subtitle: "AI & Full-Stack Developer",
+    entries: [
+      { title: "What I build", detail: "AI-powered applications, intelligent automation, and complete digital products." },
+      { title: "How I work", detail: "Turning practical ideas into polished, useful experiences across interface, backend, and deployment." },
+      { title: "Current focus", detail: "Applied AI, automation systems, and dependable full-stack products." },
+      { title: "Availability", detail: "Available for remote opportunities." },
+    ],
+  };
+  if (sectionId === "about") return {
+    title: "About me",
+    subtitle: "Intelligent products. Practical engineering.",
+    entries: [
+      { title: "Background", detail: "AI student at Bahauddin Zakariya University, building practical software alongside my studies." },
+      { title: "Technical interests", detail: "AI applications, language model integrations, document workflows, and automation." },
+      { title: "Development approach", detail: "Start with the problem, keep the experience understandable, and choose technology for the job." },
+      { title: "Direction", detail: "Growing as an AI product engineer, connecting modern web systems with useful applied intelligence." },
+    ],
+  };
+  if (sectionId === "projects") return {
+    title: "Selected projects",
+    subtitle: "Products, experiments, and solutions",
+    columns: 2,
+    entries: projects.map((project) => ({ title: project.title, detail: project.description, meta: project.tech.slice(0, 3).join(" · ") || project.category })),
+  };
+  if (sectionId === "experience") return {
+    title: "Professional experience",
+    subtitle: "Selected roles and ongoing work",
+    entries: experience.map((item) => ({ title: item.role, detail: item.description, meta: `${item.org} · ${item.date}` })),
+  };
+  if (sectionId === "education") return {
+    title: "Education",
+    subtitle: "Academic background",
+    entries: education.map((item) => ({ title: item.title, detail: item.detail, meta: `${item.place} · ${item.status}` })),
+  };
+  if (sectionId === "skills") return {
+    title: "Technical skills",
+    subtitle: "A practical full-stack and AI toolkit",
+    columns: 2,
+    entries: skillGroups.map((group) => ({ title: group.title, detail: group.skills.join(" · ") })),
+  };
+  if (sectionId === "services") return {
+    title: "Services",
+    subtitle: "Practical software for real product needs",
+    entries: services.map((service) => ({ title: service.title, detail: service.description, meta: service.technologies.join(" · ") })),
+  };
+  if (sectionId === "certifications") return {
+    title: "Certifications",
+    subtitle: "Credentials and continuing study",
+    columns: 2,
+    entries: certifications.map(([issuer, name, date, id]) => ({ title: name, detail: `${issuer} · ${date}`, meta: `Credential ID: ${id}` })),
+  };
+  if (sectionId === "achievements") return {
+    title: "Achievements",
+    subtitle: "Academic, sports, and community recognition",
+    columns: 2,
+    entries: achievements.map((item) => ({ title: item.title, detail: item.detail })),
+  };
+  return {
+    title: "Contact",
+    subtitle: "For recruiters and collaborators",
+    entries: [
+      { title: "Email", detail: links.email },
+      { title: "GitHub", detail: "@sajjadhaider1016-dot", meta: links.githubProfile },
+      { title: "LinkedIn", detail: "Professional profile", meta: links.linkedin },
+      { title: "WhatsApp", detail: "Open a conversation", meta: links.whatsapp },
+    ],
+  };
+}
+
+function drawWrappedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number, maxLines: number) {
+  const words = text.split(/\s+/);
+  const lines: string[] = [];
+  let line = "";
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word;
+    if (line && ctx.measureText(test).width > maxWidth) {
+      lines.push(line);
+      line = word;
+    } else line = test;
   }
-  ctx.strokeStyle = "rgba(119,110,97,.42)";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(20, 20, 344, 472);
+  if (line) lines.push(line);
+  const visibleLines = lines.slice(0, maxLines);
+  if (lines.length > maxLines && visibleLines.length) {
+    let last = visibleLines[visibleLines.length - 1];
+    while (last.length > 1 && ctx.measureText(`${last}…`).width > maxWidth) last = last.slice(0, -1);
+    visibleLines[visibleLines.length - 1] = `${last.trimEnd()}…`;
+  }
+  visibleLines.forEach((visibleLine, index) => ctx.fillText(visibleLine, x, y + index * lineHeight));
+  return y + visibleLines.length * lineHeight;
+}
+
+function roomDetailsTexture(sectionId: SectionId) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 768;
+  canvas.height = 960;
+  const ctx = canvas.getContext("2d")!;
+  const accent = "#a76543";
+  const ink = "#302c27";
+  const muted = "#665e53";
+  const { title, subtitle, entries, columns = 1 } = boardContent(sectionId);
+  const pad = 48;
+  const contentWidth = canvas.width - pad * 2;
+  ctx.fillStyle = "#f8f5ed";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#d0c4b4";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
+  ctx.fillStyle = accent;
+  ctx.font = "700 18px Arial";
+  ctx.fillText(`SAJJAD HAIDER   /   ${sections.find((item) => item.id === sectionId)?.number}`, pad, 62);
+  ctx.fillStyle = ink;
+  ctx.font = "700 42px Arial";
+  let y = drawWrappedText(ctx, title, pad, 122, contentWidth, 48, 2);
+  ctx.fillStyle = accent;
+  ctx.font = "600 22px Arial";
+  y = drawWrappedText(ctx, subtitle, pad, y + 4, contentWidth, 29, 2);
+  ctx.strokeStyle = "#b7a993";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(pad, y + 18); ctx.lineTo(canvas.width - pad, y + 18); ctx.stroke();
+  const startY = y + 42;
+  const colGap = 20;
+  const colWidth = columns === 2 ? (contentWidth - colGap) / 2 : contentWidth;
+  const rowsPerColumn = columns === 2 ? Math.ceil(entries.length / 2) : entries.length;
+  const itemHeight = Math.min(160, Math.floor((canvas.height - startY - pad) / rowsPerColumn));
+  const dense = columns === 2 || entries.length >= 3;
+  entries.forEach((entry, index) => {
+    const col = columns === 2 ? Math.floor(index / rowsPerColumn) : 0;
+    const row = columns === 2 ? index % rowsPerColumn : index;
+    const x = pad + col * (colWidth + colGap);
+    const rowY = startY + row * itemHeight;
+    const innerPad = 13;
+    ctx.fillStyle = index % 2 === 0 ? "#f0ebe1" : "#f5f1e9";
+    ctx.fillRect(x, rowY, colWidth, itemHeight - 10);
+    ctx.fillStyle = accent;
+    ctx.fillRect(x, rowY, 4, itemHeight - 10);
+    ctx.fillStyle = ink;
+    ctx.font = dense ? "700 21px Arial" : "700 25px Arial";
+    let textY = drawWrappedText(ctx, entry.title, x + innerPad, rowY + (dense ? 24 : 28), colWidth - innerPad * 2, dense ? 22 : 30, 2);
+    if (entry.detail) {
+      ctx.fillStyle = muted;
+      ctx.font = dense ? "400 17px Arial" : "400 20px Arial";
+      textY = drawWrappedText(ctx, entry.detail, x + innerPad, textY + 2, colWidth - innerPad * 2, dense ? 18 : 23, dense ? 2 : 3);
+    }
+    if (entry.meta) {
+      ctx.fillStyle = accent;
+      ctx.font = dense ? "600 13px Arial" : "600 16px Arial";
+      drawWrappedText(ctx, entry.meta, x + innerPad, Math.min(rowY + itemHeight - (dense ? 20 : 14), textY + 4), colWidth - innerPad * 2, dense ? 15 : 19, dense ? 1 : 2);
+    }
+  });
+  ctx.fillStyle = muted;
+  ctx.font = "600 13px Arial";
+  ctx.fillText("ILLUSTRATED PORTFOLIO  ·  ROOM DISPLAY", pad, canvas.height - 26);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -262,21 +346,27 @@ function addExhibitionRoom(
   const trim = new THREE.MeshStandardMaterial({ color: "#94704f", roughness: 0.84 });
   const stone = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.98 });
   const brass = new THREE.MeshStandardMaterial({ color: "#9e815f", metalness: 0.45, roughness: 0.5 });
-  const artworkZ = z;
-  box(world, [0.12, 1.72, 1.46], [side * 8.08, 2.58, artworkZ], trim);
-  const art = new THREE.Mesh(new THREE.PlaneGeometry(1.28, 1.54), new THREE.MeshStandardMaterial({ map: roomArtworkTexture(section.id, sections.findIndex((item) => item.id === section.id)), roughness: 0.98, side: THREE.DoubleSide }));
-  art.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-  art.position.set(side * 7.99, 2.58, artworkZ);
-  world.add(art);
-  box(world, [0.045, 0.035, 1.34], [side * 7.88, 3.53, artworkZ], roomMetal, false);
+  const boardZ = z;
+  const boardCenterY = 1.98;
+  const boardWidth = 2.45;
+  const boardHeight = 2.88;
+  box(world, [0.14, boardHeight + 0.18, boardWidth + 0.18], [side * 8.08, boardCenterY, boardZ], trim);
+  const board = new THREE.Mesh(new THREE.PlaneGeometry(boardWidth, boardHeight), new THREE.MeshBasicMaterial({ map: roomDetailsTexture(section.id), side: THREE.DoubleSide, toneMapped: false }));
+  board.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+  board.position.set(side * 7.99, boardCenterY, boardZ);
+  board.userData.sectionId = section.id;
+  board.name = `${section.label} room information board`;
+  world.add(board);
+  box(world, [0.045, 0.045, boardWidth - 0.12], [side * 7.88, boardCenterY - boardHeight / 2 + 0.08, boardZ], roomMetal, false);
   const pictureLight = new THREE.PointLight(0xffe6c3, 0.2, 3.2, 2);
-  pictureLight.position.set(side * 7.55, 3.43, artworkZ);
+  pictureLight.position.set(side * 7.5, 3.83, boardZ);
   world.add(pictureLight);
 
   // A slim timber console, lounge chair, and plant give each destination a lived-in scale.
-  box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z], wood);
+  // Keep the display line open so furniture cannot cover the information board.
+  box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z + 1.65], wood);
   for (const dx of [-0.43, 0.43]) for (const dz of [-0.58, 0.58]) {
-    box(world, [0.07, 0.78, 0.07], [side * (6.92 + dx), 0.4, z + dz], trim, false);
+    box(world, [0.07, 0.78, 0.07], [side * (6.92 + dx), 0.4, z + 1.65 + dz], trim, false);
   }
   box(world, [0.85, 0.12, 0.82], [side * 4.62, 0.48, z - 1.32], stone);
   box(world, [0.12, 0.74, 0.78], [side * 4.62, 0.88, z - 1.68], wood);
@@ -298,18 +388,19 @@ function addExhibitionRoom(
   }
 
   if (section.id === "projects") {
-    for (const [offset, projectIndex] of [[-1.15, 0], [0, 1], [1.15, 2]] as const) {
-      box(world, [0.78, 0.58, 0.78], [side * 5.55, 0.29, z + offset], stone);
-      box(world, [0.06, 0.83, 0.62], [side * 5.55, 0.98, z + offset], wood);
-      const canvasPanel = box(world, [0.035, 0.67, 0.49], [side * 5.505, 1.02, z + offset], new THREE.MeshStandardMaterial({ color: ["#e5e0d5", "#d8e3e4", "#e5d6c4"][projectIndex], roughness: 0.74 }), false);
+    for (const [offset, projectIndex] of [[-0.5, 0], [0, 1], [0.5, 2]] as const) {
+      const displayZ = z + 1.48 + offset;
+      box(world, [0.78, 0.58, 0.78], [side * 5.12, 0.29, displayZ], stone);
+      box(world, [0.06, 0.83, 0.62], [side * 5.12, 0.98, displayZ], wood);
+      const canvasPanel = box(world, [0.035, 0.67, 0.49], [side * 5.075, 1.02, displayZ], new THREE.MeshStandardMaterial({ color: ["#e5e0d5", "#d8e3e4", "#e5d6c4"][projectIndex], roughness: 0.74 }), false);
       canvasPanel.userData.sectionId = section.id;
-      box(world, [0.025, 0.035, 0.34], [side * 5.48, 1.14, z + offset], roomMetal, false);
-      box(world, [0.025, 0.025, 0.25], [side * 5.48, 0.94, z + offset], trim, false);
+      box(world, [0.025, 0.035, 0.34], [side * 5.045, 1.14, displayZ], roomMetal, false);
+      box(world, [0.025, 0.025, 0.25], [side * 5.045, 0.94, displayZ], trim, false);
       const previewPaths = ["/projects/veyra-live.png", "/projects/study-buddy-live.png", "/projects/docedit-live.png"];
       const previewMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", side: THREE.DoubleSide, toneMapped: false });
       const preview = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.29), previewMaterial);
       preview.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-      preview.position.set(side * 5.46, 1.05, z + offset);
+      preview.position.set(side * 5.025, 1.05, displayZ);
       preview.userData.sectionId = section.id;
       world.add(preview);
       new THREE.TextureLoader().load(previewPaths[projectIndex], (texture) => {
@@ -321,12 +412,12 @@ function addExhibitionRoom(
       });
     }
   } else if (section.id === "experience") {
-    box(world, [0.09, 1.48, 0.09], [side * 5.3, 1.55, z - 1.05], brass, false);
-    box(world, [0.09, 1.48, 0.09], [side * 5.3, 1.55, z + 1.05], brass, false);
-    box(world, [0.12, 0.08, 2.2], [side * 5.3, 2.25, z], brass, false);
+    box(world, [0.09, 1.48, 0.09], [side * 5.12, 1.55, z + 0.75], brass, false);
+    box(world, [0.09, 1.48, 0.09], [side * 5.12, 1.55, z + 2], brass, false);
+    box(world, [0.12, 0.08, 1.3], [side * 5.12, 2.25, z + 1.38], brass, false);
     for (let mark = 0; mark < 4; mark++) {
       const dot = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 10), wood);
-      dot.position.set(side * 5.25, 2.2, z - 0.75 + mark * 0.5);
+      dot.position.set(side * 5.06, 2.2, z + 0.9 + mark * 0.28);
       world.add(dot);
     }
   } else if (section.id === "education") {
@@ -336,48 +427,48 @@ function addExhibitionRoom(
     }
   } else if (section.id === "skills") {
     for (const offset of [-0.82, 0, 0.82]) {
-      const screen = box(world, [0.16, 0.58, 0.65], [side * 6.4, 1.55, z + offset], wood);
+      const screen = box(world, [0.16, 0.58, 0.65], [side * 5.12, 1.55, z + 1.5 + offset * 0.55], wood);
       screen.castShadow = true;
-      box(world, [0.04, 0.43, 0.5], [side * 6.305, 1.55, z + offset], stone, false);
+      box(world, [0.04, 0.43, 0.5], [side * 5.025, 1.55, z + 1.5 + offset * 0.55], stone, false);
     }
   } else if (section.id === "certifications") {
     for (let row = 0; row < 2; row++) for (let col = 0; col < 3; col++) {
       const seal = new THREE.Mesh(new THREE.TorusGeometry(0.14, 0.028, 8, 20), brass);
       seal.rotation.y = Math.PI / 2;
-      seal.position.set(side * 6.8, 1.8 + row * 0.66, z - 0.8 + col * 0.8);
+      seal.position.set(side * 5.12, 1.8 + row * 0.66, z + 1.15 + col * 0.42);
       world.add(seal);
     }
   } else if (section.id === "achievements") {
-    box(world, [0.62, 0.22, 0.62], [side * 5.5, 0.11, z], stone);
+    box(world, [0.62, 0.22, 0.62], [side * 5.12, 0.11, z + 1.5], stone);
     const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.2, 0.44, 12), brass);
-    cup.position.set(side * 5.5, 0.43, z);
+    cup.position.set(side * 5.12, 0.43, z + 1.5);
     cup.castShadow = true;
     world.add(cup);
     for (const offset of [-0.2, 0.2]) {
       const handle = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.025, 8, 14, Math.PI), brass);
       handle.rotation.z = Math.PI / 2;
-      handle.position.set(side * 5.5, 0.47, z + offset);
+      handle.position.set(side * 5.12, 0.47, z + 1.5 + offset);
       world.add(handle);
     }
   } else if (section.id === "services") {
     for (let block = 0; block < 3; block++) {
       const cube = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.56, 0.56), block === 1 ? brass : wood);
-      cube.position.set(side * (5.25 + block * 0.55), 1.15 + (block === 1 ? 0.32 : 0), z);
+      cube.position.set(side * (4.7 + block * 0.42), 1.15 + (block === 1 ? 0.32 : 0), z + 1.48);
       cube.rotation.set(0.08, 0.12 * block, 0.11 * (block - 1));
       world.add(cube);
     }
   } else if (section.id === "contact") {
-    box(world, [1.4, 0.12, 0.78], [side * 5.6, 0.92, z], wood);
-    for (const offset of [-0.28, 0.28]) box(world, [0.1, 0.9, 0.1], [side * 5.6, 0.45, z + offset], trim, false);
+    box(world, [1.4, 0.12, 0.78], [side * 4.2, 0.92, z + 1.3], wood);
+    for (const offset of [-0.28, 0.28]) box(world, [0.1, 0.9, 0.1], [side * 4.2, 0.45, z + 1.3 + offset], trim, false);
     const lamp = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.18, 18, 1, true), new THREE.MeshStandardMaterial({ color: "#e4d2b5", side: THREE.DoubleSide }));
-    lamp.position.set(side * 5.1, 1.42, z);
+    lamp.position.set(side * 4.75, 1.42, z + 1.3);
     world.add(lamp);
   } else {
     const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.72, 20), stone);
-    pedestal.position.set(side * 5.5, 0.36, z);
+    pedestal.position.set(side * 5.12, 0.36, z + 1.5);
     world.add(pedestal);
     const keepsake = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 1), section.id === "home" ? new THREE.MeshStandardMaterial({ color: "#73826c", roughness: 0.95 }) : brass);
-    keepsake.position.set(side * 5.5, 0.95, z);
+    keepsake.position.set(side * 5.12, 0.95, z + 1.5);
     keepsake.scale.y = 1.3;
     world.add(keepsake);
   }
@@ -386,17 +477,15 @@ function addExhibitionRoom(
   world.add(sconce);
 }
 
-export default function CorridorScene({ active, movement, onChoose, onRoomArrive, onReady, onError }: Props) {
+export default function CorridorScene({ active, movement, onChoose, onReady, onError }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hoveredDoor, setHoveredDoor] = useState<SectionId | null>(null);
   const activeRef = useRef(active);
   const movementRefLatest = useRef(movement);
   const chooseRef = useRef(onChoose);
-  const arriveRef = useRef(onRoomArrive);
   const readyRef = useRef(onReady);
   const errorRef = useRef(onError);
   useEffect(() => { chooseRef.current = onChoose; }, [onChoose]);
-  useEffect(() => { arriveRef.current = onRoomArrive; }, [onRoomArrive]);
   useEffect(() => { readyRef.current = onReady; }, [onReady]);
   useEffect(() => { errorRef.current = onError; }, [onError]);
 
@@ -738,7 +827,6 @@ export default function CorridorScene({ active, movement, onChoose, onRoomArrive
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let transitionFrom: SectionId = "home";
     let transitionStage = 0;
-    let roomArrivalPending = false;
     const movementRef = { current: movement };
     let previousActive = active;
     const loop = () => {
@@ -755,7 +843,6 @@ export default function CorridorScene({ active, movement, onChoose, onRoomArrive
         cursorLookTarget.set(0, 0);
         transitionStage = transitionFrom === "home" ? (active === "home" ? 3 : 1) : 0;
         cameraHasArrived = false;
-        roomArrivalPending = true;
       }
       movementRef.current = movementRefLatest.current;
       cursorLookCurrent.lerp(cursorLookTarget, Math.min(1, dt * 2.4));
@@ -793,10 +880,12 @@ export default function CorridorScene({ active, movement, onChoose, onRoomArrive
           desired = new THREE.Vector3(0, 1.62, d.z);
         } else if (transitionStage === 2 && active !== "home") {
           // Keep a portrait phone far enough from the display wall to frame the whole room panel.
-          desired = new THREE.Vector3(d.side * 5.05, 1.62, d.z);
+          desired = new THREE.Vector3(d.side * (isMobile ? 4.2 : 5.05), 1.62, d.z);
           yaw = -d.side * Math.PI / 2;
         } else if (active === "home") {
-          desired = new THREE.Vector3(0, 1.62, 2.2);
+          // Start and return inside the Home room, facing its information board.
+          desired = new THREE.Vector3(d.side * (isMobile ? 4.2 : 5.05), 1.62, d.z);
+          yaw = -d.side * Math.PI / 2;
         }
         const transitionRate = reduced.matches ? 10 : isMobile ? 4.6 : 3.2;
         camera.position.lerp(desired, 1 - Math.exp(-transitionRate * dt));
@@ -808,11 +897,6 @@ export default function CorridorScene({ active, movement, onChoose, onRoomArrive
           else cameraHasArrived = true;
         }
       }
-      if (cameraHasArrived && roomArrivalPending) {
-        roomArrivalPending = false;
-        if (isMobile) arriveRef.current();
-      }
-
       camera.rotation.order = "YXZ";
       const cursorYaw = pointerLocked ? 0 : -cursorLookCurrent.x * 0.34;
       const cursorPitch = pointerLocked ? 0 : cursorLookCurrent.y * 0.2;
@@ -840,7 +924,7 @@ export default function CorridorScene({ active, movement, onChoose, onRoomArrive
         if (right) movementVector.add(rightVector);
         if (movementVector.lengthSq() > 0) camera.position.addScaledVector(movementVector.normalize(), pace);
         const currentRoom = sections[selectedIndex];
-        if (active !== "home" && currentRoom) {
+        if (currentRoom) {
           const roomEdge = isMobile ? 7.1 : 7.82;
           camera.position.x = currentRoom.side > 0 ? THREE.MathUtils.clamp(camera.position.x, 3.82, roomEdge) : THREE.MathUtils.clamp(camera.position.x, -roomEdge, -3.82);
           camera.position.z = THREE.MathUtils.clamp(camera.position.z, doorRecords[selectedIndex].z - 1.78, doorRecords[selectedIndex].z + 1.78);

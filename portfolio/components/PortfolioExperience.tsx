@@ -23,7 +23,6 @@ export default function PortfolioExperience() {
   const [active, setActive] = useState<SectionId>("home");
   const [movement, setMovement] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [roomDetailsVisible, setRoomDetailsVisible] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
   const [sceneFailed, setSceneFailed] = useState(false);
@@ -35,7 +34,6 @@ export default function PortfolioExperience() {
     setMoreOpen(false);
     setActive("home");
     setMode("portfolio");
-    setRoomDetailsVisible(false);
     window.requestAnimationFrame(() => document.getElementById("section-home")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }, []);
 
@@ -43,20 +41,14 @@ export default function PortfolioExperience() {
     setActive(id);
     setMovement([]);
     setMenuOpen(false);
-    if (mode === "tour") setRoomDetailsVisible(true);
     if (mode === "portfolio") document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [mode]);
-
-  const roomArrived = useCallback(() => setRoomDetailsVisible(true), []);
 
   const enter = useCallback(() => {
     setMenuOpen(false);
     setMoreOpen(false);
     setMode("tour");
-    setRoomDetailsVisible(true);
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-    const card = document.querySelector(".section-scroll");
-    if (card instanceof HTMLElement) card.scrollTop = 0;
   }, []);
 
   useEffect(() => {
@@ -121,10 +113,10 @@ export default function PortfolioExperience() {
   }
 
   return (
-    <main className={`portfolio-world mode-${mode}${roomDetailsVisible ? " has-tour-room-details" : ""}`}>
-      <a className="skip-link" href="#portfolio-content">Skip to portfolio content</a>
+    <main className={`portfolio-world mode-${mode}`}>
+      <a className="skip-link" href={mode === "tour" ? "#tour-room-menu" : "#portfolio-content"}>Skip to {mode === "tour" ? "room navigation" : "portfolio content"}</a>
       <div className="scene-wrap">
-        {mode === "tour" && <CorridorScene active={active} movement={movement} onChoose={goTo} onRoomArrive={roomArrived} onReady={() => setSceneReady(true)} onError={() => setSceneFailed(true)} />}
+        {mode === "tour" && <CorridorScene active={active} movement={movement} onChoose={goTo} onReady={() => setSceneReady(true)} onError={() => setSceneFailed(true)} />}
         {sceneFailed && <div className="scene-fallback" role="status"><span className="fallback-drawing" aria-hidden="true">⌂</span><p>The 3D scene is unavailable in this browser. You can still visit every section from the destinations menu.</p></div>}
         {!sceneReady && !sceneFailed && <div className="scene-loader" aria-hidden="true"><span />Preparing the illustrated world</div>}
       </div>
@@ -153,11 +145,11 @@ export default function PortfolioExperience() {
         <div className="map-foot"><span className="pencil-line" />Choose a room to enter</div>
       </aside>}
 
-      <div className={`content-anchor ${mode === "tour" ? "tour-details-hidden" : ""}`} id="portfolio-content">
-        <SectionPanel section={active} enter={enter} navigate={goTo} allSections={mode === "portfolio"} />
-      </div>
+      {mode === "portfolio" && <div className="content-anchor" id="portfolio-content">
+        <SectionPanel section={active} enter={enter} navigate={goTo} allSections />
+      </div>}
 
-      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">Move · move cursor to look · drag for free look</span><span className="mobile-instructions">Drag to look · pad to walk</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); setRoomDetailsVisible(false); }} aria-label="Return to portfolio details">i</button></div>}
+      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">Move · look around · room details are on the wall displays</span><span className="mobile-instructions">Drag to look · pad to walk · details on wall boards</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); }} aria-label="Return to portfolio details">i</button></div>}
 
       {mode === "tour" && <div className={`touch-pad ${menuOpen ? "is-suspended" : ""}`} aria-label="Touch movement controls" aria-hidden={menuOpen}>
         <button type="button" aria-label="Move forward" onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); hold("w"); }} onPointerUp={() => release("w")} onPointerCancel={() => release("w")} onPointerLeave={() => release("w")}>↑</button>
