@@ -81,64 +81,72 @@ function roomArtworkTexture(sectionId: SectionId, variant: number) {
   canvas.height = 512;
   const ctx = canvas.getContext("2d")!;
   const accents = ["#a66b47", "#68745f", "#9a805a", "#718087", "#8c684e"];
-  const accent = accents[(sections.findIndex((section) => section.id === sectionId) + variant) % accents.length];
-  ctx.fillStyle = "#f4efe5";
+  const accent = accents[sections.findIndex((section) => section.id === sectionId) % accents.length];
+  const ink = "#776e61";
+  ctx.fillStyle = "#eee8dc";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#bcae9c";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(17, 17, 350, 478);
-  ctx.strokeStyle = "#766b5d";
+  ctx.strokeStyle = "#d0c4b2";
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
-
-  // Original pencil-style architectural studies, with no portfolio copy on the walls.
-  const shift = variant * 13;
-  ctx.beginPath();
-  ctx.moveTo(72 + shift, 382);
-  ctx.lineTo(72 + shift, 238);
-  ctx.quadraticCurveTo(72 + shift, 147, 164 + shift, 147);
-  ctx.quadraticCurveTo(256 + shift, 147, 256 + shift, 238);
-  ctx.lineTo(256 + shift, 382);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(93 + shift, 382);
-  ctx.lineTo(93 + shift, 244);
-  ctx.quadraticCurveTo(93 + shift, 169, 164 + shift, 169);
-  ctx.quadraticCurveTo(235 + shift, 169, 235 + shift, 244);
-  ctx.lineTo(235 + shift, 382);
-  ctx.stroke();
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.moveTo(45, 402);
-  ctx.lineTo(337, 402);
-  ctx.moveTo(52, 422);
-  ctx.quadraticCurveTo(190, 398 + variant * 4, 331, 423);
-  ctx.stroke();
-
-  if (sectionId === "projects" || sectionId === "skills" || sectionId === "services") {
-    for (let index = 0; index < 3; index++) {
-      const x = 70 + index * 88;
-      const y = 72 + (index % 2) * 14;
-      ctx.strokeStyle = index === variant % 3 ? accent : "#958875";
-      ctx.strokeRect(x, y, 58, 42);
-      ctx.beginPath();
-      ctx.moveTo(x + 8, y + 55);
-      ctx.lineTo(x + 50, y + 55);
-      ctx.stroke();
-    }
-  } else {
+  // Give each destination a different quiet studio sketch instead of repeating
+  // the same oversized arch illustration on every room wall.
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = 3;
+  if (sectionId === "projects") {
+    ctx.strokeRect(56, 86, 272, 214);
+    ctx.strokeRect(75, 105, 234, 164);
     ctx.strokeStyle = accent;
-    ctx.lineWidth = 3;
-    for (let index = 0; index < 4; index++) {
-      const y = 80 + index * 32;
-      ctx.beginPath();
-      ctx.arc(190 + ((index % 2) * 18), y, 5 + (index % 2), 0, Math.PI * 2);
-      ctx.moveTo(202, y);
-      ctx.lineTo(274, y);
-      ctx.stroke();
+    ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(76, 315); ctx.lineTo(308, 315); ctx.stroke();
+    ctx.strokeStyle = ink;
+    for (let i = 0; i < 3; i++) {
+      const x = 92 + i * 70;
+      ctx.strokeRect(x, 150 + (i % 2) * 12, 45, 54);
+      ctx.beginPath(); ctx.moveTo(x, 219 + (i % 2) * 12); ctx.lineTo(x + 45, 219 + (i % 2) * 12); ctx.stroke();
     }
+  } else if (sectionId === "experience") {
+    ctx.beginPath(); ctx.moveTo(88, 105); ctx.lineTo(88, 365); ctx.stroke();
+    for (let i = 0; i < 4; i++) {
+      const y = 130 + i * 70;
+      ctx.beginPath(); ctx.arc(88, y, 9, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = i === 0 ? accent : ink;
+      ctx.beginPath(); ctx.moveTo(118, y - 8); ctx.lineTo(292, y - 8); ctx.moveTo(118, y + 12); ctx.lineTo(253, y + 12); ctx.stroke();
+      ctx.strokeStyle = ink;
+    }
+  } else if (sectionId === "education" || sectionId === "certifications") {
+    for (let i = 0; i < 3; i++) {
+      const x = 85 + i * 72;
+      ctx.strokeStyle = i === 1 ? accent : ink;
+      ctx.beginPath(); ctx.arc(x + 34, 176, 28, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x + 10, 224); ctx.lineTo(x + 57, 224); ctx.moveTo(x + 15, 244); ctx.lineTo(x + 52, 244); ctx.stroke();
+    }
+    ctx.strokeStyle = accent;
+    ctx.beginPath(); ctx.moveTo(78, 320); ctx.lineTo(306, 320); ctx.stroke();
+  } else if (sectionId === "skills" || sectionId === "services") {
+    for (let row = 0; row < 2; row++) for (let col = 0; col < 3; col++) {
+      const x = 69 + col * 88; const y = 126 + row * 93;
+      ctx.strokeStyle = (row + col + variant) % 3 === 0 ? accent : ink;
+      ctx.strokeRect(x, y, 54, 48);
+      ctx.beginPath(); ctx.moveTo(x + 2, y + 61); ctx.lineTo(x + 52, y + 61); ctx.stroke();
+    }
+  } else if (sectionId === "achievements") {
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(192, 210, 76, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(192, 210, 58, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = ink;
+    ctx.beginPath(); ctx.moveTo(128, 326); ctx.lineTo(256, 326); ctx.moveTo(146, 348); ctx.lineTo(238, 348); ctx.stroke();
+  } else {
+    // A loose landscape study for the personal, home, and contact rooms.
+    ctx.beginPath(); ctx.moveTo(52, 345); ctx.lineTo(330, 345); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(62, 340); ctx.quadraticCurveTo(130, 240, 195, 330); ctx.quadraticCurveTo(264, 220, 325, 340); ctx.stroke();
+    ctx.strokeStyle = accent;
+    ctx.beginPath(); ctx.arc(254, 126, 36, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(70, 375); ctx.lineTo(310, 375); ctx.stroke();
   }
+  ctx.strokeStyle = "rgba(119,110,97,.42)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(20, 20, 344, 472);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -254,18 +262,16 @@ function addExhibitionRoom(
   const trim = new THREE.MeshStandardMaterial({ color: "#94704f", roughness: 0.84 });
   const stone = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.98 });
   const brass = new THREE.MeshStandardMaterial({ color: "#9e815f", metalness: 0.45, roughness: 0.5 });
-  for (const [variant, offset] of [-1.1, 0, 1.1].entries()) {
-    const artworkZ = z + offset;
-    box(world, [0.12, 1.52, 0.94], [side * 8.08, 2.52, artworkZ], trim);
-    const art = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 1.34), new THREE.MeshStandardMaterial({ map: roomArtworkTexture(section.id, variant), roughness: 0.98, side: THREE.DoubleSide }));
-    art.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-    art.position.set(side * 7.99, 2.52, artworkZ);
-    world.add(art);
-    box(world, [0.045, 0.035, 0.86], [side * 7.88, 3.39, artworkZ], roomMetal, false);
-    const pictureLight = new THREE.PointLight(0xffe6c3, 0.16, 2.7, 2);
-    pictureLight.position.set(side * 7.55, 3.3, artworkZ);
-    world.add(pictureLight);
-  }
+  const artworkZ = z;
+  box(world, [0.12, 1.72, 1.46], [side * 8.08, 2.58, artworkZ], trim);
+  const art = new THREE.Mesh(new THREE.PlaneGeometry(1.28, 1.54), new THREE.MeshStandardMaterial({ map: roomArtworkTexture(section.id, sections.findIndex((item) => item.id === section.id)), roughness: 0.98, side: THREE.DoubleSide }));
+  art.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+  art.position.set(side * 7.99, 2.58, artworkZ);
+  world.add(art);
+  box(world, [0.045, 0.035, 1.34], [side * 7.88, 3.53, artworkZ], roomMetal, false);
+  const pictureLight = new THREE.PointLight(0xffe6c3, 0.2, 3.2, 2);
+  pictureLight.position.set(side * 7.55, 3.43, artworkZ);
+  world.add(pictureLight);
 
   // A slim timber console, lounge chair, and plant give each destination a lived-in scale.
   box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z], wood);
