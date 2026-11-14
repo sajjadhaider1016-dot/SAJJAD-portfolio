@@ -68,27 +68,30 @@ function About() {
   );
 }
 
-function ProjectPreview({ index, title, screenshot }: { index: number; title: string; screenshot: string }) {
+function ProjectPreview({ index, title, screenshot, previewUrl }: { index: number; title: string; screenshot: string; previewUrl?: string }) {
   return (
     <div className={`project-preview preview-${index % 4}`}>
-      {screenshot ? <Image src={screenshot} alt={`${title} project preview`} fill sizes="(max-width: 760px) 100vw, 44vw" className="project-screenshot" /> : <>
+      {previewUrl ? <>
+        <div className="project-preview-toolbar"><small>LIVE WEBSITE PREVIEW</small><a href={previewUrl} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>Visit live website <span aria-hidden="true">↗</span></a></div>
+        <iframe src={previewUrl} title={`${title} live website preview`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+      </> : screenshot ? <Image src={screenshot} alt={`${title} project preview`} fill sizes="(max-width: 760px) 100vw, 44vw" className="project-screenshot" /> : <>
         <div className="project-cover"><small>PROJECT PREVIEW</small><strong>{title}</strong><span>Open details for links and information</span></div>
       </>}
-      {screenshot && <small>Project screenshot</small>}
+      {screenshot && !previewUrl && <small>Project screenshot</small>}
     </div>
   );
 }
 
 function Projects() {
   const [projectFilter, setProjectFilter] = useState("All");
-  const projectCategories = ["AI & Machine Learning", "Web Development", "Software & Applications", "Experiments"];
+  const projectCategories = Array.from(new Set(projects.map((project) => project.category)));
   const groups = projectCategories.map((category) => ({
     title: category,
     entries: projects.filter((project) => project.category === category),
   }));
   return (
     <>
-      <p className="eyebrow">Selected work · 09 projects</p>
+      <p className="eyebrow">Selected work · {String(projects.length).padStart(2, "0")} projects</p>
       <h2>Products, experiments<br />and <em>solutions.</em></h2>
       <p className="lead">A collection of products, experiments and solutions I’ve built and contributed to.</p>
       <div className="project-filters" role="group" aria-label="Filter projects by category">
@@ -101,17 +104,21 @@ function Projects() {
         {group.entries.map((project, index) => (
           <details className="project-card" key={project.id}>
             <summary>
-              <ProjectPreview index={index} title={project.title} screenshot={project.screenshot} />
-              <span className="project-summary"><small>{project.category} · {project.eyebrow}</small><strong>{project.title}</strong><span className="project-blurb">{project.description}</span><span className="project-card-meta">{project.tech.slice(0, 4).join(" · ") || (project.id === "course-registration" ? "Windows download" : project.live ? "Live preview available" : project.github ? "Source code available" : "Project details")}</span><i aria-hidden="true">＋</i></span>
+              <ProjectPreview index={index} title={project.title} screenshot={project.screenshot} previewUrl={project.previewUrl} />
+              <span className="project-summary"><small>{project.category} · {project.eyebrow}</small><strong>{project.title}</strong><span className="project-blurb">{project.description}</span><span className="project-card-meta">{project.projectType ? `${project.projectType} · ` : ""}{project.tech.slice(0, 4).join(" · ") || (project.id === "course-registration" ? "Windows download" : project.live ? "Live preview available" : project.github ? "Source code available" : "Project details")}</span><i aria-hidden="true">＋</i></span>
             </summary>
             <div className="project-detail">
               <p className="project-overview"><strong>Overview</strong><br />{project.description}</p>
+              {project.showcase && <div className="project-showcase-details">
+                <article className="project-showcase-block"><p className="eyebrow">01 / Website</p><h3>{project.showcase.website.title}</h3><p>{project.showcase.website.description}</p><ul>{project.showcase.website.points.map((point) => <li key={point}>{point}</li>)}</ul><a className="project-showcase-link" href={project.live} target="_blank" rel="noreferrer">Visit live website <span aria-hidden="true">↗</span></a></article>
+                <article className="project-showcase-block agent-showcase"><p className="eyebrow">02 / AI engineering</p><h3>{project.showcase.agent.title}</h3><p>{project.showcase.agent.description}</p><ol className="agent-workflow" aria-label="Property monitoring workflow">{project.showcase.agent.workflow.map((step, stepIndex) => <li key={step}><span>{String(stepIndex + 1).padStart(2, "0")}</span><strong>{step}</strong>{stepIndex < (project.showcase?.agent.workflow.length ?? 0) - 1 && <i aria-hidden="true">→</i>}</li>)}</ol></article>
+              </div>}
               {project.features.length > 0 && <><h3>Key features</h3><ul>{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul></>}
               {project.contribution && <><h3>Role &amp; contribution</h3><p>{project.contribution}</p></>}
               {project.tech.length > 0 && <div className="tag-list">{project.tech.map((tech) => <span className="tag" key={tech}>{tech}</span>)}</div>}
               <div className="project-links">
                 {project.github && <a href={project.github} target="_blank" rel="noreferrer">Source code ↗</a>}
-                {project.live && <a href={project.live} target="_blank" rel="noreferrer">{project.id === "course-registration" ? "Download Windows build ↗" : "Open live preview ↗"}</a>}
+                {project.live && <a href={project.live} target="_blank" rel="noreferrer">{project.id === "course-registration" ? "Download Windows build ↗" : project.id === "studio-bdtla" ? "Visit live website ↗" : "Open live preview ↗"}</a>}
               </div>
             </div>
           </details>

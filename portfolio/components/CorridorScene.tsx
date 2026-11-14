@@ -89,7 +89,7 @@ function roomItems(id: SectionId): { introduction: string; items: RoomItem[] } {
     { title: "How I work", body: "I start with the user and the problem, build in clear steps, and choose technology that fits the job." },
     { title: "Current direction", body: "Growing as an AI product engineer, building dependable software where modern web systems and machine intelligence meet." },
   ] };
-  if (id === "projects") return { introduction: "Nine products and experiments. Select a project display in this gallery to explore its live preview.", items: projects.map((project) => ({
+  if (id === "projects") return { introduction: `${projects.length} products and experiments. Select a project display in this gallery to explore its details and live preview.`, items: projects.map((project) => ({
     title: project.title,
     body: [project.description, project.features.length ? `Features: ${project.features.join(" · ")}` : "", project.contribution ? `Role: ${project.contribution}` : ""].filter(Boolean).join(" "),
     meta: [project.category, project.tech.join(" · "), project.live ? "Live preview available" : "", project.github ? "Public source available" : ""].filter(Boolean).join("  /  "),
@@ -418,9 +418,10 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
+    const isMobile = window.matchMedia("(max-width: 760px), (pointer: coarse)").matches;
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false, powerPreference: isMobile ? "low-power" : "high-performance" });
     } catch {
       errorRef.current();
       return;
@@ -429,11 +430,11 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#f3f0e8");
     scene.fog = new THREE.Fog("#f3f0e8", 20, 45);
-    const camera = new THREE.PerspectiveCamera(61, 1, 0.1, 70);
+    const camera = new THREE.PerspectiveCamera(isMobile ? 68 : 61, 1, 0.1, 70);
     camera.position.set(0, 1.62, 2.2);
     const world = new THREE.Group();
     scene.add(world);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.7));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -449,7 +450,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
     const sunlight = new THREE.DirectionalLight(0xffedce, 2.3);
     sunlight.position.set(-3, 8, 5);
     sunlight.castShadow = true;
-    sunlight.shadow.mapSize.set(1024, 1024);
+    sunlight.shadow.mapSize.set(isMobile ? 512 : 1024, isMobile ? 512 : 1024);
     sunlight.shadow.camera.left = -8;
     sunlight.shadow.camera.right = 8;
     sunlight.shadow.camera.top = 8;
@@ -735,6 +736,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
       const width = host.clientWidth || window.innerWidth;
       const height = host.clientHeight || window.innerHeight;
       camera.aspect = width / height;
+      camera.fov = isMobile ? 68 : 61;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
     };
@@ -789,7 +791,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
           // Align with the selected doorway inside the corridor.
           desired = new THREE.Vector3(0, 1.62, d.z);
         } else if (transitionStage === 2 && active !== "home") {
-          desired = new THREE.Vector3(d.side * 5.05, 1.62, d.z);
+          desired = new THREE.Vector3(d.side * (isMobile ? 6.15 : 5.05), 1.62, d.z);
           yaw = -d.side * Math.PI / 2;
         } else if (active === "home") {
           desired = new THREE.Vector3(0, 1.62, 2.2);
@@ -815,7 +817,7 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
 
       const keys = new Set(movementRef.current);
       if (keys.size && cameraHasArrived) {
-        const pace = 2.5 * dt;
+        const pace = (isMobile ? 3.4 : 2.5) * dt;
         const forward = keys.has("w") || keys.has("arrowup");
         const backward = keys.has("s") || keys.has("arrowdown");
         const left = keys.has("a") || keys.has("arrowleft");
@@ -832,7 +834,8 @@ export default function CorridorScene({ active, movement, onChoose, onReady, onE
         if (movementVector.lengthSq() > 0) camera.position.addScaledVector(movementVector.normalize(), pace);
         const currentRoom = sections[selectedIndex];
         if (active !== "home" && currentRoom) {
-          camera.position.x = currentRoom.side > 0 ? THREE.MathUtils.clamp(camera.position.x, 3.82, 7.82) : THREE.MathUtils.clamp(camera.position.x, -7.82, -3.82);
+          const roomEdge = isMobile ? 7.1 : 7.82;
+          camera.position.x = currentRoom.side > 0 ? THREE.MathUtils.clamp(camera.position.x, 3.82, roomEdge) : THREE.MathUtils.clamp(camera.position.x, -roomEdge, -3.82);
           camera.position.z = THREE.MathUtils.clamp(camera.position.z, doorRecords[selectedIndex].z - 1.78, doorRecords[selectedIndex].z + 1.78);
         } else {
           camera.position.x = THREE.MathUtils.clamp(camera.position.x, -2.65, 2.65);

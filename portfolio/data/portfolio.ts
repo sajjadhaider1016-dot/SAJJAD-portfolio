@@ -24,7 +24,27 @@ export const sections: { id: SectionId; label: string; number: string; side: -1 
 ];
 
 const github = "https://github.com/sajjadhaider1016-dot";
-export const projects = [
+export type PortfolioProject = {
+  id: string;
+  title: string;
+  category: string;
+  eyebrow: string;
+  description: string;
+  features: string[];
+  contribution: string;
+  tech: string[];
+  github: string;
+  live: string;
+  screenshot: string;
+  previewUrl?: string;
+  projectType?: string;
+  showcase?: {
+    website: { title: string; description: string; points: string[] };
+    agent: { title: string; description: string; workflow: string[] };
+  };
+};
+
+export const projects: PortfolioProject[] = [
   {
     id: "veyra-language-studio",
     title: "VEYRA — Language Studio",
@@ -37,6 +57,37 @@ export const projects = [
     github: "",
     live: "https://veyra-scwb.onrender.com/",
     screenshot: "/projects/veyra-live.png",
+  },
+  {
+    id: "studio-bdtla",
+    title: "Studio B DTLA",
+    category: "Real Estate & Property Management",
+    eyebrow: "Client project · Web + AI automation",
+    description: "A public website and a separate local AI property-monitoring agent built for a Los Angeles real estate and property-management business. The website presents its residential and commercial property offering, while the agent organizes daily updates from incoming listings.",
+    features: [
+      "Residential and commercial property discovery",
+      "Professional presentation of property-management services",
+      "Daily monitoring and organization of incoming listing information",
+    ],
+    contribution: "Website Developer & AI Agent Developer. Developed the Studio B DTLA website and independently built a local AI-powered property-monitoring agent.",
+    tech: [],
+    github: "",
+    live: "https://studiobdtla.com/",
+    screenshot: "",
+    previewUrl: "https://studiobdtla.com/",
+    projectType: "Client project",
+    showcase: {
+      website: {
+        title: "Website development",
+        description: "A professional digital presence for a Los Angeles property-management business, with a user-friendly way to discover residential and commercial properties and understand its services.",
+        points: ["Public-facing business website", "Residential and commercial property presentation", "Property discovery and service information"],
+      },
+      agent: {
+        title: "AI property monitoring agent",
+        description: "An independently developed local agent that checks incoming property listings, extracts relevant details, and organizes daily property updates.",
+        workflow: ["Property listings", "Local AI agent", "Information extraction", "Daily property updates"],
+      },
+    },
   },
   {
     id: "study-buddy",
