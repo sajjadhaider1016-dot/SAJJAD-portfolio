@@ -242,42 +242,29 @@ function roomDetailsTexture(sectionId: SectionId) {
 
 function welcomeTexture() {
   const canvas = document.createElement("canvas");
-  canvas.width = 1200;
-  canvas.height = 760;
+  canvas.width = 1400;
+  canvas.height = 700;
   const ctx = canvas.getContext("2d")!;
-  ctx.fillStyle = "#f8f5ed";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#c9bba8";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
-  ctx.strokeStyle = "#a76543";
-  ctx.lineWidth = 5;
-  ctx.beginPath(); ctx.moveTo(76, 76); ctx.lineTo(294, 76); ctx.stroke();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.textAlign = "center";
   ctx.fillStyle = "#a76543";
-  ctx.font = "600 25px Arial";
-  ctx.fillText("AN INTERACTIVE PORTFOLIO", 76, 128);
+  ctx.font = "600 24px Arial";
+  ctx.fillText("SAJJAD HAIDER   /   AI & FULL-STACK DEVELOPER", 700, 86);
   ctx.fillStyle = "#302c27";
-  ctx.font = "700 80px Arial";
-  ctx.fillText("Sajjad Haider", 72, 246);
+  ctx.font = "600 84px Arial";
+  ctx.fillText("Building intelligent", 700, 216);
   ctx.fillStyle = "#a76543";
-  ctx.font = "600 32px Arial";
-  ctx.fillText("AI & FULL-STACK DEVELOPER", 78, 308);
+  ctx.font = "italic 88px Georgia";
+  ctx.fillText("digital experiences.", 700, 318);
   ctx.fillStyle = "#554d43";
-  ctx.font = "400 27px Arial";
-  ctx.fillText("Building intelligent digital experiences through AI,", 78, 394);
-  ctx.fillText("automation, and modern web technologies.", 78, 434);
-  ctx.strokeStyle = "#d0c4b4";
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(78, 502); ctx.lineTo(1120, 502); ctx.stroke();
-  ctx.fillStyle = "#302c27";
-  ctx.font = "700 24px Arial";
-  ctx.fillText("CHOOSE A ROOM TO BEGIN", 78, 562);
-  ctx.fillStyle = "#665e53";
-  ctx.font = "400 20px Arial";
-  ctx.fillText("Select Rooms above or click a door in the corridor.", 78, 606);
-  ctx.fillStyle = "#a76543";
-  ctx.font = "600 17px Arial";
-  ctx.fillText("HOME  ·  ABOUT  ·  PROJECTS  ·  EXPERIENCE  ·  AND MORE", 78, 694);
+  ctx.font = "400 25px Arial";
+  ctx.fillText("AI applications  ·  automation  ·  full-stack products", 700, 390);
+  ctx.fillStyle = "#8d6b52";
+  ctx.font = "500 19px Arial";
+  ctx.fillText("Choose a room to explore  ·  Move forward or backward to begin", 700, 480);
+  ctx.strokeStyle = "#a76543";
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(570, 530); ctx.lineTo(830, 530); ctx.stroke();
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -286,16 +273,14 @@ function welcomeTexture() {
 
 function addWelcomeInstallation(world: THREE.Group) {
   const installation = new THREE.Group();
-  installation.name = "3D portfolio welcome installation";
-  const backing = new THREE.MeshStandardMaterial({ color: "#98704f", roughness: 0.82 });
-  box(installation, [4, 2.65, 0.17], [0, 2.05, 0], backing, false);
-  const face = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.84, 2.5),
-    new THREE.MeshBasicMaterial({ map: welcomeTexture(), side: THREE.DoubleSide, toneMapped: false }),
-  );
-  face.position.set(0, 2.05, 0.095);
-  installation.add(face);
-  box(installation, [4.42, 0.08, 0.22], [0, 0.49, 0], backing, false);
+  installation.name = "3D portfolio welcome typography";
+  const heroMaterial = new THREE.MeshBasicMaterial({ map: welcomeTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+  const heroText = new THREE.Mesh(new THREE.PlaneGeometry(5.25, 2.625), heroMaterial);
+  heroText.position.set(0, 2.58, 0.02);
+  installation.add(heroText);
+  const accent = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.018, 0.025), new THREE.MeshBasicMaterial({ color: "#a76543", transparent: true, depthWrite: false }));
+  accent.position.set(0, 3.52, 0.04);
+  installation.add(accent);
   world.add(installation);
   return installation;
 }
@@ -428,45 +413,33 @@ function addExhibitionRoom(
   pictureLight.position.set(side * 7.5, 3.83, boardZ);
   world.add(pictureLight);
 
-  // A slim timber console, lounge chair, and plant give each destination a lived-in scale.
-  // Keep the display line open so furniture cannot cover the information board.
-  box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z + 1.65], wood);
-  for (const dx of [-0.43, 0.43]) for (const dz of [-0.58, 0.58]) {
-    box(world, [0.07, 0.78, 0.07], [side * (6.92 + dx), 0.4, z + 1.65 + dz], trim, false);
-  }
-  box(world, [0.85, 0.12, 0.82], [side * 4.62, 0.48, z - 1.32], stone);
-  box(world, [0.12, 0.74, 0.78], [side * 4.62, 0.88, z - 1.68], wood);
-  for (const dx of [-0.32, 0.32]) for (const dz of [-0.27, 0.27]) {
-    box(world, [0.075, 0.45, 0.075], [side * (4.62 + dx), 0.23, z - 1.32 + dz], trim, false);
-  }
-  const planter = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.28, 0.42, 16), stone);
-  planter.position.set(side * 7.42, 0.22, z + 1.62);
-  world.add(planter);
-  const foliage = new THREE.MeshStandardMaterial({ color: "#75816a", roughness: 0.96 });
-  for (let leaf = 0; leaf < 5; leaf++) {
-    const angle = (leaf / 5) * Math.PI * 2;
-    const sprig = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.88, 7), foliage);
-    sprig.position.set(side * 7.42 + Math.cos(angle) * 0.13, 0.82, z + 1.62 + Math.sin(angle) * 0.13);
-    sprig.rotation.z = Math.cos(angle) * 0.32;
-    sprig.rotation.x = Math.sin(angle) * 0.3;
-    sprig.castShadow = true;
-    world.add(sprig);
-  }
-
   if (section.id === "projects") {
-    for (const [offset, projectIndex] of [[-0.5, 0], [0, 1], [0.5, 2]] as const) {
-      const displayZ = z + 1.48 + offset;
-      box(world, [0.78, 0.58, 0.78], [side * 5.12, 0.29, displayZ], stone);
-      box(world, [0.06, 0.83, 0.62], [side * 5.12, 0.98, displayZ], wood);
-      const canvasPanel = box(world, [0.035, 0.67, 0.49], [side * 5.075, 1.02, displayZ], new THREE.MeshStandardMaterial({ color: ["#e5e0d5", "#d8e3e4", "#e5d6c4"][projectIndex], roughness: 0.74 }), false);
-      canvasPanel.userData.sectionId = section.id;
-      box(world, [0.025, 0.035, 0.34], [side * 5.045, 1.14, displayZ], roomMetal, false);
-      box(world, [0.025, 0.025, 0.25], [side * 5.045, 0.94, displayZ], trim, false);
-      const previewPaths = ["/projects/veyra-live.png", "/projects/study-buddy-live.png", "/projects/docedit-live.png"];
+    // A gallery wall replaces the generic lounge furniture: three aligned, readable exhibits
+    // face the entrance while leaving the information board and the center aisle clear.
+    const galleryWood = new THREE.MeshStandardMaterial({ color: "#8f6848", roughness: 0.78 });
+    const galleryPaper = new THREE.MeshStandardMaterial({ color: "#f7f3ea", roughness: 0.94 });
+    const previewPaths = ["/projects/veyra-live.png", "/projects/study-buddy-live.png", "/projects/docedit-live.png"];
+    const previewTitles = ["VEYRA", "STUDY BUDDY", "DOCEDIT"];
+    const galleryXs = [4.55, 5.9, 7.25];
+    for (const projectIndex of [0, 1, 2]) {
+      const displayX = side * galleryXs[projectIndex];
+      const displayZ = z + 2.08;
+      box(world, [1.18, 1.26, 0.11], [displayX, 2.08, displayZ], galleryWood, false);
+      box(world, [1.08, 1.16, 0.035], [displayX, 2.08, displayZ - 0.073], galleryPaper, false);
+      const labelCanvas = document.createElement("canvas");
+      labelCanvas.width = 512; labelCanvas.height = 96;
+      const labelContext = labelCanvas.getContext("2d")!;
+      labelContext.fillStyle = "#f7f3ea"; labelContext.fillRect(0, 0, 512, 96);
+      labelContext.fillStyle = "#463a30"; labelContext.font = "600 32px Arial"; labelContext.textAlign = "center";
+      labelContext.fillText(previewTitles[projectIndex], 256, 62);
+      const labelTexture = new THREE.CanvasTexture(labelCanvas);
+      labelTexture.colorSpace = THREE.SRGBColorSpace;
+      const label = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.18), new THREE.MeshBasicMaterial({ map: labelTexture, toneMapped: false, side: THREE.DoubleSide }));
+      label.position.set(displayX, 1.5, displayZ - 0.096);
+      world.add(label);
       const previewMaterial = new THREE.MeshBasicMaterial({ color: "#ffffff", side: THREE.DoubleSide, toneMapped: false });
-      const preview = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.29), previewMaterial);
-      preview.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-      preview.position.set(side * 5.025, 1.05, displayZ);
+      const preview = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.72), previewMaterial);
+      preview.position.set(displayX, 2.17, displayZ - 0.098);
       preview.userData.sectionId = section.id;
       world.add(preview);
       new THREE.TextureLoader().load(previewPaths[projectIndex], (texture) => {
@@ -477,7 +450,36 @@ function addExhibitionRoom(
         previewMaterial.needsUpdate = true;
       });
     }
-  } else if (section.id === "experience") {
+    box(world, [0.055, 0.05, 3.4], [side * 5.9, 0.035, z + 2.02], brass, false);
+    const galleryLight = new THREE.PointLight(0xffe4bf, 0.42, 5, 2);
+    galleryLight.position.set(side * 5.9, 3.42, z + 1.25);
+    world.add(galleryLight);
+    // Low display bench at the back, outside the viewing lane.
+    box(world, [2.4, 0.12, 0.45], [side * 5.86, 0.48, z - 1.72], wood);
+    for (const xOffset of [-1.02, 1.02]) box(world, [0.08, 0.42, 0.08], [side * (5.86 + xOffset), 0.23, z - 1.72], trim, false);
+  } else {
+    // A slim console, lounge chair, and plant furnish the other rooms without crowding Projects.
+    box(world, [1.05, 0.09, 1.42], [side * 6.92, 0.84, z + 1.65], wood);
+    for (const dx of [-0.43, 0.43]) for (const dz of [-0.58, 0.58]) box(world, [0.07, 0.78, 0.07], [side * (6.92 + dx), 0.4, z + 1.65 + dz], trim, false);
+    box(world, [0.85, 0.12, 0.82], [side * 4.62, 0.48, z - 1.32], stone);
+    box(world, [0.12, 0.74, 0.78], [side * 4.62, 0.88, z - 1.68], wood);
+    for (const dx of [-0.32, 0.32]) for (const dz of [-0.27, 0.27]) box(world, [0.075, 0.45, 0.075], [side * (4.62 + dx), 0.23, z - 1.32 + dz], trim, false);
+    const planter = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.28, 0.42, 16), stone);
+    planter.position.set(side * 7.42, 0.22, z + 1.62);
+    world.add(planter);
+    const foliage = new THREE.MeshStandardMaterial({ color: "#75816a", roughness: 0.96 });
+    for (let leaf = 0; leaf < 5; leaf++) {
+      const angle = (leaf / 5) * Math.PI * 2;
+      const sprig = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.88, 7), foliage);
+      sprig.position.set(side * 7.42 + Math.cos(angle) * 0.13, 0.82, z + 1.62 + Math.sin(angle) * 0.13);
+      sprig.rotation.z = Math.cos(angle) * 0.32;
+      sprig.rotation.x = Math.sin(angle) * 0.3;
+      sprig.castShadow = true;
+      world.add(sprig);
+    }
+  }
+
+  if (section.id === "experience") {
     box(world, [0.09, 1.48, 0.09], [side * 5.12, 1.55, z + 0.75], brass, false);
     box(world, [0.09, 1.48, 0.09], [side * 5.12, 1.55, z + 2], brass, false);
     box(world, [0.12, 0.08, 1.3], [side * 5.12, 2.25, z + 1.38], brass, false);
@@ -529,7 +531,7 @@ function addExhibitionRoom(
     const lamp = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.18, 18, 1, true), new THREE.MeshStandardMaterial({ color: "#e4d2b5", side: THREE.DoubleSide }));
     lamp.position.set(side * 4.75, 1.42, z + 1.3);
     world.add(lamp);
-  } else {
+  } else if (section.id !== "projects") {
     const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.72, 20), stone);
     pedestal.position.set(side * 5.12, 0.36, z + 1.5);
     world.add(pedestal);
@@ -577,6 +579,17 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
     scene.add(world);
     const welcomeInstallation = addWelcomeInstallation(world);
     welcomeInstallation.visible = welcome;
+    const welcomeMaterials: THREE.Material[] = [];
+    welcomeInstallation.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        for (const material of materials) {
+          material.transparent = true;
+          material.depthWrite = false;
+          welcomeMaterials.push(material);
+        }
+      }
+    });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
     renderer.shadowMap.enabled = !isMobile;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -915,6 +928,8 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
     const movementRef = { current: movement };
     let previousActive = active;
     let previousWelcome = welcome;
+    let welcomeDismissed = false;
+    let welcomeOpacity = welcome ? 1 : 0;
     const movementVelocity = new THREE.Vector3();
     const loop = () => {
       raf = requestAnimationFrame(loop);
@@ -924,6 +939,7 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
       const nextWelcome = welcomeRef.current;
       if (nextActive !== previousActive || nextWelcome !== previousWelcome) {
         const leavingWelcome = previousWelcome && !nextWelcome;
+        if (!previousWelcome && nextWelcome) welcomeDismissed = false;
         previousActive = nextActive;
         transitionFrom = active;
         active = nextActive;
@@ -936,7 +952,10 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
         transitionStage = leavingWelcome ? 1 : 0;
         cameraHasArrived = false;
       }
-      welcomeInstallation.visible = nextWelcome;
+      const welcomeTargetOpacity = nextWelcome && !welcomeDismissed ? 1 : 0;
+      welcomeOpacity += (welcomeTargetOpacity - welcomeOpacity) * (1 - Math.exp(-(reduced.matches ? 16 : 7.5) * dt));
+      welcomeInstallation.visible = welcomeOpacity > 0.008;
+      for (const material of welcomeMaterials) material.opacity = welcomeOpacity;
       if (!nextWelcome) ensureRoomBoard(active);
       movementRef.current = movementRefLatest.current;
       cursorLookCurrent.lerp(cursorLookTarget, Math.min(1, dt * 2.4));
@@ -997,7 +1016,9 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
       camera.rotation.x += (lookPitch - camera.rotation.x) * lookDamping;
 
       const keys = new Set(movementRef.current);
-      if (keys.size && cameraHasArrived && !nextWelcome) {
+      const walkingForwardOrBackward = keys.has("w") || keys.has("s") || keys.has("arrowup") || keys.has("arrowdown");
+      if (nextWelcome && walkingForwardOrBackward) welcomeDismissed = true;
+      if (keys.size && cameraHasArrived) {
         const forward = keys.has("w") || keys.has("arrowup");
         const backward = keys.has("s") || keys.has("arrowdown");
         const left = keys.has("a") || keys.has("arrowleft");
@@ -1015,14 +1036,14 @@ export default function CorridorScene({ active, welcome, movement, onChoose, onR
         const movementDamping = 1 - Math.exp(-(targetVelocity.lengthSq() > 0 ? 8 : 10) * dt);
         movementVelocity.lerp(targetVelocity, movementDamping);
         camera.position.addScaledVector(movementVelocity, dt);
-        const currentRoom = sections[selectedIndex];
+        const currentRoom = nextWelcome ? undefined : sections[selectedIndex];
         if (currentRoom) {
           const roomEdge = isMobile ? 7.1 : 7.82;
           camera.position.x = currentRoom.side > 0 ? THREE.MathUtils.clamp(camera.position.x, 3.82, roomEdge) : THREE.MathUtils.clamp(camera.position.x, -roomEdge, -3.82);
           camera.position.z = THREE.MathUtils.clamp(camera.position.z, doorRecords[selectedIndex].z - 1.78, doorRecords[selectedIndex].z + 1.78);
         } else {
           camera.position.x = THREE.MathUtils.clamp(camera.position.x, -2.65, 2.65);
-          camera.position.z = THREE.MathUtils.clamp(camera.position.z, -31.8, 2.3);
+          camera.position.z = THREE.MathUtils.clamp(camera.position.z, -31.8, nextWelcome ? 8.3 : 2.3);
         }
         camera.position.y = 1.62;
       }
