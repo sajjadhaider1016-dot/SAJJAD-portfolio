@@ -74,7 +74,7 @@ export const projects = [
     contribution: "Built an AI assistant with university question flows and document, image, and voice input.",
     tech: ["Node.js", "Express", "JavaScript", "Groq", "OCR", "PDF / DOCX"],
     github: `${github}/BZU-AI-Assistant`,
-    live: "https://bzu-ai-assistant-production-8cc9.up.railway.app/",
+    live: "https://bzu-ai-assistant.vercel.app/",
     screenshot: "",
   },
   {
