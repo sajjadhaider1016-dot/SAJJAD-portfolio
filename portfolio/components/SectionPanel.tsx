@@ -22,10 +22,10 @@ function Home({ enter, navigate }: Pick<Props, "enter" | "navigate">) {
     <>
       <div className="home-hero">
         <div className="hero-copy">
-          <p className="eyebrow">AI engineer / full-stack developer</p>
-          <h1>Building intelligent<br />digital <em>experiences.</em></h1>
-          <p className="hero-role">Sajjad Haider · AI &amp; Full-Stack Developer</p>
-          <p className="lead">I build AI-powered applications, intelligent automation, and complete digital products—turning practical ideas into polished, useful experiences.</p>
+          <p className="eyebrow">AI &amp; full-stack developer</p>
+          <h1>Web products<br /><em>and AI tools.</em></h1>
+          <p className="hero-role">Sajjad Haider</p>
+          <p className="lead">I build web applications, AI tools, and workflow automation—from the interface and APIs to data and model integrations.</p>
           <p className="availability"><span className="availability-dot" />Available for remote opportunities</p>
           <div className="hero-actions">
             <button type="button" className="button button-dark" onClick={() => navigate("projects")}>Explore my work <span aria-hidden="true">↗</span></button>
@@ -36,9 +36,6 @@ function Home({ enter, navigate }: Pick<Props, "enter" | "navigate">) {
         </div>
         <div className="hero-visual">
           <div className="hero-frame"><Image src="/identity/sajjad-haider.jpg" alt="Portrait of Sajjad Haider" width={720} height={1200} priority sizes="(max-width: 760px) 78vw, 38vw" className="hero-photo" /></div>
-          <span className="hero-coordinate">AI · SYSTEMS · PRODUCT</span>
-          <span className="tech-note note-top">Intelligent systems</span><span className="tech-note note-bottom">Thoughtful software</span>
-          <span className="hero-visual-index">01 / 10</span>
         </div>
       </div>
       <div className="capability-strip" aria-label="Areas of work">{["AI & full-stack development", "AI automation", "Web applications", "Product development"].map((item) => <span key={item}>{item}</span>)}</div>
@@ -50,18 +47,18 @@ function About() {
   return (
     <>
       <p className="eyebrow">About me</p>
-      <h2>Intelligent products.<br /><em>Practical engineering.</em></h2>
+      <h2>About Sajjad.</h2>
       <div className="profile-row">
-        <div><p className="lead">I’m Sajjad Haider, an AI &amp; Full-Stack Developer with an academic foundation in Artificial Intelligence.</p><p>I work across the product: shaping a clear interface, connecting application logic and data, and applying AI where it can make a practical difference.</p></div>
+        <div><p className="lead">I study Artificial Intelligence at Bahauddin Zakariya University and build full-stack software alongside my studies.</p><p>My work includes web applications, AI assistants, document tools, and automation. I handle the interface, application logic, data, and model integrations needed to make each product work.</p></div>
       </div>
       <div className="copy-block">
-        <h3>From idea to useful software</h3>
-        <p>My background in AI informs how I approach intelligent applications, language model integrations, document workflows, and automation. Full-stack development lets me carry those ideas through the interface, backend, and deployment instead of treating AI as an isolated feature.</p>
+        <h3>Areas I work in</h3>
+        <p>I work with language model integrations, document workflows, and automation, as well as the web interfaces and backend systems around them. Recent projects include a university assistant, a collaborative document editor, and a property-listing monitor.</p>
       </div>
       <div className="copy-block about-followup">
         <h3>How I work</h3>
-        <p>I start with the problem and the person using the product. Then I build in clear steps, keep the experience understandable, and make technical choices that fit the job. My independent product work and co-founding experience also keep me attentive to operations, customer experience, and the realities of shipping.</p>
-        <p>My direction is to keep growing as an AI product engineer: building dependable software where modern web systems, useful automation, and applied machine intelligence meet.</p>
+        <p>I begin with the task a product needs to support, then build and refine the workflow around it. I aim for clear interfaces, reliable data handling, and AI features tied to a specific use.</p>
+        <p>Independent development and co-founding China Vibes have also given me experience with product decisions, daily operations, and customer experience. I plan to keep developing as an AI product engineer.</p>
       </div>
     </>
   );
@@ -90,9 +87,9 @@ function Projects() {
   }));
   return (
     <>
-      <p className="eyebrow">Selected work · {String(projects.length).padStart(2, "0")} projects</p>
-      <h2>Products, experiments<br />and <em>solutions.</em></h2>
-      <p className="lead">A collection of products, experiments and solutions I’ve built and contributed to.</p>
+      <p className="eyebrow">Projects · {String(projects.length).padStart(2, "0")}</p>
+      <h2>Selected projects.</h2>
+      <p className="lead">Web applications, AI tools, client work, and software experiments.</p>
       <div className="project-filters" role="group" aria-label="Filter projects by category">
         {["All", ...projectCategories].map((category) => <button type="button" key={category} aria-pressed={projectFilter === category} className={projectFilter === category ? "is-selected" : ""} onClick={() => setProjectFilter(category)}>{category}</button>)}
       </div>
@@ -133,7 +130,7 @@ function Experience() {
   return (
     <>
       <p className="eyebrow">Experience</p><h2>The work behind<br /><em>the projects.</em></h2>
-      <p className="lead">A mix of hands-on product building, entrepreneurship, and applied AI learning.</p>
+      <p className="lead">Roles across web development, applied AI, independent software, and business operations.</p>
       <div className="timeline">
         {experience.map((job) => <article className="timeline-item" key={job.role}>
           <span className="timeline-dot" /><p className="eyebrow">{job.date}</p><h3>{job.role}</h3><p className="org">{job.org}</p><p>{job.description}</p>
@@ -147,7 +144,7 @@ function Experience() {
 function Education() {
   return <>
     <p className="eyebrow">Education</p><h2>A focused AI degree.<br /><em>A strong foundation.</em></h2>
-    <p className="lead">Academic path.</p>
+    <p className="lead">Artificial Intelligence at Bahauddin Zakariya University, preceded by Intermediate and secondary education.</p>
     <div className="education-stack">{education.map((item, index) => <article className="education-card" key={item.title}>
       <span className="education-number">0{index + 1}</span><small>{item.status}</small><h3>{item.title}</h3><p className="org">{item.place}</p><p>{item.detail}</p>
     </article>)}</div>
@@ -156,8 +153,8 @@ function Education() {
 
 function Skills() {
   return <>
-    <p className="eyebrow">Technical skills</p><h2>A practical full-stack<br /><em>and AI toolkit.</em></h2>
-    <p className="lead">Organized by how products actually ship: interfaces, systems, data, intelligence, and delivery.</p>
+    <p className="eyebrow">Technical skills</p><h2>Full-stack &amp; AI development.</h2>
+    <p className="lead">Tools and technologies I use across interfaces, backend systems, data, AI, and deployment.</p>
     <div className="skills-grid">{skillGroups.map((group) => <article className="skill-group" key={group.title}>
       <span className="small-rule" /><h3>{group.title}</h3><p>{group.detail}</p><div className="tag-list">{group.skills.map((skill) => <span className="tag" key={skill}>{skill}</span>)}</div>
     </article>)}</div>
@@ -166,7 +163,7 @@ function Skills() {
 
 function Services({ navigate }: Pick<Props, "navigate">) {
   return <>
-    <p className="eyebrow">Services</p><h2>What I can build<br /><em>with you.</em></h2><p className="lead">From full-stack applications to AI systems and reliable backend architecture.</p>
+    <p className="eyebrow">Services</p><h2>Development services.</h2><p className="lead">Web applications, AI integrations, workflow automation, APIs, and database design.</p>
     <div className="service-list">{services.map((service, index) => <article className="service-row" key={service.title}>
       <span className="service-index">0{index + 1}</span><div><h3>{service.title}</h3><p>{service.description}</p><p className="service-outcome"><strong>Typical outcome</strong> {service.outcome}</p><div className="tag-list">{service.technologies.map((tech) => <span className="tag" key={tech}>{tech}</span>)}</div></div><button aria-label={`Ask about ${service.title}`} onClick={() => navigate("contact")}>↗</button>
     </article>)}</div>
@@ -175,7 +172,7 @@ function Services({ navigate }: Pick<Props, "navigate">) {
 
 function Certifications() {
   return <>
-    <p className="eyebrow">Certifications</p><h2>Credentials and<br /><em>continued learning.</em></h2><p className="lead">Issuer, date, and credential ID are preserved from the portfolio.</p>
+    <p className="eyebrow">Certifications</p><h2>Courses &amp; credentials.</h2><p className="lead">Certificates from Google, UniAthena, and Udemy.</p>
     <div className="certificate-list">{certifications.map(([issuer, title, date, id]) => <article className="certificate" key={id}>
       <span className="certificate-seal" aria-hidden="true">{issuer.slice(0, 1)}</span><div><small>{issuer} · {date}</small><h3>{title}</h3><p>Credential ID: {id}</p></div>
     </article>)}</div>
@@ -193,8 +190,8 @@ function Achievements() {
 
 function Contact() {
   return <>
-    <p className="eyebrow">Contact room</p><h2>Let’s build something<br /><em>great together.</em></h2>
-    <p className="lead">Whether you need a full-stack application, AI-powered solution, chatbot, automation system, or technical consultation, let’s connect.</p>
+    <p className="eyebrow">Contact</p><h2>Tell me about your project.</h2>
+    <p className="lead">For web development, AI features, workflow automation, or API work, send a short description of what you need.</p>
     <div className="contact-layout"><ContactForm />
       <aside className="contact-links"><p className="eyebrow">For recruiters &amp; collaborators</p><p>Available for internships, freelance, and product work.</p>
         <a href={`mailto:${links.email}`}>Email <span>{links.email}</span></a>
@@ -244,7 +241,7 @@ function GithubShowcase() {
   }, []);
   return <div className="github-showcase" ref={rootRef}>
     <p className="eyebrow">Public work, in the open</p><h3>Sajjad Haider <small>@ sajjadhaider1016-dot</small></h3>
-    <p>AI &amp; Full-Stack Developer building intelligent products in public.</p>
+    <p>Recent public repositories from my GitHub account.</p>
     <p className="github-count">{count === null ? "Repository data loads as you reach this section" : `${count} public repositories`}</p>
     {error ? <p>GitHub is unavailable right now. Browse the public profile instead.</p> : <div className="repo-list">{repos.map((repo) => <a key={repo.name} href={repo.html_url} target="_blank" rel="noreferrer"><strong>{repo.name}</strong><span>{repo.description || "Public repository"}</span><small>{repo.language || "Repository"} · {repo.stargazers_count} stars</small></a>)}</div>}
     <a className="inline-link" href={links.github} target="_blank" rel="noreferrer">Open GitHub profile ↗</a>

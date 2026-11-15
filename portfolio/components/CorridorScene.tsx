@@ -1080,7 +1080,7 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     <div className={`tour-welcome-copy ${welcomeTextVisible ? "is-visible" : ""}`} aria-hidden={!welcomeTextVisible}>
       <p className="tour-welcome-kicker">AI Engineer · Full-Stack Developer</p>
       <h1>Sajjad Haider</h1>
-      <p className="tour-welcome-tagline">Building intelligent digital experiences.</p>
+      <p className="tour-welcome-tagline">Web applications, AI tools, and workflow automation.</p>
     </div>
     {hoveredLabel && <div className="door-tooltip">Click to enter <strong>{hoveredLabel}</strong><span>↗</span></div>}
   </div>;

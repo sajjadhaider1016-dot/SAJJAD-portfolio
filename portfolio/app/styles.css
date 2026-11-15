@@ -7,10 +7,10 @@
   --line: rgba(82, 72, 58, .25);
   --wood: #956c4b;
   --copper: #a2603d;
-  --display: var(--font-geist), "Segoe UI", Arial, sans-serif;
+  --display: var(--font-playfair), Georgia, serif;
   --sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
   --mono: var(--font-geist-mono), Consolas, monospace;
-  --serif: var(--font-geist), "Segoe UI", Arial, sans-serif;
+  --serif: var(--font-playfair), Georgia, serif;
   --type-display-xl: clamp(42px, 7.1vw, 108px);
   --type-display-lg: clamp(38px, 5.4vw, 76px);
   --type-heading-xl: clamp(32px, 4.3vw, 62px);
@@ -933,4 +933,25 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   .mode-portfolio .section-home .note-top { right: -3px; }
   .mode-portfolio .section-home .note-bottom { bottom: 14%; left: -3px; }
   .mode-portfolio .section-home .hero-visual-index { right: 20px; bottom: 1px; }
+}
+
+/* Clean type hierarchy: Playfair for display headings, Inter for supporting headings and UI. */
+h1, h2 {
+  font-family: var(--display) !important;
+  font-weight: 500;
+  font-synthesis: none;
+  line-height: 1.04;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+h3 { font-family: var(--sans) !important; font-synthesis: none; letter-spacing: -.015em; }
+.mode-portfolio .hero-copy h1 { max-width: 12ch; font-size: clamp(54px, 7.4vw, 100px); font-weight: 500; line-height: 1.01; letter-spacing: -.045em; }
+.mode-portfolio .section-scroll > h2 { max-width: 21ch; font-size: clamp(38px, 4.4vw, 60px); font-weight: 500; line-height: 1.08; letter-spacing: -.03em; }
+.mode-portfolio .hero-copy h1 em, .mode-portfolio h2 em { color: #8d6044; font-family: var(--serif); font-style: italic; font-weight: 500; letter-spacing: -.025em; }
+.mode-portfolio .eyebrow { letter-spacing: .11em; }
+.mode-portfolio .hero-role { letter-spacing: .08em; }
+.mode-tour .tour-welcome-copy h1 { font-family: var(--display); font-weight: 500; letter-spacing: -.035em; }
+@media (max-width: 760px) {
+  .mode-portfolio .hero-copy h1 { max-width: 12ch; font-size: clamp(43px, 11vw, 60px); line-height: 1.03; }
+  .mode-portfolio .section-scroll > h2 { font-size: clamp(34px, 8.5vw, 44px); line-height: 1.1; }
 }

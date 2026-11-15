@@ -119,8 +119,8 @@ export const projects: PortfolioProject[] = [
     id: "bzu-ai-assistant",
     title: "BZU AI Assistant",
     category: "AI & Machine Learning",
-    eyebrow: "AI / Intelligent assistant · 2026",
-    description: "AI-powered university assistant designed to help students access academic information through conversational AI and intelligent search capabilities.",
+    eyebrow: "University assistant · 2026",
+    description: "A conversational university assistant for accessing academic information, with support for PDFs, DOCX files, images, and voice input.",
     features: ["University question flows", "PDF and DOCX support", "Image OCR", "Voice input", "Saved chat history"],
     contribution: "Built an AI assistant with university question flows and document, image, and voice input.",
     tech: ["Node.js", "Express", "JavaScript", "Groq", "OCR", "PDF / DOCX"],
@@ -216,7 +216,7 @@ export const experience = [
     role: "AI & Full-Stack Developer",
     org: "Self-employed",
     date: "Current · Ongoing",
-    description: "Design and build practical software products, from AI-assisted workflows to complete web applications.",
+    description: "Build software from AI-assisted workflows to complete web applications.",
     points: ["Build AI and full-stack products from idea to deployment", "Create responsive interfaces and connected backend workflows", "Explore education, productivity, and account-recovery solutions"],
     tags: ["Next.js", "React", "Node.js", "AI automation"],
   },
@@ -240,18 +240,18 @@ export const skillGroups = [
   { title: "Frontend", detail: "Interfaces that feel considered, fast, and production-ready.", skills: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"] },
   { title: "Backend", detail: "Server-side systems, APIs, and authentication flows.", skills: ["Node.js", "Express.js", "REST APIs", "Authentication systems"] },
   { title: "Databases", detail: "Structured data and query-driven application logic.", skills: ["PostgreSQL", "SQLite", "MongoDB"] },
-  { title: "Artificial intelligence", detail: "AI applications, agents, and intelligent automation.", skills: ["AI chatbots", "AI agents", "Prompt engineering", "Automation systems", "Groq", "Gemini AI", "LLM applications", "Python", "Machine learning", "OCR & document processing"] },
+  { title: "Artificial intelligence", detail: "AI applications, agents, and workflow automation.", skills: ["AI chatbots", "AI agents", "Prompt engineering", "Automation systems", "Groq", "Gemini AI", "LLM applications", "Python", "Machine learning", "OCR & document processing"] },
   { title: "Programming", detail: "Language fundamentals and software design.", skills: ["C++", "Object-oriented programming"] },
   { title: "Tools", detail: "Version control, containers, and deployment.", skills: ["Git", "GitHub", "Docker", "Vercel"] },
   { title: "Product & business", detail: "Applied services and product work across digital platforms.", skills: ["Meta account recovery", "Data recovery", "Digital marketing", "SEO", "Cybersecurity", "IT consulting", "Custom software development"] },
 ];
 
 export const services = [
-  { title: "Full-Stack Web Development", description: "Modern web applications using React, Next.js, Node.js, and scalable databases.", outcome: "A responsive product with connected interface, server logic, data persistence, and a deployment-ready foundation.", technologies: ["React", "Next.js", "Node.js", "PostgreSQL"] },
-  { title: "AI Chatbot Development", description: "Intelligent conversational systems powered by modern AI models.", outcome: "A focused conversational experience built around a clear user task and an integrated AI model.", technologies: ["Python", "Groq", "Gemini AI", "LLM applications"] },
-  { title: "AI Agents & Automation", description: "Workflow automation and business productivity solutions.", outcome: "Connected steps that reduce repetitive work and bring AI into a practical workflow.", technologies: ["Python", "AI agents", "Prompt engineering", "Automation systems"] },
-  { title: "API Development", description: "Secure backend systems and scalable integrations.", outcome: "Well-structured REST endpoints that let application interfaces and services exchange data reliably.", technologies: ["Node.js", "Express.js", "REST APIs", "Authentication systems"] },
-  { title: "Database Design", description: "Reliable and efficient database architecture.", outcome: "A data model and persistence layer shaped around the product’s records and relationships.", technologies: ["PostgreSQL", "SQLite", "MongoDB"] },
+  { title: "Full-Stack Web Development", description: "Web applications built with React, Next.js, Node.js, and relational or document databases.", outcome: "A responsive interface connected to application logic, data storage, and deployment.", technologies: ["React", "Next.js", "Node.js", "PostgreSQL"] },
+  { title: "AI Chatbot Development", description: "Conversational interfaces connected to AI models for defined user tasks.", outcome: "A chatbot flow designed around the questions users need to answer or the tasks they need to complete.", technologies: ["Python", "Groq", "Gemini AI", "LLM applications"] },
+  { title: "AI Agents & Automation", description: "Automated workflows that connect repeatable tasks with AI where it is useful.", outcome: "A defined workflow with the relevant steps connected and documented.", technologies: ["Python", "AI agents", "Prompt engineering", "Automation systems"] },
+  { title: "API Development", description: "REST APIs and authentication for web applications and integrations.", outcome: "Endpoints that let application interfaces and services exchange data.", technologies: ["Node.js", "Express.js", "REST APIs", "Authentication systems"] },
+  { title: "Database Design", description: "Database schemas and persistence for application data.", outcome: "A data model organized around the application’s records and relationships.", technologies: ["PostgreSQL", "SQLite", "MongoDB"] },
 ];
 
 export const certifications = [

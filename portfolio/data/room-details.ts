@@ -18,25 +18,25 @@ export function roomDetailsFor(sectionId: SectionId): RoomDetails {
     title: "Sajjad Haider",
     subtitle: "AI & Full-Stack Developer",
     entries: [
-      { title: "What I build", detail: "AI-powered applications, intelligent automation, and complete digital products." },
-      { title: "How I work", detail: "Turning practical ideas into polished, useful experiences across interface, backend, and deployment." },
-      { title: "Current focus", detail: "Applied AI, automation systems, and dependable full-stack products." },
+      { title: "What I build", detail: "Web applications, AI tools, and workflow automation." },
+      { title: "How I work", detail: "I build across the interface, application logic, data, and deployment." },
+      { title: "Current focus", detail: "AI applications, workflow automation, and full-stack development." },
       { title: "Availability", detail: "Available for remote opportunities." },
     ],
   };
   if (sectionId === "about") return {
     title: "About me",
-    subtitle: "Intelligent products. Practical engineering.",
+    subtitle: "AI studies and full-stack product work.",
     entries: [
-      { title: "Background", detail: "AI student at Bahauddin Zakariya University, building practical software alongside my studies." },
+      { title: "Background", detail: "I study Artificial Intelligence at Bahauddin Zakariya University and build software alongside my degree." },
       { title: "Technical interests", detail: "AI applications, language model integrations, document workflows, and automation." },
-      { title: "Development approach", detail: "Start with the problem, keep the experience understandable, and choose technology for the job." },
-      { title: "Direction", detail: "Growing as an AI product engineer, connecting modern web systems with useful applied intelligence." },
+      { title: "Development approach", detail: "I start with the user’s task, then choose tools and build the workflow around it." },
+      { title: "Direction", detail: "I plan to keep developing as an AI product engineer." },
     ],
   };
   if (sectionId === "projects") return {
     title: "Selected projects",
-    subtitle: "Products, experiments, and solutions",
+    subtitle: "Web applications, AI tools, and software experiments",
     columns: 2,
     entries: projects.map((project) => ({ title: project.title, detail: project.description, meta: project.tech.slice(0, 3).join(" · ") || project.category })),
   };
@@ -52,13 +52,13 @@ export function roomDetailsFor(sectionId: SectionId): RoomDetails {
   };
   if (sectionId === "skills") return {
     title: "Technical skills",
-    subtitle: "A practical full-stack and AI toolkit",
+    subtitle: "Frontend, backend, data, AI, and deployment",
     columns: 2,
     entries: skillGroups.map((group) => ({ title: group.title, detail: group.skills.join(" · ") })),
   };
   if (sectionId === "services") return {
     title: "Services",
-    subtitle: "Practical software for real product needs",
+    subtitle: "Web, AI, automation, and backend work",
     entries: services.map((service) => ({ title: service.title, detail: service.description, meta: service.technologies.join(" · ") })),
   };
   if (sectionId === "certifications") return {

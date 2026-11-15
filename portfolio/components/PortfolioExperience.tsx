@@ -187,7 +187,7 @@ export default function PortfolioExperience() {
       </div>}
       {mode === "portfolio" && <footer className="portfolio-footer">
         <div className="footer-main">
-          <div className="footer-signature"><a href="#section-home" className="footer-wordmark"><span className="footer-monogram">SH</span><span>SAJJAD HAIDER</span></a><p>AI &amp; Full-Stack Developer<br />Building useful products with intelligent systems.</p><span className="footer-availability"><i /> Available for remote opportunities</span></div>
+          <div className="footer-signature"><a href="#section-home" className="footer-wordmark"><span className="footer-monogram">SH</span><span>SAJJAD HAIDER</span></a><p>AI &amp; Full-Stack Developer<br />Web applications, AI tools, and workflow automation.</p><span className="footer-availability"><i /> Available for remote opportunities</span></div>
           <nav className="footer-navigation" aria-label="Footer navigation"><strong>Explore</strong><a href="#section-home">Home</a><a href="#section-about">About</a><a href="#section-projects">Selected work</a><a href="#section-experience">Experience</a><a href="#section-contact">Contact</a></nav>
           <div className="footer-connect"><strong>Connect</strong><div className="footer-socials" aria-label="Social profiles">
             <a href={links.githubProfile} target="_blank" rel="noreferrer" aria-label="GitHub profile" title="GitHub"><SocialIcon name="github" /></a>
@@ -196,7 +196,7 @@ export default function PortfolioExperience() {
             <a href={`mailto:${links.email}`} aria-label="Email Sajjad" title="Email"><SocialIcon name="email" /></a>
           </div><button type="button" className="footer-tour" onClick={enter}>Explore the 3D world ↗</button></div>
         </div>
-        <div className="footer-bottom"><span>© 2026 Sajjad Haider</span><span>Designed around thoughtful, practical software.</span><a href="#section-home">Back to top ↑</a></div>
+        <div className="footer-bottom"><span>© 2026 Sajjad Haider</span><span>AI, web development, and automation.</span><a href="#section-home">Back to top ↑</a></div>
       </footer>}
       {mode === "tour" && <footer className="world-footer"><span>AN ILLUSTRATED WORLD BY SAJJAD HAIDER</span><span className="footer-center"><i />INTERACTIVE ARCHITECTURE</span><a href={`mailto:sajjadhaider1016@gmail.com`}>SAY HELLO ↗</a></footer>}
     </main>
