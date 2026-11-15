@@ -14,14 +14,26 @@ const playfair = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sajjad-haider-portfolio.vercel.app"),
+  applicationName: "Sajjad Haider Portfolio",
   title: "Sajjad Haider — AI & Full-Stack Developer",
   description:
-    "Sajjad Haider is an AI and full-stack developer building web applications, AI tools, and workflow automation.",
+    "Portfolio of Sajjad Haider, an AI engineer and full-stack developer building AI applications, intelligent agents, business automation, and web products.",
+  alternates: { canonical: "/" },
+  keywords: ["Sajjad Haider", "AI Engineer", "Full-Stack Developer", "AI Automation", "AI Applications", "Web Development"],
+  authors: [{ name: "Sajjad Haider", url: "https://sajjad-haider-portfolio.vercel.app" }],
+  creator: "Sajjad Haider",
+  publisher: "Sajjad Haider",
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   openGraph: {
     title: "Sajjad Haider — AI & Full-Stack Developer",
-    description: "Selected web applications, AI tools, and software projects by Sajjad Haider.",
+    description: "AI applications, intelligent agents, workflow automation, and web products by Sajjad Haider.",
     type: "website",
+    url: "https://sajjad-haider-portfolio.vercel.app/",
+    siteName: "Sajjad Haider Portfolio",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sajjad Haider — AI Engineer and Full-Stack Developer" }],
   },
+  twitter: { card: "summary_large_image", title: "Sajjad Haider — AI & Full-Stack Developer", description: "AI applications, intelligent agents, workflow automation, and web products.", images: ["/opengraph-image"] },
 };
 
 export const viewport: Viewport = {

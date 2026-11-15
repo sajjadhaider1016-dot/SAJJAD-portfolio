@@ -34,6 +34,7 @@ export default function ContactForm() {
     event.preventDefault();
     if (busy) return;
     const form = event.currentTarget;
+    if (new FormData(form).get("botcheck")) return;
     const payload = Object.fromEntries(new FormData(form).entries()) as ContactPayload;
     setBusy(true);
     setStatus(null);
@@ -73,6 +74,7 @@ export default function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={submit}>
+      <label className="contact-trap" aria-hidden="true">Website<input name="botcheck" tabIndex={-1} autoComplete="off" /></label>
       <label>Name<input name="name" autoComplete="name" maxLength={100} required /></label>
       <label>Email<input name="email" type="email" autoComplete="email" maxLength={254} required /></label>
       <label>Subject<input name="subject" maxLength={160} required /></label>

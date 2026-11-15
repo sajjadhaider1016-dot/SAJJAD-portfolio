@@ -884,6 +884,118 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   .mode-portfolio .project-card:hover .project-screenshot { transform: none; }
 }
 
+/* Featured project hierarchy and concrete service references. */
+.mode-portfolio .section-projects .project-collection { gap: clamp(32px, 5vw, 58px); }
+.mode-portfolio .section-projects .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.mode-portfolio .section-projects .project-card.is-featured:first-child { grid-column: 1 / -1; }
+.mode-portfolio .section-projects .project-card.is-featured:first-child summary { grid-template-columns: minmax(320px, .9fr) minmax(0, 1.1fr); }
+.mode-portfolio .section-projects .project-card summary { grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); min-height: 250px; }
+.mode-portfolio .section-projects .project-preview { min-width: 0; min-height: 250px; }
+.mode-portfolio .section-projects .project-summary { min-width: 0; min-height: 250px; padding: 22px 40px 22px 22px; }
+.mode-portfolio .section-projects .project-summary small { line-height: 1.55; }
+.mode-portfolio .section-projects .project-summary .project-blurb { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+.mode-portfolio .project-flow-preview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: center; gap: 9px; height: 100%; min-height: 250px; padding: 18px; background: #e9e1d5; }
+.mode-portfolio .project-flow-preview > span { position: relative; display: flex; min-height: 75px; flex-direction: column; justify-content: space-between; gap: 8px; padding: 12px; border: 1px solid rgba(80,68,52,.2); background: #f8f5ee; }
+.mode-portfolio .project-flow-preview small { position: static; color: #80573b; font: 11px var(--mono); }
+.mode-portfolio .project-flow-preview strong { color: #302c26; font: 600 13px/1.35 var(--sans); }
+.mode-portfolio .project-flow-preview i { position: absolute; top: calc(50% - 10px); right: -9px; z-index: 1; display: grid; width: 18px; height: 20px; place-items: center; background: #e9e1d5; color: #80573b; font-style: normal; }
+.mode-portfolio .project-flow-preview > span:nth-child(2) i { top: auto; right: 50%; bottom: -15px; transform: translateX(50%) rotate(90deg); }
+.mode-portfolio .experience-status { display: inline-flex; align-items: center; margin-left: 8px; padding: 3px 8px; border: 1px solid rgba(82,72,58,.2); border-radius: 999px; color: #594b3b; font: 11px/1.4 var(--mono); vertical-align: middle; }
+.mode-portfolio .service-usecase, .mode-portfolio .service-related { margin-top: 10px; }
+.mode-portfolio .service-usecase strong, .mode-portfolio .service-related strong { margin-right: 6px; color: #514333; }
+.mode-portfolio .service-related a { color: #704d32; text-decoration: underline; text-underline-offset: 3px; }
+.mode-portfolio .hero-social-links { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; }
+.mode-portfolio .hero-social-links a { min-height: 36px; color: #594b3b; font-size: 13px; text-decoration: underline; text-decoration-color: rgba(112,77,50,.35); text-underline-offset: 4px; }
+.mode-portfolio .hero-social-links a:hover { color: #704d32; text-decoration-color: currentColor; }
+.contact-trap { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+
+@media (max-width: 1080px) {
+  .mode-portfolio .section-projects .project-list { grid-template-columns: minmax(0, 1fr); }
+  .mode-portfolio .section-projects .project-card.is-featured:first-child { grid-column: auto; }
+}
+@media (max-width: 760px) {
+  .mode-portfolio .section-projects .project-card summary,
+  .mode-portfolio .section-projects .project-card.is-featured:first-child summary { grid-template-columns: minmax(0, 1fr); }
+  .mode-portfolio .section-projects .project-preview,
+  .mode-portfolio .section-projects .project-summary { min-height: 0; }
+  .mode-portfolio .section-projects .project-preview { min-height: 200px; }
+  .mode-portfolio .section-projects .project-flow-preview { min-height: 200px; }
+  .mode-portfolio .section-projects .project-summary { padding: 18px 42px 18px 18px; }
+  .mode-portfolio .hero-social-links { gap: 16px; margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mode-portfolio .section-projects .project-screenshot,
+  .mode-portfolio .hero-photo { transition: none; }
+}
+
+/* Crisp readable room notes sit over the scene without texture blur. */
+.mode-tour .room-details-anchor {
+  position: absolute;
+  z-index: 5;
+  top: 54%;
+  right: clamp(20px, 4vw, 64px);
+  display: block;
+  width: min(390px, 31vw);
+  max-height: min(66svh, 590px);
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: room-card-in .22s ease both;
+}
+.mode-tour .room-details-card {
+  max-height: min(66svh, 590px);
+  overflow: auto;
+  padding: 20px;
+  border: 1px solid rgba(75,64,50,.28);
+  background: #f9f7f0;
+  box-shadow: 0 12px 36px rgba(43,34,25,.22);
+  color: #302b25;
+  pointer-events: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #a8896a transparent;
+  scrollbar-width: thin;
+}
+.mode-tour .room-details-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: #704a30; font: 500 11px/1.4 var(--mono); letter-spacing: .035em; text-transform: uppercase; }
+.mode-tour .room-details-heading .eyebrow { margin: 0; color: inherit; font: inherit; }
+.mode-tour .room-details-card h2 { margin: 0 0 5px; color: #302b25; font: 600 clamp(24px, 2.3vw, 32px)/1.12 var(--display); letter-spacing: -.025em; }
+.mode-tour .room-details-subtitle { margin: 0 0 14px; color: #51483e; font: 400 15px/1.55 var(--sans); }
+.mode-tour .room-details-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mode-tour .room-detail-item { min-width: 0; padding: 10px 11px; border-left: 2px solid #a9633f; background: #f0ebe1; }
+.mode-tour .room-detail-item h3 { margin: 0 0 4px; color: #302b25; font: 600 13px/1.35 var(--sans); }
+.mode-tour .room-detail-item p,
+.mode-tour .room-detail-item a { display: block; margin: 0; color: #51483e; font: 400 14px/1.5 var(--sans); overflow-wrap: anywhere; }
+.mode-tour .room-detail-item a { color: #704a30; text-decoration: underline; text-underline-offset: 2px; }
+.mode-tour .room-detail-item small { display: block; margin-top: 5px; color: #60462f; font: 400 11px/1.45 var(--mono); overflow-wrap: anywhere; }
+.mode-tour .room-details-card:focus-visible { outline: 3px solid #a9633f; outline-offset: 2px; }
+@media (max-width: 760px) {
+  .mode-tour .room-details-anchor {
+    top: auto;
+    right: 10px;
+    bottom: calc(max(110px, env(safe-area-inset-bottom) + 100px));
+    left: 10px;
+    width: auto;
+    height: min(38svh, 250px);
+    min-height: 186px;
+    max-height: none;
+    transform: none;
+  }
+  .mode-tour .room-details-card { width: 100%; height: 100%; max-height: none; padding: 13px 15px 15px; -webkit-overflow-scrolling: touch; }
+  .mode-tour .room-details-card h2 { font-size: clamp(22px, 6vw, 28px); }
+  .mode-tour .room-details-subtitle { margin-bottom: 10px; font-size: 14px; }
+  .mode-tour .room-detail-item { padding: 8px 9px; }
+  .mode-tour .room-detail-item p,
+  .mode-tour .room-detail-item a { font-size: 14px; }
+}
+@media (max-width: 390px) {
+  .mode-tour .room-details-anchor { right: 8px; left: 8px; height: min(38svh, 220px); min-height: 174px; bottom: calc(max(108px, env(safe-area-inset-bottom) + 98px)); }
+  .mode-tour .room-details-card { padding: 11px 12px 13px; }
+  .mode-tour .room-details-list { gap: 6px; }
+  .mode-tour .room-detail-item { padding: 7px 8px; }
+  .mode-tour .room-detail-item h3 { font-size: 12px; }
+  .mode-tour .room-detail-item p,
+  .mode-tour .room-detail-item a { font-size: 13px; line-height: 1.45; }
+}
+@media (prefers-reduced-motion: reduce) { .mode-tour .room-details-anchor { animation: none; } }
+
 /* Studio B DTLA: live site preview and distinct web/agent case-study panels. */
 .mode-portfolio .project-preview-toolbar { position: absolute; z-index: 2; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 38px; padding: 0 11px; border-bottom: 1px solid rgba(74,63,49,.16); background: rgba(249,247,240,.96); }
 .mode-portfolio .project-preview-toolbar small { position: static; color: #756653; font: 500 9px var(--mono); letter-spacing: .06em; }

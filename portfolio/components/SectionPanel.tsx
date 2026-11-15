@@ -22,16 +22,17 @@ function Home({ enter, navigate }: Pick<Props, "enter" | "navigate">) {
     <>
       <div className="home-hero">
         <div className="hero-copy">
-          <p className="eyebrow">AI &amp; full-stack developer</p>
-          <h1>Web products<br /><em>and AI tools.</em></h1>
+          <p className="eyebrow">AI engineer / full-stack developer</p>
+          <h1>I build intelligent<br /><em>software that solves</em><br />real problems.</h1>
           <p className="hero-role">Sajjad Haider</p>
-          <p className="lead">I build web applications, AI tools, and workflow automation—from the interface and APIs to data and model integrations.</p>
+          <p className="lead">AI applications, intelligent agents, business automation, and modern web products — turning complex ideas into practical digital solutions.</p>
           <p className="availability"><span className="availability-dot" />Available for remote opportunities</p>
           <div className="hero-actions">
             <button type="button" className="button button-dark" onClick={() => navigate("projects")}>Explore my work <span aria-hidden="true">↗</span></button>
-            <button type="button" className="button button-paper" onClick={() => navigate("about")}>About me</button>
+            <button type="button" className="button button-paper" onClick={() => navigate("contact")}>Let’s connect</button>
             <a className="text-button resume-request" href="/CV.pdf" download>Download résumé <span aria-hidden="true">↗</span></a>
           </div>
+          <nav className="hero-social-links" aria-label="Profile links"><a href={links.githubProfile} target="_blank" rel="noreferrer">GitHub</a><a href={links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={`mailto:${links.email}`}>Email</a></nav>
           <p className="tour-invite"><span>Prefer to explore?</span> <button type="button" onClick={enter}>Enter the illustrated 3D world ↗</button></p>
         </div>
         <div className="hero-visual">
@@ -64,27 +65,38 @@ function About() {
   );
 }
 
-function ProjectPreview({ index, title, screenshot, previewUrl }: { index: number; title: string; screenshot: string; previewUrl?: string }) {
+function ProjectPreview({ index, title, screenshot, previewUrl, previewSteps }: { index: number; title: string; screenshot: string; previewUrl?: string; previewSteps?: string[] }) {
   return (
     <div className={`project-preview preview-${index % 4}`}>
       {previewUrl ? <>
         <div className="project-preview-toolbar"><small>LIVE WEBSITE PREVIEW</small><a href={previewUrl} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>Visit live website <span aria-hidden="true">↗</span></a></div>
         <iframe src={previewUrl} title={`${title} live website preview`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
-      </> : screenshot ? <Image src={screenshot} alt={`${title} project preview`} fill sizes="(max-width: 760px) 100vw, 44vw" className="project-screenshot" /> : <>
-        <div className="project-cover"><small>PROJECT PREVIEW</small><strong>{title}</strong><span>Open details for links and information</span></div>
+      </> : screenshot ? <Image src={screenshot} alt={`${title} project interface`} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 72vw, 54vw" className="project-screenshot" /> : previewSteps?.length ? <div className="project-flow-preview" aria-label={`${title} workflow`}>{previewSteps.map((step, stepIndex) => <span key={step}><small>0{stepIndex + 1}</small><strong>{step}</strong>{stepIndex < previewSteps.length - 1 && <i aria-hidden="true">→</i>}</span>)}</div> : <>
+    <div className="project-cover"><small>PROJECT DETAILS</small><strong>{title}</strong><span>{projectPreviewMessage(title)}</span></div>
       </>}
       {screenshot && !previewUrl && <small>Project screenshot</small>}
     </div>
   );
 }
 
+function projectPreviewMessage(title: string) {
+  if (title === "China Vibes") return "Co-founder contribution · source repository linked below";
+  if (title === "Customer Support AI Copilot" || title === "ContentPilot AI") return "No public live demo or screenshot is listed";
+  return "No public screenshot is listed · see verified links below";
+}
+
 function Projects() {
   const [projectFilter, setProjectFilter] = useState("All");
   const projectCategories = Array.from(new Set(projects.map((project) => project.category)));
-  const groups = projectCategories.map((category) => ({
-    title: category,
-    entries: projects.filter((project) => project.category === category),
-  }));
+  const featuredOrder = ["bzu-ai-assistant", "customer-support-ai-copilot", "contentpilot-ai", "property-monitoring-agent", "docedit", "china-vibes", "studio-bdtla"];
+  const featured = featuredOrder.map((id) => projects.find((project) => project.id === id)).filter((project): project is (typeof projects)[number] => Boolean(project));
+  const featuredIds = new Set(featured.map((project) => project.id));
+  const secondary = projects.filter((project) => !featuredIds.has(project.id));
+  const visible = projectFilter === "All" ? featured : projects.filter((project) => project.category === projectFilter);
+  const groups = [
+    { title: projectFilter === "All" ? "Featured work" : projectFilter, entries: visible },
+    ...(projectFilter === "All" && secondary.length ? [{ title: "More projects", entries: secondary }] : []),
+  ];
   return (
     <>
       <p className="eyebrow">Projects · {String(projects.length).padStart(2, "0")}</p>
@@ -98,9 +110,9 @@ function Projects() {
           <div className="project-group-heading"><h3>{group.title}</h3><small>{String(group.entries.length).padStart(2, "0")} projects</small></div>
           <div className="project-list">
         {group.entries.map((project, index) => (
-          <details className="project-card" key={project.id}>
+          <details className={`project-card${featuredIds.has(project.id) ? " is-featured" : ""}`} key={project.id} id={`project-${project.id}`}>
             <summary>
-              <ProjectPreview index={index} title={project.title} screenshot={project.screenshot} previewUrl={project.previewUrl} />
+              <ProjectPreview index={index} title={project.title} screenshot={project.screenshot} previewUrl={project.previewUrl} previewSteps={project.previewSteps} />
               <span className="project-summary"><small>{project.category} · {project.eyebrow}</small><strong>{project.title}</strong><span className="project-blurb">{project.description}</span><span className="project-card-meta">{project.projectType ? `${project.projectType} · ` : ""}{project.tech.slice(0, 4).join(" · ") || (project.id === "course-registration" ? "Windows download" : project.live ? "Live preview available" : project.github ? "Source code available" : "Project details")}</span><i aria-hidden="true">＋</i></span>
             </summary>
             <div className="project-detail">
@@ -109,8 +121,8 @@ function Projects() {
                 <article className="project-showcase-block"><p className="eyebrow">01 / Website</p><h3>{project.showcase.website.title}</h3><p>{project.showcase.website.description}</p><ul>{project.showcase.website.points.map((point) => <li key={point}>{point}</li>)}</ul><a className="project-showcase-link" href={project.live} target="_blank" rel="noreferrer">Visit live website <span aria-hidden="true">↗</span></a></article>
                 <article className="project-showcase-block agent-showcase"><p className="eyebrow">02 / AI engineering</p><h3>{project.showcase.agent.title}</h3><p>{project.showcase.agent.description}</p><ol className="agent-workflow" aria-label="Property monitoring workflow">{project.showcase.agent.workflow.map((step, stepIndex) => <li key={step}><span>{String(stepIndex + 1).padStart(2, "0")}</span><strong>{step}</strong>{stepIndex < (project.showcase?.agent.workflow.length ?? 0) - 1 && <i aria-hidden="true">→</i>}</li>)}</ol></article>
               </div>}
-              {project.features.length > 0 && <><h3>Key features</h3><ul>{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul></>}
-              {project.contribution && <><h3>Role &amp; contribution</h3><p>{project.contribution}</p></>}
+              {project.features.length > 0 && <><h3>Features</h3><ul>{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul></>}
+              {project.contribution && <><h3>My contribution</h3><p>{project.contribution}</p></>}
               {project.tech.length > 0 && <div className="tag-list">{project.tech.map((tech) => <span className="tag" key={tech}>{tech}</span>)}</div>}
               <div className="project-links">
                 {project.github && <a href={project.github} target="_blank" rel="noreferrer">Source code ↗</a>}
@@ -133,7 +145,7 @@ function Experience() {
       <p className="lead">Roles across web development, applied AI, independent software, and business operations.</p>
       <div className="timeline">
         {experience.map((job) => <article className="timeline-item" key={job.role}>
-          <span className="timeline-dot" /><p className="eyebrow">{job.date}</p><h3>{job.role}</h3><p className="org">{job.org}</p><p>{job.description}</p>
+          <span className="timeline-dot" /><p className="eyebrow">{job.date}</p><h3>{job.role}</h3><p className="org">{job.org} <span className="experience-status">{job.status}</span></p><p>{job.description}</p>
           <ul>{job.points.map((point) => <li key={point}>{point}</li>)}</ul><div className="tag-list">{job.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
         </article>)}
       </div>
@@ -165,7 +177,7 @@ function Services({ navigate }: Pick<Props, "navigate">) {
   return <>
     <p className="eyebrow">Services</p><h2>Development services.</h2><p className="lead">Web applications, AI integrations, workflow automation, APIs, and database design.</p>
     <div className="service-list">{services.map((service, index) => <article className="service-row" key={service.title}>
-      <span className="service-index">0{index + 1}</span><div><h3>{service.title}</h3><p>{service.description}</p><p className="service-outcome"><strong>Typical outcome</strong> {service.outcome}</p><div className="tag-list">{service.technologies.map((tech) => <span className="tag" key={tech}>{tech}</span>)}</div></div><button aria-label={`Ask about ${service.title}`} onClick={() => navigate("contact")}>↗</button>
+      <span className="service-index">0{index + 1}</span><div><h3>{service.title}</h3><p>{service.description}</p><p className="service-outcome"><strong>Deliverable</strong> {service.outcome}</p><p className="service-usecase"><strong>Useful for</strong> {service.useCase}</p><p className="service-related"><strong>Related work</strong> {service.relatedProjects.map((title, projectIndex) => { const project = projects.find((item) => item.title === title); return project ? <a key={title} href={`#project-${project.id}`}>{title}{projectIndex < service.relatedProjects.length - 1 ? ", " : ""}</a> : title; })}</p><div className="tag-list">{service.technologies.map((tech) => <span className="tag" key={tech}>{tech}</span>)}</div></div><button type="button" aria-label={`Ask about ${service.title}`} onClick={() => navigate("contact")}>↗</button>
     </article>)}</div>
   </>;
 }

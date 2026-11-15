@@ -48,7 +48,11 @@ data/
 
 The About room uses Sajjad's profile photo recovered from the published source repository at `public/identity/sajjad-haider.jpg`. The scene includes a proportioned, professionally dressed procedural 3D stand-in. A custom photorealistic avatar model (GLB) was not available; replace the stand-in in `components/CorridorScene.tsx` when one is supplied.
 
-The gallery uses available Study Buddy and Recoveriest product screenshots from the source repository; other project previews are clearly labeled, replaceable placeholders. Project descriptions, links, tools, employment details, and credentials are kept in `data/portfolio.ts`.
+The gallery uses the available BZU AI Assistant, DocEdit, Recoveriest, Study Buddy, and VEYRA screenshots. Studio B DTLA uses a lazy live-site preview. The Property Monitoring Agent includes a workflow illustration based on the provided process; projects without public screenshots or live demos are labeled accordingly. Featured work is ordered around the portfolio's AI and full-stack projects, with remaining work retained below it. Project descriptions, links, tools, employment details, and credentials are kept in `data/portfolio.ts`.
+
+## Search and sharing
+
+The home page declares the canonical `https://sajjad-haider-portfolio.vercel.app/` URL, Open Graph and X metadata, and Person, WebSite, and BZU AI Assistant structured data. Next.js generates `/sitemap.xml`, `/robots.txt`, and a portfolio-specific `/opengraph-image`. Local portfolio screenshots use the Next.js image optimizer.
 
 ## GitHub data
 

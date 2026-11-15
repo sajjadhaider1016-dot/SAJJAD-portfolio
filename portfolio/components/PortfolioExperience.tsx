@@ -39,7 +39,6 @@ export default function PortfolioExperience() {
       window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}`);
     }
     window.scrollTo(0, 0);
-    setActive("home");
     const frame = window.requestAnimationFrame(() => window.scrollTo(0, 0));
     return () => {
       window.cancelAnimationFrame(frame);
