@@ -874,7 +874,8 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   .mode-portfolio .section-home .home-hero { align-items: start; }
   .mode-portfolio .section-home .home-hero { gap: 22px; }
   .mode-portfolio .section-home .hero-visual { width: min(calc(100% - 28px), 320px); justify-self: center; margin: 0 auto; padding: 0 8px 18px 0; }
-  .mode-portfolio .section-home .hero-frame { aspect-ratio: .88; box-shadow: 10px 10px 0 rgba(151,116,83,.12); }
+  .mode-portfolio .section-home .hero-frame { aspect-ratio: .65; box-shadow: 10px 10px 0 rgba(151,116,83,.12); }
+  .mode-portfolio .section-home .hero-photo { object-fit: contain; object-position: center; }
   .mode-portfolio .section-home .hero-coordinate { left: -7px; font-size: 8px; }
   .mode-portfolio .section-home .note-top { right: -3px; }
   .mode-portfolio .section-home .note-bottom { bottom: 14%; left: -3px; }

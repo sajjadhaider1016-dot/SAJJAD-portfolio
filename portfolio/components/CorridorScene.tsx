@@ -173,23 +173,25 @@ function drawWrappedText(ctx: CanvasRenderingContext2D, text: string, x: number,
 }
 
 function roomDetailsTexture(sectionId: SectionId) {
+  const layoutWidth = 1024;
+  const layoutHeight = 1280;
   const canvas = document.createElement("canvas");
-  canvas.width = 1024;
-  canvas.height = 1280;
+  // Keep the layout coordinates inside the canvas while rasterizing at 2× for crisp room displays.
+  canvas.width = layoutWidth * 2;
+  canvas.height = layoutHeight * 2;
   const ctx = canvas.getContext("2d")!;
-  // Draw at the established layout size, then rasterize at 1⅓× for crisp in-world type.
-  ctx.scale(4 / 3, 4 / 3);
+  ctx.scale(2, 2);
   const accent = "#a76543";
   const ink = "#302c27";
   const muted = "#665e53";
   const { title, subtitle, entries, columns = 1 } = boardContent(sectionId);
   const pad = 48;
-  const contentWidth = canvas.width - pad * 2;
+  const contentWidth = layoutWidth - pad * 2;
   ctx.fillStyle = "#f8f5ed";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = "#d0c4b4";
   ctx.lineWidth = 2;
-  ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
+  ctx.strokeRect(16, 16, layoutWidth - 32, layoutHeight - 32);
   ctx.fillStyle = accent;
   ctx.font = "700 18px Arial";
   ctx.fillText(`SAJJAD HAIDER   /   ${sections.find((item) => item.id === sectionId)?.number}`, pad, 62);
@@ -206,7 +208,7 @@ function roomDetailsTexture(sectionId: SectionId) {
   const colGap = 20;
   const colWidth = columns === 2 ? (contentWidth - colGap) / 2 : contentWidth;
   const rowsPerColumn = columns === 2 ? Math.ceil(entries.length / 2) : entries.length;
-  const itemHeight = Math.min(160, Math.floor((canvas.height - startY - pad) / rowsPerColumn));
+  const itemHeight = Math.min(160, Math.floor((layoutHeight - startY - pad) / rowsPerColumn));
   const dense = columns === 2 || entries.length >= 3;
   entries.forEach((entry, index) => {
     const col = columns === 2 ? Math.floor(index / rowsPerColumn) : 0;
@@ -234,7 +236,7 @@ function roomDetailsTexture(sectionId: SectionId) {
   });
   ctx.fillStyle = muted;
   ctx.font = "600 13px Arial";
-  ctx.fillText("ILLUSTRATED PORTFOLIO  ·  ROOM DISPLAY", pad, canvas.height - 26);
+  ctx.fillText("ILLUSTRATED PORTFOLIO  ·  ROOM DISPLAY", pad, layoutHeight - 26);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -583,7 +585,8 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
         }
       }
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+    // Keep mobile rendering close to native resolution; device DPR 2–3 multiplies scene fill cost sharply.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2));
     renderer.shadowMap.enabled = !isMobile;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -931,10 +934,14 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
       setWelcomeTextVisible(visible);
     };
     const movementVelocity = new THREE.Vector3();
+    const moveForward = new THREE.Vector3();
+    const moveRight = new THREE.Vector3();
+    const moveTarget = new THREE.Vector3();
+    const worldUp = new THREE.Vector3(0, 1, 0);
     const loop = () => {
       raf = requestAnimationFrame(loop);
       timer.update();
-      const dt = Math.min(timer.getDelta(), 0.05);
+      const dt = Math.min(timer.getDelta(), 0.033);
       const nextActive = activeRef.current;
       const nextWelcome = welcomeRef.current;
       const nextWelcomeReset = welcomeResetRef.current;
@@ -1033,18 +1040,18 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
         const backward = keys.has("s") || keys.has("arrowdown");
         const left = keys.has("a") || keys.has("arrowleft");
         const right = keys.has("d") || keys.has("arrowright");
-        const forwardVector = camera.getWorldDirection(new THREE.Vector3());
-        forwardVector.y = 0;
-        forwardVector.normalize();
-        const rightVector = new THREE.Vector3().crossVectors(forwardVector, new THREE.Vector3(0, 1, 0)).normalize();
-        const targetVelocity = new THREE.Vector3();
-        if (forward) targetVelocity.add(forwardVector);
-        if (backward) targetVelocity.sub(forwardVector);
-        if (left) targetVelocity.sub(rightVector);
-        if (right) targetVelocity.add(rightVector);
-        if (targetVelocity.lengthSq() > 0) targetVelocity.normalize().multiplyScalar(isMobile ? 3.4 : 3);
-        const movementDamping = 1 - Math.exp(-(targetVelocity.lengthSq() > 0 ? 8 : 10) * dt);
-        movementVelocity.lerp(targetVelocity, movementDamping);
+        camera.getWorldDirection(moveForward);
+        moveForward.y = 0;
+        moveForward.normalize();
+        moveRight.crossVectors(moveForward, worldUp).normalize();
+        moveTarget.set(0, 0, 0);
+        if (forward) moveTarget.add(moveForward);
+        if (backward) moveTarget.sub(moveForward);
+        if (left) moveTarget.sub(moveRight);
+        if (right) moveTarget.add(moveRight);
+        if (moveTarget.lengthSq() > 0) moveTarget.normalize().multiplyScalar(isMobile ? 2.5 : 3);
+        const movementDamping = 1 - Math.exp(-(moveTarget.lengthSq() > 0 ? 10 : 13) * dt);
+        movementVelocity.lerp(moveTarget, movementDamping);
         camera.position.addScaledVector(movementVelocity, dt);
         const currentRoom = nextWelcome ? undefined : sections[selectedIndex];
         if (currentRoom) {
