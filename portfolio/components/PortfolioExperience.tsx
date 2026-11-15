@@ -20,9 +20,9 @@ function SocialIcon({ name }: { name: SocialName }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.1a9.7 9.7 0 0 0-8.3 14.7L2.5 21l4.3-1.1A9.7 9.7 0 1 0 12 2.1Zm0 17.6a7.9 7.9 0 0 1-4-1.1l-.3-.2-2.5.7.7-2.4-.2-.3A7.9 7.9 0 1 1 12 19.7Zm4.3-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.8c-.1.2-.3.2-.5.1a6.4 6.4 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5.2-.4c.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.2.9 2.4c.1.2 1.6 2.5 3.9 3.5.5.2.9.4 1.2.4.5.2 1 .2 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.3-.2-.5-.3Z" /></svg>;
 }
 
-export default function PortfolioExperience() {
+export default function PortfolioExperience({ initialSection = "home" }: { initialSection?: SectionId }) {
   const [mode, setMode] = useState<"portfolio" | "tour">("portfolio");
-  const [active, setActive] = useState<SectionId>("home");
+  const [active, setActive] = useState<SectionId>(initialSection);
   const [tourWelcome, setTourWelcome] = useState(false);
   const [welcomeReset, setWelcomeReset] = useState(0);
   const [movement, setMovement] = useState<string[]>([]);
@@ -38,17 +38,20 @@ export default function PortfolioExperience() {
   useEffect(() => {
     const previousRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
-    // A stale section fragment or browser-restored scroll position must not skip the home hero.
+    // Direct section URLs should open at their matching section, while the root opens at home.
     if (window.location.hash) {
       window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}`);
     }
-    window.scrollTo(0, 0);
-    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 0));
+    const frame = window.requestAnimationFrame(() => {
+      const section = document.getElementById(`section-${initialSection}`);
+      if (section) section.scrollIntoView({ behavior: "instant", block: "start" });
+      else window.scrollTo(0, 0);
+    });
     return () => {
       window.cancelAnimationFrame(frame);
       window.history.scrollRestoration = previousRestoration;
     };
-  }, []);
+  }, [initialSection]);
 
   const returnToWebsite = useCallback(() => {
     setMovement([]);
