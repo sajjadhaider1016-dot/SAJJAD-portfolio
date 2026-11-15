@@ -442,7 +442,7 @@ function addExhibitionRoom(
         new THREE.TextureLoader().load(project.screenshot, (texture) => {
           if (!preview.parent) { texture.dispose(); return; }
           texture.colorSpace = THREE.SRGBColorSpace;
-          texture.anisotropy = 2;
+          texture.anisotropy = 4;
           previewMaterial.map = texture;
           previewMaterial.needsUpdate = true;
         }, undefined, () => {
@@ -564,7 +564,7 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     const isMobile = window.matchMedia("(max-width: 760px), (pointer: coarse)").matches;
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false, powerPreference: isMobile ? "low-power" : "high-performance" });
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     } catch {
       errorRef.current();
       return;
@@ -590,8 +590,11 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
         }
       }
     });
-    // Keep mobile rendering close to native resolution; device DPR 2–3 multiplies scene fill cost sharply.
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2));
+    // Start crisp on high-density screens, then adapt resolution only if sustained frame time needs it.
+    const maxPixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    const minPixelRatio = isMobile ? 1 : 1.25;
+    let renderPixelRatio = maxPixelRatio;
+    renderer.setPixelRatio(renderPixelRatio);
     renderer.shadowMap.enabled = !isMobile;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -957,10 +960,29 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     const moveRight = new THREE.Vector3();
     const moveTarget = new THREE.Vector3();
     const worldUp = new THREE.Vector3(0, 1, 0);
+    let qualitySampleTotal = 0;
+    let qualitySampleCount = 0;
     const loop = () => {
       raf = requestAnimationFrame(loop);
       timer.update();
       const dt = Math.min(timer.getDelta(), 0.033);
+      qualitySampleTotal += dt * 1000;
+      qualitySampleCount++;
+      if (qualitySampleCount >= 90) {
+        const averageFrameTime = qualitySampleTotal / qualitySampleCount;
+        const nextPixelRatio = averageFrameTime > 27
+          ? Math.max(minPixelRatio, renderPixelRatio - 0.25)
+          : averageFrameTime < 19
+            ? Math.min(maxPixelRatio, renderPixelRatio + 0.25)
+            : renderPixelRatio;
+        if (nextPixelRatio !== renderPixelRatio) {
+          renderPixelRatio = nextPixelRatio;
+          renderer.setPixelRatio(renderPixelRatio);
+          renderer.setSize(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight, false);
+        }
+        qualitySampleTotal = 0;
+        qualitySampleCount = 0;
+      }
       const nextActive = activeRef.current;
       const nextWelcome = welcomeRef.current;
       const nextWelcomeReset = welcomeResetRef.current;
