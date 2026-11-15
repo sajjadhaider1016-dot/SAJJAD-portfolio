@@ -30,6 +30,22 @@ export default function PortfolioExperience() {
   const [sceneFailed, setSceneFailed] = useState(false);
   const [pointerLocked, setPointerLocked] = useState(false);
 
+  useEffect(() => {
+    const previousRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    // A stale section fragment or browser-restored scroll position must not skip the home hero.
+    if (window.location.hash) {
+      window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}`);
+    }
+    window.scrollTo(0, 0);
+    setActive("home");
+    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 0));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.history.scrollRestoration = previousRestoration;
+    };
+  }, []);
+
   const returnToWebsite = useCallback(() => {
     setMovement([]);
     setMenuOpen(false);
