@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import SectionPanel from "@/components/SectionPanel";
+import RoomDetailsCard from "@/components/RoomDetailsCard";
 import { links, sections, type SectionId } from "@/data/portfolio";
 
 const CorridorScene = dynamic(() => import("@/components/CorridorScene"), {
@@ -169,6 +170,8 @@ export default function PortfolioExperience() {
         </nav>
         <div className="map-foot"><span className="pencil-line" />Choose a room to enter</div>
       </aside>}
+
+      {mode === "tour" && !tourWelcome && <div className="room-details-anchor"><RoomDetailsCard section={active} /></div>}
 
       {mode === "portfolio" && <div className="content-anchor" id="portfolio-content">
         <SectionPanel section={active} enter={enter} navigate={goTo} allSections />
