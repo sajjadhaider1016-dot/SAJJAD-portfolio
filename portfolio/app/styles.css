@@ -1137,6 +1137,18 @@ h3 { font-family: var(--sans) !important; font-synthesis: none; font-weight: 600
 .mode-portfolio .button, .mode-portfolio .menu-toggle, .mode-portfolio .mobile-nav, .mode-portfolio .contact-form { font-family: var(--sans); }
 .portfolio-footer { padding-right: clamp(28px, 7vw, 112px); padding-left: clamp(28px, 7vw, 112px); }
 
+.portfolio-scroll-progress {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  transform-origin: 0 50%;
+  background: var(--accent, #a2603d);
+  pointer-events: none;
+}
+
 @media (min-width: 1440px) {
   .mode-portfolio .section-scroll { padding-right: clamp(72px, 7vw, 128px); padding-left: clamp(72px, 7vw, 128px); }
   .mode-portfolio .hero-copy h1 { font-size: clamp(82px, 5.5vw, 104px); }

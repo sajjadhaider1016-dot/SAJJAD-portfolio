@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "motion/react";
 import SectionPanel from "@/components/SectionPanel";
 import RoomDetailsCard from "@/components/RoomDetailsCard";
 import { links, sections, type SectionId } from "@/data/portfolio";
@@ -32,6 +32,8 @@ export default function PortfolioExperience() {
   const [sceneFailed, setSceneFailed] = useState(false);
   const [pointerLocked, setPointerLocked] = useState(false);
   const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 160, damping: 36, restDelta: 0.001 });
 
   useEffect(() => {
     const previousRestoration = window.history.scrollRestoration;
@@ -141,6 +143,7 @@ export default function PortfolioExperience() {
 
   return (
     <main className={`portfolio-world mode-${mode}`}>
+      {mode === "portfolio" && !reducedMotion && <motion.div className="portfolio-scroll-progress" style={{ scaleX: scrollProgress }} aria-hidden="true" />}
       <a className="skip-link" href={mode === "tour" ? "#tour-room-menu" : "#portfolio-content"}>Skip to {mode === "tour" ? "room navigation" : "portfolio content"}</a>
       <div className="scene-wrap">
         {mode === "tour" && <CorridorScene active={active} welcome={tourWelcome} welcomeReset={welcomeReset} movement={movement} onChoose={goTo} onReady={() => setSceneReady(true)} onError={() => setSceneFailed(true)} />}

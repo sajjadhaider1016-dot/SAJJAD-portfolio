@@ -319,10 +319,10 @@ export default function SectionPanel({ section, enter, navigate, allSections = f
       className={`section-card section-${current}`}
       aria-label={`${current} portfolio section`}
       key={current}
-      initial={reducedMotion ? false : { opacity: .97, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: .08 }}
-      transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 28, mass: .8 }}
+      initial={reducedMotion ? false : { opacity: .86, y: 30, scale: .99 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: false, amount: .14 }}
+      transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 145, damping: 25, mass: .85 }}
     >
       <span className="panel-corner" aria-hidden="true" />
       <div className="section-scroll">
