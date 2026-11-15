@@ -1,3 +1,32 @@
+@font-face {
+  font-family: "Portfolio Playfair Fallback";
+  src: url("/fonts/playfair-display-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Portfolio Playfair Fallback";
+  src: url("/fonts/playfair-display-italic-latin.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Portfolio Inter Fallback";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Portfolio Geist Mono Fallback";
+  src: url("/fonts/geist-mono.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root {
   --paper: #f4f0e7;
   --paper-light: #fbf9f3;
@@ -7,10 +36,13 @@
   --line: rgba(82, 72, 58, .25);
   --wood: #956c4b;
   --copper: #a2603d;
-  --display: var(--font-playfair), Georgia, serif;
-  --sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
-  --mono: var(--font-geist-mono), Consolas, monospace;
-  --serif: var(--font-playfair), Georgia, serif;
+  --font-heading: "Cormorant Garamond", "Portfolio Playfair Fallback", Georgia, serif;
+  --font-body: "Manrope", "Portfolio Inter Fallback", "Segoe UI", Arial, sans-serif;
+  --font-technical: "IBM Plex Mono", "Portfolio Geist Mono Fallback", Consolas, monospace;
+  --display: var(--font-heading);
+  --sans: var(--font-body);
+  --mono: var(--font-technical);
+  --serif: var(--font-heading);
   --type-display-xl: clamp(42px, 7.1vw, 108px);
   --type-display-lg: clamp(38px, 5.4vw, 76px);
   --type-heading-xl: clamp(32px, 4.3vw, 62px);
@@ -1047,7 +1079,7 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   .mode-portfolio .section-home .hero-visual-index { right: 20px; bottom: 1px; }
 }
 
-/* Clean type hierarchy: Playfair for display headings, Inter for supporting headings and UI. */
+/* Editorial type system: Cormorant Garamond headings, Manrope interface, IBM Plex Mono metadata. */
 h1, h2 {
   font-family: var(--display) !important;
   font-weight: 500;
@@ -1056,14 +1088,99 @@ h1, h2 {
   letter-spacing: -.035em;
   text-wrap: balance;
 }
-h3 { font-family: var(--sans) !important; font-synthesis: none; letter-spacing: -.015em; }
+h3 { font-family: var(--sans) !important; font-synthesis: none; font-weight: 600; letter-spacing: -.015em; }
 .mode-portfolio .hero-copy h1 { max-width: 12ch; font-size: clamp(54px, 7.4vw, 100px); font-weight: 500; line-height: 1.01; letter-spacing: -.045em; }
 .mode-portfolio .section-scroll > h2 { max-width: 21ch; font-size: clamp(38px, 4.4vw, 60px); font-weight: 500; line-height: 1.08; letter-spacing: -.03em; }
-.mode-portfolio .hero-copy h1 em, .mode-portfolio h2 em { color: #8d6044; font-family: var(--serif); font-style: italic; font-weight: 500; letter-spacing: -.025em; }
+.mode-portfolio .hero-copy h1 em, .mode-portfolio h2 em { color: #8d6044; font-family: var(--serif); font-style: italic; font-weight: 600; letter-spacing: -.025em; }
 .mode-portfolio .eyebrow { letter-spacing: .11em; }
 .mode-portfolio .hero-role { letter-spacing: .08em; }
 .mode-tour .tour-welcome-copy h1 { font-family: var(--display); font-weight: 500; letter-spacing: -.035em; }
 @media (max-width: 760px) {
   .mode-portfolio .hero-copy h1 { max-width: 12ch; font-size: clamp(43px, 11vw, 60px); line-height: 1.03; }
   .mode-portfolio .section-scroll > h2 { font-size: clamp(34px, 8.5vw, 44px); line-height: 1.1; }
+}
+
+/* Desktop portfolio refinement: preserve screenshot framing and give projects a stable grid. */
+.mode-portfolio .section-scroll { width: min(100%, 1400px); }
+.mode-portfolio .section-home .section-scroll { padding-top: clamp(30px, 3vw, 48px); padding-bottom: clamp(34px, 4vw, 60px); }
+.mode-portfolio .home-hero { grid-template-columns: minmax(0, 1.18fr) minmax(300px, .82fr); align-items: center; gap: clamp(38px, 5vw, 78px); }
+.mode-portfolio .hero-copy h1 { max-width: 11.5ch; font-size: clamp(58px, 6.2vw, 92px); line-height: .98; }
+.mode-portfolio .hero-visual { width: min(100%, clamp(300px, 30vw, 420px)); justify-self: end; margin: 0; }
+.mode-portfolio .hero-frame { aspect-ratio: .78; }
+.mode-portfolio .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: clamp(16px, 1.6vw, 24px); }
+.mode-portfolio .section-projects .project-card { min-width: 0; height: 100%; }
+.mode-portfolio .section-projects .project-card.is-featured:first-child { grid-column: 1 / -1; }
+.mode-portfolio .section-projects .project-card.is-featured:first-child summary { grid-template-columns: minmax(310px, .9fr) minmax(0, 1.1fr); min-height: 320px; }
+.mode-portfolio .section-projects .project-card.is-featured:first-child .project-preview,
+.mode-portfolio .section-projects .project-card.is-featured:first-child .project-summary { min-height: 320px; }
+.mode-portfolio .section-projects .project-card:not(.is-featured:first-child) summary { display: flex; min-height: 0; flex-direction: column; }
+.mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-preview { width: 100%; min-height: 0; aspect-ratio: 16 / 9; border-right: 0; border-bottom: 1px solid rgba(80,68,52,.17); }
+.mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-summary { width: 100%; min-height: 205px; justify-content: flex-start; padding: 20px 42px 20px 20px; }
+.mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-summary .project-blurb { -webkit-line-clamp: 3; }
+.mode-portfolio .section-projects .project-preview .project-screenshot { object-fit: contain; object-position: center; }
+.mode-portfolio .project-preview:has(.project-screenshot) { background: #e9e3d8; }
+.mode-portfolio .project-summary strong { font-family: var(--display); font-size: clamp(25px, 2.7vw, 34px); font-weight: 600; line-height: 1.12; letter-spacing: -.025em; }
+.mode-portfolio .project-summary .project-blurb { font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+.mode-portfolio .project-summary small,
+.mode-portfolio .project-group-heading > small,
+.mode-portfolio .project-card-meta,
+.mode-portfolio .eyebrow,
+.mode-portfolio .tag,
+.mode-portfolio .timeline-item .eyebrow,
+.mode-portfolio .certificate small,
+.mode-portfolio .service-index,
+.mode-portfolio .footer-bottom { font-family: var(--mono); font-weight: 400; }
+.mode-portfolio .world-header.site-header { gap: clamp(18px, 2vw, 30px); padding-right: clamp(28px, 5vw, 84px); padding-left: clamp(28px, 5vw, 84px); }
+.mode-portfolio .primary-nav { gap: clamp(12px, 1.45vw, 23px); }
+.mode-portfolio .primary-nav > button, .mode-portfolio .more-nav > button { white-space: nowrap; font-family: var(--sans); font-size: clamp(12px, .9vw, 14px); }
+.mode-portfolio .button, .mode-portfolio .menu-toggle, .mode-portfolio .mobile-nav, .mode-portfolio .contact-form { font-family: var(--sans); }
+.portfolio-footer { padding-right: clamp(28px, 7vw, 112px); padding-left: clamp(28px, 7vw, 112px); }
+
+@media (min-width: 1440px) {
+  .mode-portfolio .section-scroll { padding-right: clamp(72px, 7vw, 128px); padding-left: clamp(72px, 7vw, 128px); }
+  .mode-portfolio .hero-copy h1 { font-size: clamp(82px, 5.5vw, 104px); }
+}
+@media (max-width: 1280px) {
+  .mode-portfolio .world-header.site-header { gap: 18px; padding-right: 30px; padding-left: 30px; }
+  .mode-portfolio .primary-nav { gap: 13px; }
+  .mode-portfolio .primary-nav > button, .mode-portfolio .more-nav > button { font-size: 12px; }
+  .mode-portfolio .hero-copy h1 { font-size: clamp(58px, 6.4vw, 82px); }
+}
+@media (max-width: 1366px) and (min-width: 1081px) {
+  .mode-portfolio .section-scroll { padding-right: clamp(44px, 6vw, 82px); padding-left: clamp(44px, 6vw, 82px); }
+  .mode-portfolio .section-home .hero-visual { width: min(100%, clamp(300px, 29vw, 400px)); }
+}
+@media (max-width: 1080px) {
+  .mode-portfolio .home-hero { grid-template-columns: minmax(0, 1fr) minmax(260px, .75fr); gap: 34px; }
+  .mode-portfolio .hero-copy h1 { font-size: clamp(54px, 6.6vw, 74px); }
+  .mode-portfolio .section-projects .project-list { grid-template-columns: minmax(0, 1fr); }
+  .mode-portfolio .section-projects .project-card.is-featured:first-child { grid-column: auto; }
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) summary { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(0, 1.2fr); min-height: 240px; }
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-preview { width: auto; min-height: 240px; aspect-ratio: auto; border-right: 1px solid rgba(80,68,52,.17); border-bottom: 0; }
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-summary { min-height: 240px; }
+}
+@media (max-width: 900px) {
+  .mode-portfolio .world-header.site-header { gap: 16px; }
+  .mode-portfolio .home-hero { grid-template-columns: minmax(0, 1fr); }
+  .mode-portfolio .hero-visual { width: min(72%, 390px); justify-self: center; margin: 0 auto; }
+  .mode-portfolio .hero-copy h1 { max-width: 13ch; font-size: clamp(58px, 9vw, 80px); }
+}
+@media (max-width: 760px) {
+  .mode-portfolio .section-scroll { width: 100%; }
+  .mode-portfolio .hero-copy h1 { max-width: 12ch; font-size: clamp(48px, 12.2vw, 66px); }
+  .mode-portfolio .section-projects .project-card.is-featured:first-child summary,
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) summary { display: flex; min-height: 0; flex-direction: column; }
+  .mode-portfolio .section-projects .project-card.is-featured:first-child .project-preview,
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-preview { width: 100%; min-height: 0; aspect-ratio: 16 / 10; border-right: 0; border-bottom: 1px solid rgba(80,68,52,.17); }
+  .mode-portfolio .section-projects .project-card.is-featured:first-child .project-summary,
+  .mode-portfolio .section-projects .project-card:not(.is-featured:first-child) .project-summary { min-height: 0; padding: 18px 42px 20px 18px; }
+  .mode-portfolio .section-projects .project-summary strong { font-size: clamp(25px, 7vw, 32px); }
+  .mode-portfolio .section-projects .project-summary .project-blurb { -webkit-line-clamp: 4; }
+  .mode-portfolio .world-header.site-header { padding-right: max(20px, env(safe-area-inset-right)); padding-left: max(20px, env(safe-area-inset-left)); }
+  .mode-portfolio .section-home .section-scroll { padding-bottom: clamp(38px, 9vw, 64px); }
+}
+@media (max-width: 390px) {
+  .mode-portfolio .hero-copy h1 { font-size: clamp(46px, 12vw, 54px); }
+  .mode-portfolio .section-scroll { padding-right: 19px; padding-left: 19px; }
+  .mode-portfolio .section-projects .project-summary .project-blurb { font-size: 14px; }
 }

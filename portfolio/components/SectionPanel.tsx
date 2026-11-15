@@ -71,7 +71,7 @@ function ProjectPreview({ index, title, screenshot, previewUrl, previewSteps }: 
       {previewUrl ? <>
         <div className="project-preview-toolbar"><small>LIVE WEBSITE PREVIEW</small><a href={previewUrl} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>Visit live website <span aria-hidden="true">↗</span></a></div>
         <iframe src={previewUrl} title={`${title} live website preview`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
-      </> : screenshot ? <Image src={screenshot} alt={`${title} project interface`} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 72vw, 54vw" className="project-screenshot" /> : previewSteps?.length ? <div className="project-flow-preview" aria-label={`${title} workflow`}>{previewSteps.map((step, stepIndex) => <span key={step}><small>0{stepIndex + 1}</small><strong>{step}</strong>{stepIndex < previewSteps.length - 1 && <i aria-hidden="true">→</i>}</span>)}</div> : <>
+      </> : screenshot ? <Image src={screenshot} alt={`${title} project interface`} fill sizes="(max-width: 760px) 100vw, (max-width: 1080px) 90vw, (max-width: 1440px) 42vw, 30vw" className="project-screenshot" /> : previewSteps?.length ? <div className="project-flow-preview" aria-label={`${title} workflow`}>{previewSteps.map((step, stepIndex) => <span key={step}><small>0{stepIndex + 1}</small><strong>{step}</strong>{stepIndex < previewSteps.length - 1 && <i aria-hidden="true">→</i>}</span>)}</div> : <>
     <div className="project-cover"><small>PROJECT DETAILS</small><strong>{title}</strong><span>{projectPreviewMessage(title)}</span></div>
       </>}
       {screenshot && !previewUrl && <small>Project screenshot</small>}

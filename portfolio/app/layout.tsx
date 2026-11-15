@@ -1,17 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 import "./styles.css";
-
-const inter = localFont({ src: "../public/fonts/inter.woff2", display: "swap", variable: "--font-inter", weight: "100 900" });
-const geistMono = localFont({ src: "../public/fonts/geist-mono.woff2", display: "swap", variable: "--font-geist-mono", weight: "100 900" });
-const playfair = localFont({
-  src: [
-    { path: "../public/fonts/playfair-display-latin.woff2", weight: "400 900", style: "normal" },
-    { path: "../public/fonts/playfair-display-italic-latin.woff2", weight: "400 900", style: "italic" },
-  ],
-  display: "swap",
-  variable: "--font-playfair",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sajjad-haider-portfolio.vercel.app"),
@@ -44,7 +32,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable} ${playfair.variable}`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600;1,700&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
