@@ -362,6 +362,7 @@ function addExhibitionRoom(
   floor: THREE.Material,
   wall: THREE.Material,
   roomBoards: Map<SectionId, THREE.MeshBasicMaterial>,
+  deferredProjectPreviews: Array<() => void>,
 ) {
   const side = section.side;
   const x = side * 5.86;
@@ -437,12 +438,16 @@ function addExhibitionRoom(
       preview.renderOrder = 5;
       preview.userData.sectionId = section.id;
       world.add(preview);
-      new THREE.TextureLoader().load(project.screenshot, (texture) => {
-        if (!preview.parent) { texture.dispose(); return; }
-        texture.colorSpace = THREE.SRGBColorSpace;
-        texture.anisotropy = 4;
-        previewMaterial.map = texture;
-        previewMaterial.needsUpdate = true;
+      deferredProjectPreviews.push(() => {
+        new THREE.TextureLoader().load(project.screenshot, (texture) => {
+          if (!preview.parent) { texture.dispose(); return; }
+          texture.colorSpace = THREE.SRGBColorSpace;
+          texture.anisotropy = 2;
+          previewMaterial.map = texture;
+          previewMaterial.needsUpdate = true;
+        }, undefined, () => {
+          if (preview.parent) previewMaterial.color.set("#e6dccd");
+        });
       });
     }
     box(world, [0.055, 0.05, 3.4], [side * 5.85, 0.035, z + 2.02], brass, false);
@@ -618,6 +623,7 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     const panelInset = new THREE.MeshStandardMaterial({ color: "#bb895d", roughness: 0.86 });
     const metal = new THREE.MeshStandardMaterial({ color: "#8d7654", metalness: 0.68, roughness: 0.35 });
     const roomBoardMaterials = new Map<SectionId, THREE.MeshBasicMaterial>();
+    const deferredProjectPreviews: Array<() => void> = [];
     // Carve ten real doorway openings from the corridor walls and frame compact rooms behind them.
     for (const side of [-1, 1] as const) {
       let cursor = 9;
@@ -631,7 +637,7 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
         if (segmentLength > 0) box(world, [0.23, 4.2, segmentLength], [side * 3.43, 2.08, (cursor + openingTop) / 2], wallMat, false);
         box(world, [0.23, 1.58, 1.56], [side * 3.43, 3.41, z], wallMat, false);
         cursor = openingBottom;
-        addExhibitionRoom(world, section, z, new THREE.MeshStandardMaterial({ map: floorTex, color: "#cfac88", roughness: 0.86 }), wallMat, roomBoardMaterials);
+        addExhibitionRoom(world, section, z, new THREE.MeshStandardMaterial({ map: floorTex, color: "#cfac88", roughness: 0.86 }), wallMat, roomBoardMaterials, deferredProjectPreviews);
       });
       if (cursor > -31) box(world, [0.23, 4.2, cursor + 31], [side * 3.43, 2.08, (cursor - 31) / 2], wallMat, false);
     }
@@ -903,16 +909,29 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
     readyRef.current();
 
     let active = activeRef.current;
-    const loadedRoomBoards = new Set<SectionId>();
+    let displayedRoomBoard: SectionId | null = null;
     const ensureRoomBoard = (sectionId: SectionId) => {
-      if (loadedRoomBoards.has(sectionId)) return;
+      if (displayedRoomBoard === sectionId) return;
+      if (displayedRoomBoard) {
+        const previous = roomBoardMaterials.get(displayedRoomBoard);
+        previous?.map?.dispose();
+        if (previous) { previous.map = null; previous.needsUpdate = true; }
+      }
       const material = roomBoardMaterials.get(sectionId);
       if (!material) return;
       material.map = roomDetailsTexture(sectionId);
       material.color.set("#ffffff");
       material.needsUpdate = true;
-      loadedRoomBoards.add(sectionId);
+      displayedRoomBoard = sectionId;
     };
+    let projectPreviewsLoaded = false;
+    const loadProjectPreviews = () => {
+      if (projectPreviewsLoaded) return;
+      projectPreviewsLoaded = true;
+      deferredProjectPreviews.forEach((loadPreview) => loadPreview());
+      deferredProjectPreviews.length = 0;
+    };
+    if (!welcome && active === "projects") loadProjectPreviews();
     if (!welcome) ensureRoomBoard(active);
     let cameraHasArrived = welcome;
     const timer = new THREE.Timer();
@@ -953,6 +972,7 @@ export default function CorridorScene({ active, welcome, welcomeReset, movement,
         previousActive = nextActive;
         transitionFrom = active;
         active = nextActive;
+        if (active === "projects") loadProjectPreviews();
         previousWelcome = nextWelcome;
         previousWelcomeReset = nextWelcomeReset;
         dragYaw = 0;

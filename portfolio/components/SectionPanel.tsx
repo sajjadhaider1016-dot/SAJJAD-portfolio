@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ContactForm from "@/components/ContactForm";
 import {
@@ -208,25 +208,44 @@ function Contact() {
 
 type GithubRepo = { name: string; html_url: string; description: string | null; language: string | null; stargazers_count: number };
 function GithubShowcase() {
+  const rootRef = useRef<HTMLDivElement>(null);
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [count, setCount] = useState<number | null>(null);
   const [error, setError] = useState(false);
   useEffect(() => {
-    const controller = new AbortController();
-    Promise.all([
-      fetch("https://api.github.com/users/sajjadhaider1016-dot", { signal: controller.signal }).then((res) => { if (!res.ok) throw new Error("profile"); return res.json(); }),
-      fetch("https://api.github.com/users/sajjadhaider1016-dot/repos?sort=updated&per_page=5", { signal: controller.signal }).then((res) => { if (!res.ok) throw new Error("repos"); return res.json(); }),
-    ]).then(([profile, repositoryList]) => {
-      if (controller.signal.aborted) return;
-      setCount(Number(profile.public_repos));
-      setRepos(Array.isArray(repositoryList) ? repositoryList : []);
-    }).catch(() => { if (!controller.signal.aborted) setError(true); });
-    return () => controller.abort();
+    const root = rootRef.current;
+    if (!root) return;
+    let controller: AbortController | undefined;
+    const load = () => {
+      if (controller) return;
+      controller = new AbortController();
+      Promise.all([
+        fetch("https://api.github.com/users/sajjadhaider1016-dot", { signal: controller.signal }).then((res) => { if (!res.ok) throw new Error("profile"); return res.json(); }),
+        fetch("https://api.github.com/users/sajjadhaider1016-dot/repos?sort=updated&per_page=5", { signal: controller.signal }).then((res) => { if (!res.ok) throw new Error("repos"); return res.json(); }),
+      ]).then(([profile, repositoryList]) => {
+        if (controller?.signal.aborted) return;
+        setCount(Number(profile.public_repos));
+        setRepos(Array.isArray(repositoryList) ? repositoryList : []);
+      }).catch(() => { if (!controller?.signal.aborted) setError(true); });
+    };
+    if (!("IntersectionObserver" in window)) {
+      load();
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          load();
+        }
+      }, { rootMargin: "320px 0px" });
+      observer.observe(root);
+      return () => { observer.disconnect(); controller?.abort(); };
+    }
+    return () => controller?.abort();
   }, []);
-  return <div className="github-showcase">
+  return <div className="github-showcase" ref={rootRef}>
     <p className="eyebrow">Public work, in the open</p><h3>Sajjad Haider <small>@ sajjadhaider1016-dot</small></h3>
     <p>AI &amp; Full-Stack Developer building intelligent products in public.</p>
-    <p className="github-count">{count === null ? "Profile data loading" : `${count} public repositories`}</p>
+    <p className="github-count">{count === null ? "Repository data loads as you reach this section" : `${count} public repositories`}</p>
     {error ? <p>GitHub is unavailable right now. Browse the public profile instead.</p> : <div className="repo-list">{repos.map((repo) => <a key={repo.name} href={repo.html_url} target="_blank" rel="noreferrer"><strong>{repo.name}</strong><span>{repo.description || "Public repository"}</span><small>{repo.language || "Repository"} · {repo.stargazers_count} stars</small></a>)}</div>}
     <a className="inline-link" href={links.github} target="_blank" rel="noreferrer">Open GitHub profile ↗</a>
   </div>;
@@ -267,12 +286,12 @@ export default function SectionPanel({ section, enter, navigate, allSections = f
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
           entry.target.classList.remove("reveal-pending");
-        } else {
-          entry.target.classList.remove("is-visible");
-          if (revealItems.has(entry.target as HTMLElement)) entry.target.classList.add("reveal-pending");
+          // Reveal once, then keep content visible. Re-hiding on scroll-out made pages look blank
+          // when users scrolled back or a tall section crossed the observer threshold.
+          observer.unobserve(entry.target);
         }
       });
-    }, { rootMargin: "-6% 0px -8% 0px", threshold: 0.12 });
+    }, { rootMargin: "0px 0px 280px 0px", threshold: 0.01 });
     targets.forEach((target) => observer.observe(target));
     return () => {
       observer.disconnect();
