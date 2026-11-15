@@ -553,7 +553,6 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
     height: min(34svh, 250px);
     min-height: 176px;
     pointer-events: none;
-    animation: room-card-in .22s ease both;
   }
   .room-details-card {
     width: 100%;
@@ -590,7 +589,6 @@ kbd { min-width: 19px; padding: 2px 4px; border: 1px solid #b7aa96; background: 
   .room-detail-item h3 { font-size: 12px; }
   .room-detail-item p, .room-detail-item a { font-size: 12px; line-height: 1.45; }
 }
-@keyframes room-card-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .mode-tour .room-details-anchor { animation: none; } }
 
 /* Final editorial type scale and ordered project archive. */
@@ -969,9 +967,8 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   display: block;
   width: min(390px, 31vw);
   max-height: min(66svh, 590px);
-  transform: translateY(-50%);
+  translate: 0 -50%;
   pointer-events: none;
-  animation: room-card-in .22s ease both;
 }
 .mode-tour .room-details-card {
   max-height: min(66svh, 590px);
@@ -1026,7 +1023,11 @@ h1, h2, h3, .wordmark-copy strong, .footer-wordmark { font-family: var(--display
   .mode-tour .room-detail-item p,
   .mode-tour .room-detail-item a { font-size: 13px; line-height: 1.45; }
 }
-@media (prefers-reduced-motion: reduce) { .mode-tour .room-details-anchor { animation: none; } }
+
+/* Keep the 3D scene unobstructed on phones; use the exit control for readable section details. */
+@media (max-width: 760px) {
+  .mode-tour .room-details-anchor { display: none !important; }
+}
 
 /* Studio B DTLA: live site preview and distinct web/agent case-study panels. */
 .mode-portfolio .project-preview-toolbar { position: absolute; z-index: 2; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 38px; padding: 0 11px; border-bottom: 1px solid rgba(74,63,49,.16); background: rgba(249,247,240,.96); }

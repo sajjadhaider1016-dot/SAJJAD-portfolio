@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import ContactForm from "@/components/ContactForm";
 import {
@@ -268,6 +269,7 @@ function SectionContent({ section, enter, navigate }: Props) {
 }
 
 export default function SectionPanel({ section, enter, navigate, allSections = false }: Props) {
+  const reducedMotion = useReducedMotion();
   const visibleSections: SectionId[] = allSections ? ["home", "about", "projects", "experience", "education", "skills", "services", "certifications", "achievements", "contact"] : [section];
   useEffect(() => {
     if (!allSections || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -312,12 +314,21 @@ export default function SectionPanel({ section, enter, navigate, allSections = f
     };
   }, [allSections]);
   return <div className={allSections ? "portfolio-sections" : "portfolio-sections single-section"}>
-    {visibleSections.map((current) => <section id={`section-${current}`} className={`section-card section-${current}`} aria-label={`${current} portfolio section`} key={current}>
+    {visibleSections.map((current) => <motion.section
+      id={`section-${current}`}
+      className={`section-card section-${current}`}
+      aria-label={`${current} portfolio section`}
+      key={current}
+      initial={reducedMotion ? false : { opacity: .97, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: .08 }}
+      transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 190, damping: 28, mass: .8 }}
+    >
       <span className="panel-corner" aria-hidden="true" />
       <div className="section-scroll">
         <SectionContent section={current} enter={enter} navigate={navigate} />
       </div>
       <span className="panel-page" aria-hidden="true">SAJJAD HAIDER &nbsp; / &nbsp; {current.toUpperCase()}</span>
-    </section>)}
+    </motion.section>)}
   </div>;
 }

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import SectionPanel from "@/components/SectionPanel";
 import RoomDetailsCard from "@/components/RoomDetailsCard";
 import { links, sections, type SectionId } from "@/data/portfolio";
@@ -30,6 +31,7 @@ export default function PortfolioExperience() {
   const [sceneReady, setSceneReady] = useState(false);
   const [sceneFailed, setSceneFailed] = useState(false);
   const [pointerLocked, setPointerLocked] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const previousRestoration = window.history.scrollRestoration;
@@ -170,13 +172,22 @@ export default function PortfolioExperience() {
         <div className="map-foot"><span className="pencil-line" />Choose a room to enter</div>
       </aside>}
 
-      {mode === "tour" && !tourWelcome && <div className="room-details-anchor"><RoomDetailsCard section={active} /></div>}
+      <AnimatePresence initial={false} mode="wait">
+        {mode === "tour" && !tourWelcome && <motion.div
+          key={active}
+          className="room-details-anchor"
+          initial={reducedMotion ? false : { opacity: 0, y: 12, scale: .98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: .99 }}
+          transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 270, damping: 29, mass: .75 }}
+        ><RoomDetailsCard section={active} /></motion.div>}
+      </AnimatePresence>
 
       {mode === "portfolio" && <div className="content-anchor" id="portfolio-content">
         <SectionPanel section={active} enter={enter} navigate={goTo} allSections />
       </div>}
 
-      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">{tourWelcome ? "Walk the corridor or choose any room" : "Move · look around · room details are on the wall displays"}</span><span className="mobile-instructions">{tourWelcome ? "Walk or choose a room · drag to look" : "Drag to look · pad to walk · details on wall boards"}</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); }} aria-label="Return to portfolio details">i</button></div>}
+      {mode === "tour" && <div className="movement-hint" role="status"><span className="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span className="desktop-instructions">{tourWelcome ? "Walk the corridor or choose any room" : "Move · look around · room details are on the wall displays"}</span><span className="mobile-instructions">{tourWelcome ? "Walk or choose a room · drag to look" : "Drag to look · pad to walk · exit for full details"}</span>{!pointerLocked ? <button className="lock-look" onClick={() => window.dispatchEvent(new Event("portfolio:pointer-lock"))}>Enable mouse look</button> : <span className="lock-instructions">Mouse locked · press Esc to release</span>}<button onClick={() => { setMovement([]); setMode("portfolio"); }} aria-label="Return to portfolio details">i</button></div>}
 
       {mode === "tour" && <div className={`touch-pad ${menuOpen ? "is-suspended" : ""}`} aria-label="Touch movement controls" aria-hidden={menuOpen}>
         <button type="button" aria-label="Move forward" onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); hold("w"); }} onPointerUp={() => release("w")} onPointerCancel={() => release("w")} onPointerLeave={() => release("w")}>↑</button>
