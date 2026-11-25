@@ -1,0 +1,85 @@
+[
+  {
+    "name": "Full-Stack Web Development",
+    "description": "Web applications built across the interface, server logic, data layer, and deployment.",
+    "deliverable": "A responsive product with connected application logic and persistence.",
+    "usefulFor": "Product sites, internal tools, and complete web applications.",
+    "related": [
+      "docedit",
+      "veyra-language-studio",
+      "studio-bdtla"
+    ],
+    "tags": [
+      "React",
+      "Next.js",
+      "Node.js",
+      "PostgreSQL"
+    ],
+    "enquiry": "Ask about Full-Stack Web Development"
+  },
+  {
+    "name": "AI Chatbot Development",
+    "description": "Conversational interfaces connected to AI models and supporting document or voice workflows where required.",
+    "deliverable": "A task-focused assistant with a clear input and response flow.",
+    "usefulFor": "University information and customer-support workflows.",
+    "related": [
+      "bzu-ai-assistant",
+      "customer-support-ai-copilot"
+    ],
+    "tags": [
+      "Python",
+      "Groq",
+      "Gemini AI",
+      "LLM applications"
+    ],
+    "enquiry": "Ask about AI Chatbot Development"
+  },
+  {
+    "name": "AI Agents & Automation",
+    "description": "Local or application-based agents that handle defined, repeatable information tasks.",
+    "deliverable": "A documented workflow that collects, processes, and organizes information.",
+    "usefulFor": "Listing checks and daily property updates.",
+    "related": [
+      "property-monitoring-agent"
+    ],
+    "tags": [
+      "Python",
+      "AI agents",
+      "Prompt engineering",
+      "Automation systems"
+    ],
+    "enquiry": "Ask about AI Agents & Automation"
+  },
+  {
+    "name": "API Development",
+    "description": "REST endpoints and authentication flows for application features and integrations.",
+    "deliverable": "Structured endpoints that connect interface, data, and services.",
+    "usefulFor": "Application backends, service integrations, and data workflows.",
+    "related": [
+      "bzu-ai-assistant",
+      "docedit"
+    ],
+    "tags": [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "Authentication systems"
+    ],
+    "enquiry": "Ask about API Development"
+  },
+  {
+    "name": "Database Design & Integration",
+    "description": "Data models and persistence layers aligned with an application’s records and relationships.",
+    "deliverable": "An application data layer connected to the product workflows.",
+    "usefulFor": "Document sharing, user accounts, and structured application records.",
+    "related": [
+      "docedit"
+    ],
+    "tags": [
+      "PostgreSQL",
+      "SQLite",
+      "MongoDB"
+    ],
+    "enquiry": "Ask about Database Design & Integration"
+  }
+]

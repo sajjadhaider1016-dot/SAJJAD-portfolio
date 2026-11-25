@@ -1,6 +1,8 @@
 # Sajjad Haider — Portfolio
 
-The updated portfolio application is in [`portfolio/`](portfolio/). This repository is dedicated to Sajjad Haider's portfolio; China Vibes lives in its own repository at <https://github.com/sajjadhaider1016-dot/China-Vibes>.
+The portfolio application is in [`portfolio/`](portfolio/): React, TypeScript, Vite and Three.js. This repository is dedicated to Sajjad Haider's portfolio; China Vibes lives in its own repository at <https://github.com/sajjadhaider1016-dot/China-Vibes>.
+
+Live site: <https://sajjad-haider-portfolio.vercel.app/>
 
 ## Local development
 
@@ -10,4 +12,6 @@ npm install
 npm run dev
 ```
 
-The Vercel project uses `portfolio` as its Root Directory. See [`portfolio/README.md`](portfolio/README.md) for setup, Web3Forms configuration, and deployment notes.
+## Deployment
+
+Pushing to `main` deploys to Vercel. The Vercel project uses `portfolio` as its Root Directory, and [`portfolio/vercel.json`](portfolio/vercel.json) sets the Vite build, redirects and security headers. See [`portfolio/README.md`](portfolio/README.md) for content editing and contact-form setup.

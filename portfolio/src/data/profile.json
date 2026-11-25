@@ -1,0 +1,33 @@
+{
+  "name": "Sajjad Haider",
+  "first": "Sajjad",
+  "initials": "SH",
+  "role": "AI & Full-Stack Developer",
+  "eyebrow": "AI engineer / full-stack developer",
+  "location": "Multan, Pakistan",
+  "headline": { "lead": "I build intelligent software", "soft": "that solves real problems." },
+  "intro": "AI applications, intelligent agents, business automation, and modern web products — turning complex ideas into practical digital solutions.",
+  "tagline": "Web applications, AI tools, and workflow automation.",
+  "availability": "Available for remote opportunities",
+  "recruiterAvailability": "Available for internships, freelance, and product work.",
+  "footerNote": "AI, web development, and automation.",
+  "capabilities": ["AI & full-stack development", "AI automation", "Web applications", "Product development"],
+  "about": {
+    "lead": "I study Artificial Intelligence at Bahauddin Zakariya University and build full-stack software alongside my studies.",
+    "body": "My work includes web applications, AI assistants, document tools, and automation. I handle the interface, application logic, data, and model integrations needed to make each product work.",
+    "sections": [
+      { "title": "Areas I work in", "paragraphs": ["I work with language model integrations, document workflows, and automation, as well as the web interfaces and backend systems around them. Recent projects include a university assistant, a collaborative document editor, and a property-listing monitor."] },
+      { "title": "How I work", "paragraphs": ["I begin with the task a product needs to support, then build and refine the workflow around it. I aim for clear interfaces, reliable data handling, and AI features tied to a specific use.", "Independent development and co-founding China Vibes have also given me experience with product decisions, daily operations, and customer experience. I plan to keep developing as an AI product engineer."] }
+    ]
+  },
+  "portrait": "/identity/sajjad-haider.jpg",
+  "resume": { "url": "/CV.pdf", "fileName": "Sajjad-Haider-CV.pdf" },
+  "email": "sajjadhaider1016@gmail.com",
+  "links": {
+    "github": "https://github.com/sajjadhaider1016-dot",
+    "githubProfileCta": "https://github.com/sajjadhaider1016-dot/SAJJAD-portfolio",
+    "linkedin": "https://linkedin.com/in/sajjadhaider56/",
+    "whatsapp": "https://wa.me/923337379195"
+  },
+  "github": { "user": "sajjadhaider1016-dot", "eyebrow": "Public work, in the open", "note": "Recent public repositories from my GitHub account." }
+}

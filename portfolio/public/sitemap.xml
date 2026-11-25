@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/</loc><changefreq>monthly</changefreq><priority>1</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/about-me</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/playground</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/play</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/bzu-ai-assistant</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/customer-support-ai-copilot</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/contentpilot-ai</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/property-monitoring-agent</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/docedit</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/china-vibes</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/studio-bdtla</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/veyra-language-studio</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/study-buddy</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/recoveriest</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/course-registration</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sajjad-haider-portfolio.vercel.app/projects/car-racing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>

@@ -1,0 +1,383 @@
+[
+  {
+    "slug": "bzu-ai-assistant",
+    "title": "BZU AI Assistant",
+    "group": "Featured work",
+    "category": "AI & Machine Learning",
+    "kind": "University assistant · 2026",
+    "description": "A conversational university assistant for accessing academic information, with support for PDFs, DOCX files, images, and voice input.",
+    "cardMeta": "Node.js · Express · JavaScript · Groq",
+    "image": "/projects/bzu-ai-assistant-live.png",
+    "coverNote": "",
+    "features": [
+      "University question flows",
+      "PDF and DOCX support",
+      "Image OCR",
+      "Voice input",
+      "Saved chat history"
+    ],
+    "contribution": "Built an AI assistant with university question flows and document, image, and voice input.",
+    "tags": [
+      "Node.js",
+      "Express",
+      "JavaScript",
+      "Groq",
+      "OCR",
+      "PDF / DOCX"
+    ],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/BZU-AI-Assistant"
+      },
+      {
+        "label": "Open live preview",
+        "url": "https://bzu-ai-assistant.vercel.app/"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "customer-support-ai-copilot",
+    "title": "Customer Support AI Copilot",
+    "group": "Featured work",
+    "category": "AI & Machine Learning",
+    "kind": "AI / Customer support · 2025–2026",
+    "description": "A Grok-powered support copilot that classifies customer intent and priority, reads sentiment, drafts a reply, suggests next steps, and flags cases for human escalation.",
+    "cardMeta": "Python · Flask · Grok API · Llama",
+    "image": null,
+    "coverNote": "No public live demo or screenshot is listed",
+    "features": [
+      "Intent and priority classification",
+      "Sentiment reading",
+      "Reply drafts and suggested next steps",
+      "Human escalation flags"
+    ],
+    "contribution": "Built the Python and Flask orchestration, business-context grounding, structured AI output, and escalation guidance.",
+    "tags": [
+      "Python",
+      "Flask",
+      "Grok API",
+      "Llama"
+    ],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/Customer-Support-AI-Grok"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "contentpilot-ai",
+    "title": "ContentPilot AI",
+    "group": "Featured work",
+    "category": "AI & Machine Learning",
+    "kind": "AI content & marketing assistant · 2025–2026",
+    "description": "A Flask and Groq-powered assistant that turns a brief into platform-ready content for different audiences, tones, languages, and formats.",
+    "cardMeta": "Python · Flask · Groq API · Llama 3.3 70B",
+    "image": null,
+    "coverNote": "No public live demo or screenshot is listed",
+    "features": [
+      "Content variants",
+      "Repurposing",
+      "Copy-ready marketing assets"
+    ],
+    "contribution": "Built prompt and output orchestration for adaptable marketing content.",
+    "tags": [
+      "Python",
+      "Flask",
+      "Groq API",
+      "Llama 3.3 70B"
+    ],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/ContentPilot-AI"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "property-monitoring-agent",
+    "title": "Property Monitoring Agent",
+    "group": "Featured work",
+    "category": "AI & Machine Learning",
+    "kind": "Local AI agent · Studio B DTLA",
+    "description": "A local agent built for Studio B DTLA that checks incoming property listings, extracts relevant details, and organizes daily property updates.",
+    "cardMeta": "Studio B DTLA technical contribution · Project details",
+    "image": null,
+    "coverNote": "",
+    "features": [
+      "Daily listing checks",
+      "Property detail extraction",
+      "Organized property updates"
+    ],
+    "contribution": "Independently developed the local property-monitoring agent and its listing-to-update workflow.",
+    "tags": [],
+    "links": [],
+    "flow": [
+      "Property listings",
+      "Local AI agent",
+      "Information extraction",
+      "Daily updates"
+    ],
+    "showcase": []
+  },
+  {
+    "slug": "docedit",
+    "title": "DocEdit",
+    "group": "Featured work",
+    "category": "Web Development",
+    "kind": "Full-stack product · 2026",
+    "description": "Collaborative document editor inspired by Google Docs featuring authentication, document sharing, rich-text editing, autosave functionality, TXT/Markdown import, and PostgreSQL integration.",
+    "cardMeta": "Next.js 15 · TypeScript · Tailwind CSS · TipTap",
+    "image": "/projects/docedit-live.png",
+    "coverNote": "",
+    "features": [
+      "Sign-in and shared-document permissions",
+      "Rich-text editing",
+      "TXT and Markdown imports",
+      "Autosave and PostgreSQL persistence"
+    ],
+    "contribution": "Built the full-stack editor and its document collaboration, persistence, and import workflows.",
+    "tags": [
+      "Next.js 15",
+      "TypeScript",
+      "Tailwind CSS",
+      "TipTap",
+      "PostgreSQL"
+    ],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/docedit-submission"
+      },
+      {
+        "label": "Open live preview",
+        "url": "https://docedit-submission.vercel.app/"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "china-vibes",
+    "title": "China Vibes",
+    "group": "Featured work",
+    "category": "Product & Business",
+    "kind": "Consumer electronics · Co-founder",
+    "description": "A consumer-electronics business focused on wireless audio products and its online storefront.",
+    "cardMeta": "Co-founded business · Source code available",
+    "image": null,
+    "coverNote": "Co-founder contribution · source repository linked below",
+    "features": [
+      "Wireless audio product range",
+      "E-commerce storefront",
+      "Customer-facing product information"
+    ],
+    "contribution": "Co-founder; contributed to digital operations, customer experience, product promotion, and business growth.",
+    "tags": [],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/China-Vibes"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "studio-bdtla",
+    "title": "Studio B DTLA",
+    "group": "Featured work",
+    "category": "Real Estate & Property Management",
+    "kind": "Client project · Web + AI automation",
+    "description": "A public website and a separate local AI property-monitoring agent built for a Los Angeles real estate and property-management business. The website presents its residential and commercial property offering, while the agent organizes daily updates from incoming listings.",
+    "cardMeta": "Client project · Live preview available",
+    "image": null,
+    "coverNote": "",
+    "features": [
+      "Residential and commercial property discovery",
+      "Professional presentation of property-management services",
+      "Daily monitoring and organization of incoming listing information"
+    ],
+    "contribution": "Website Developer & AI Agent Developer. Developed the Studio B DTLA website and independently built a local AI-powered property-monitoring agent.",
+    "tags": [],
+    "links": [
+      {
+        "label": "Visit live website",
+        "url": "https://studiobdtla.com/"
+      }
+    ],
+    "flow": [],
+    "showcase": [
+      {
+        "label": "01 / Website",
+        "title": "Website development",
+        "text": "A professional digital presence for a Los Angeles property-management business, with a user-friendly way to discover residential and commercial properties and understand its services.",
+        "points": [
+          "Public-facing business website",
+          "Residential and commercial property presentation",
+          "Property discovery and service information"
+        ],
+        "steps": [],
+        "features": [],
+        "contribution": "",
+        "link": {
+          "label": "Visit live website",
+          "url": "https://studiobdtla.com/"
+        }
+      },
+      {
+        "label": "02 / AI engineering",
+        "title": "AI property monitoring agent",
+        "text": "An independently developed local agent that checks incoming property listings, extracts relevant details, and organizes daily property updates.",
+        "points": [],
+        "steps": [
+          "Property listings",
+          "Local AI agent",
+          "Information extraction",
+          "Daily property updates"
+        ],
+        "features": [],
+        "contribution": "",
+        "link": null
+      }
+    ]
+  },
+  {
+    "slug": "veyra-language-studio",
+    "title": "VEYRA — Language Studio",
+    "group": "More projects",
+    "category": "Web Development",
+    "kind": "Multilingual communication",
+    "description": "A language studio for helping people communicate across languages, with a focus on speaking naturally, understanding clearly, and staying connected.",
+    "cardMeta": "Live preview available",
+    "image": "/projects/veyra-live.png",
+    "coverNote": "",
+    "features": [],
+    "contribution": "",
+    "tags": [],
+    "links": [
+      {
+        "label": "Open live preview",
+        "url": "https://veyra-scwb.onrender.com/"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "study-buddy",
+    "title": "Study Buddy",
+    "group": "More projects",
+    "category": "Software & Applications",
+    "kind": "Education / Study tool",
+    "description": "A student-focused study companion created to support more organized, productive study time.",
+    "cardMeta": "Source code available",
+    "image": "/projects/study-buddy-live.png",
+    "coverNote": "",
+    "features": [
+      "Student-focused study experience",
+      "Product interface preview on the live portfolio"
+    ],
+    "contribution": "Built a study companion for a more organized and productive study experience.",
+    "tags": [],
+    "links": [
+      {
+        "label": "Source code",
+        "url": "https://github.com/sajjadhaider1016-dot/StudyBuddy"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "recoveriest",
+    "title": "Recoveriest",
+    "group": "More projects",
+    "category": "Web Development",
+    "kind": "Digital platform / Account recovery · 2026",
+    "description": "Account recovery and support platform focused on helping users resolve account access and platform recovery issues efficiently.",
+    "cardMeta": "Next.js · Node.js · Database systems",
+    "image": "/projects/recoveriest-live.png",
+    "coverNote": "",
+    "features": [
+      "Service pages",
+      "Recovery case categories",
+      "Guided inquiry path",
+      "Anti-scam safeguards"
+    ],
+    "contribution": "Built the customer-facing recovery and support experience.",
+    "tags": [
+      "Next.js",
+      "Node.js",
+      "Database systems"
+    ],
+    "links": [
+      {
+        "label": "Open live preview",
+        "url": "https://recoveriest-app.vercel.app/"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "course-registration",
+    "title": "Course Registration System",
+    "group": "More projects",
+    "category": "Software & Applications",
+    "kind": "Desktop application / C++ · 2025",
+    "description": "A downloadable desktop application for managing university course registrations and student academic records, built with object-oriented C++.",
+    "cardMeta": "C++ · Object-oriented programming",
+    "image": null,
+    "coverNote": "No public screenshot is listed · see verified links below",
+    "features": [
+      "Menu-driven student records",
+      "Course registration flows",
+      "Windows download"
+    ],
+    "contribution": "Built the menu-driven student record and course registration application.",
+    "tags": [
+      "C++",
+      "Object-oriented programming"
+    ],
+    "links": [
+      {
+        "label": "Download Windows build",
+        "url": "/projects/university-course-registration-system.exe"
+      }
+    ],
+    "flow": [],
+    "showcase": []
+  },
+  {
+    "slug": "car-racing",
+    "title": "Car Racing Game",
+    "group": "More projects",
+    "category": "Experiments",
+    "kind": "Academic / C++ · 2025",
+    "description": "Interactive racing game developed using C++ and object-oriented programming concepts.",
+    "cardMeta": "C++ · Object-oriented programming",
+    "image": null,
+    "coverNote": "No public screenshot is listed · see verified links below",
+    "features": [
+      "Keyboard-controlled movement",
+      "Race state",
+      "Core C++ game loop"
+    ],
+    "contribution": "Built the game loop, input movement, and race-state flow.",
+    "tags": [
+      "C++",
+      "Object-oriented programming"
+    ],
+    "links": [],
+    "flow": [],
+    "showcase": []
+  }
+]

@@ -1,7 +1,4 @@
 node_modules/
-.source-review/
-.next/
-out/
 dist/
 .vercel/
 .env*

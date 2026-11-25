@@ -1,0 +1,71 @@
+[
+  {
+    "period": "Aug 2026 – Present · Remote",
+    "role": "AI Automation & Web Developer",
+    "org": "Studio BDTLA",
+    "status": "Ongoing",
+    "summary": "Working remotely on AI automation and web development.",
+    "responsibilities": [
+      "Develop web experiences for the studio",
+      "Work on AI automation solutions",
+      "Collaborate remotely with the team"
+    ],
+    "tags": [
+      "AI automation",
+      "Web development",
+      "Remote"
+    ]
+  },
+  {
+    "period": "2026 · Selected incoming",
+    "role": "Artificial Intelligence Intern",
+    "org": "PROSTACKHUB",
+    "status": "Selected · upcoming",
+    "summary": "Selected for an industrial internship program focused on applied AI and machine learning.",
+    "responsibilities": [
+      "Applied AI and machine learning",
+      "Data analysis and model development",
+      "Industry-focused learning"
+    ],
+    "tags": [
+      "Artificial intelligence",
+      "Machine learning",
+      "Data analysis"
+    ]
+  },
+  {
+    "period": "Current · Ongoing",
+    "role": "AI & Full-Stack Developer",
+    "org": "Self-employed",
+    "status": "Ongoing",
+    "summary": "Build software from AI-assisted workflows to complete web applications.",
+    "responsibilities": [
+      "Build AI and full-stack products from idea to deployment",
+      "Create responsive interfaces and connected backend workflows",
+      "Explore education, productivity, and account-recovery solutions"
+    ],
+    "tags": [
+      "Next.js",
+      "React",
+      "Node.js",
+      "AI automation"
+    ]
+  },
+  {
+    "period": "Current · Ongoing",
+    "role": "Co-Founder",
+    "org": "China Vibes",
+    "status": "Ongoing",
+    "summary": "Contribute to a consumer brand by connecting day-to-day operations with customer experience and digital growth.",
+    "responsibilities": [
+      "Support brand and digital operations",
+      "Focus on customer experience and product promotion",
+      "Bring a product-minded perspective to business decisions"
+    ],
+    "tags": [
+      "Operations",
+      "Customer experience",
+      "Brand growth"
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "status": "Current student",
+    "degree": "Bachelor of Science in Artificial Intelligence",
+    "school": "Bahauddin Zakariya University (BZU)",
+    "description": "Focused on AI systems, full-stack product work, and applied software engineering."
+  },
+  {
+    "status": "Completed",
+    "degree": "Intermediate",
+    "school": "Punjab Group of Colleges",
+    "description": "Strong academic foundation with distinction-level performance."
+  },
+  {
+    "status": "Completed",
+    "degree": "Secondary Education",
+    "school": "Centre of Excellence",
+    "description": "Early academic excellence and competitive standing."
+  }
+]

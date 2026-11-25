@@ -1,0 +1,56 @@
+{
+  "about": {
+    "eyebrow": "About me",
+    "title": "About Sajjad.",
+    "soft": "",
+    "lead": "I study Artificial Intelligence at Bahauddin Zakariya University and build full-stack software alongside my studies."
+  },
+  "projects": {
+    "eyebrow": "Projects · 12",
+    "title": "Selected projects.",
+    "soft": "",
+    "lead": "Web applications, AI tools, client work, and software experiments."
+  },
+  "experience": {
+    "eyebrow": "Experience",
+    "title": "The work behind the projects.",
+    "soft": "the projects.",
+    "lead": "Roles across web development, applied AI, independent software, and business operations."
+  },
+  "education": {
+    "eyebrow": "Education",
+    "title": "A focused AI degree. A strong foundation.",
+    "soft": "A strong foundation.",
+    "lead": "Artificial Intelligence at Bahauddin Zakariya University, preceded by Intermediate and secondary education."
+  },
+  "skills": {
+    "eyebrow": "Technical skills",
+    "title": "Full-stack & AI development.",
+    "soft": "",
+    "lead": "Tools and technologies I use across interfaces, backend systems, data, AI, and deployment."
+  },
+  "services": {
+    "eyebrow": "Services",
+    "title": "Development services.",
+    "soft": "",
+    "lead": "Web applications, AI integrations, workflow automation, APIs, and database design."
+  },
+  "certifications": {
+    "eyebrow": "Certifications",
+    "title": "Courses & credentials.",
+    "soft": "",
+    "lead": "Certificates from Google, UniAthena, and Udemy."
+  },
+  "achievements": {
+    "eyebrow": "Achievements",
+    "title": "Recognition, discipline, community.",
+    "soft": "discipline, community.",
+    "lead": ""
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Tell me about your project.",
+    "soft": "",
+    "lead": "For web development, AI features, workflow automation, or API work, send a short description of what you need."
+  }
+}

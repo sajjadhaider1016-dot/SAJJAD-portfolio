@@ -1,68 +1,61 @@
-# Sajjad Haider — Illustrated Portfolio
+# Sajjad Haider: portfolio
 
-An interactive architectural portfolio built with the Next.js App Router and Three.js. The corridor is assembled from original geometry, a generated wood texture, pencil-line details, and hinged room doors. The content is based on the public portfolio and project information available at build time.
+React, TypeScript, Vite and Three.js.
 
-## Run locally
+**Design credit:** the page layout and interaction style follow Varun Khandelwal's portfolio (see `REFERENCE_ANALYSIS.md`). The code, artwork and the game were written for this project. Before publishing, credit that site or ask its owner.
 
-Use Node.js 20 or newer.
+## Run
+Needs Node 20.19 or newer. Run these inside the `portfolio` folder.
 
-```bash
-npm install
-npm run dev
-```
+    npm install
+    npm run dev        # http://localhost:5173
+    npm run build      # type-check and build into dist/
+    npm run preview    # serve the build, http://localhost:4173
+    npm run terminal   # the portfolio in your terminal
 
-Open [http://localhost:3000](http://localhost:3000).
+## Edit your content
+Everything lives in `src/data/`:
 
-## Controls
+| File | Contents |
+|---|---|
+| `profile.json` | name, headline, About text, contact links, résumé path |
+| `projects.json` | all projects: description, features, contribution, tags, links, screenshot |
+| `experience.json`, `education.json` | roles and studies |
+| `skills.json`, `services.json` | skill groups and services |
+| `certifications.json`, `achievements.json` | certificates and recognition |
+| `headings.json` | section titles and introductions |
 
-- Move with **WASD** or the **arrow keys**.
-- Click the corridor to enable mouse look; press **Escape** to release the pointer.
-- Click a labeled 3D door to open its section. Use the persistent room map to jump directly to any section.
-- On touch screens, drag the scene to look and use the on-screen directional controls to move.
-- The room map and all content remain available if WebGL is unavailable.
+`content.ts` types the data and defines the project filter categories. Assets are in `public/`: `CV.pdf`, `identity/` and `projects/`.
 
-## Email delivery
+The home page's first four projects are the ones that fly in from the top. Adding a project or category to the data updates the cards, filters, project pages, tape shelf, chat and terminal.
 
-The contact form sends directly from the visitor's browser to Web3Forms. Create an access key for `sajjadhaider1016@gmail.com` at [web3forms.com](https://web3forms.com/); Web3Forms sends the key to that inbox. Add it as `WEB3FORMS_ACCESS_KEY` in `.env.local` for local development and in the Vercel project's Production environment, then redeploy. The server route returns this public form identifier to the browser; Web3Forms documents browser-side submissions as the supported approach for this API.
+## Deployment
+Pushing to `main` deploys to Vercel (Root Directory: `portfolio`). `vercel.json` sets the Vite build, the security headers, and redirects from the previous site's page addresses (`/about`, `/projects` and so on).
 
-If the key is missing or delivery fails, the form offers a prefilled email draft instead of showing a false success.
+**Contact form.** `api/contact.js` hands the form the Web3Forms key from the `WEB3FORMS_ACCESS_KEY` environment variable, the same name the previous site used. Without a key, the form offers a prefilled email draft. To test delivery on your machine, copy `.env.example` to `.env.local` and add `VITE_WEB3FORMS_ACCESS_KEY` (the dev server does not run `api/`). Never commit `.env.local`.
 
-## Project map
+`public/sitemap.xml` lists every page: update it when you add or remove a project.
 
-```text
-app/
-  api/contact/route.ts    Exposes the configured public Web3Forms form key
-  page.tsx                Portfolio entry point
-  layout.tsx              Metadata and document shell
-  styles.css              Paper, timber, and responsive interface system
-components/
-  CorridorScene.tsx       Three.js corridor, doors, camera, movement, and avatar stand-in
-  PortfolioExperience.tsx Persistent map, keyboard and touch controls, scene orchestration
-  SectionPanel.tsx        Home, biography, projects, career, and contact rooms
-  ContactForm.tsx         Accessible validated contact form
-data/
-  portfolio.ts            Verified portfolio copy, links, skills, and milestones
-```
+## Signal Isles (`/play`)
+Fly Pip between five islands, scan each beacon and recover eight shards to bring the relay online. There is no way to lose: the end is a results screen with your time and best time.
 
-## Identity assets
+**Controls:** WASD or arrows to fly, Shift to boost, E to scan, J for the journal (with "Fly there" autopilot), drag or Q/R to turn the view, wheel to zoom, C to recentre, Esc to pause. On touch: joystick (push past the ring to boost), swipe to turn, Scan button.
 
-The About room uses Sajjad's profile photo recovered from the published source repository at `public/identity/sajjad-haider.jpg`. The scene includes a proportioned, professionally dressed procedural 3D stand-in. A custom photorealistic avatar model (GLB) was not available; replace the stand-in in `components/CorridorScene.tsx` when one is supplied.
+| File | Role |
+|---|---|
+| `game/world.ts` | layout, collisions, autopilot routes, beacon text |
+| `game/engine.ts` | renderer, camera direction, movement, post-processing, quality scaling |
+| `game/art/` | sky and clouds, islands, landmarks, Pip, beacons and relay |
+| `game/sound.ts` | synthesised sound effects |
+| `pages/Play.tsx`, `styles/game.css` | start, HUD, panels, ending, fallback |
 
-The gallery uses the available BZU AI Assistant, DocEdit, Recoveriest, Study Buddy, and VEYRA screenshots. Studio B DTLA uses a lazy live-site preview. The Property Monitoring Agent includes a workflow illustration based on the provided process; projects without public screenshots or live demos are labeled accordingly. Featured work is ordered around the portfolio's AI and full-stack projects, with remaining work retained below it. Project descriptions, links, tools, employment details, and credentials are kept in `data/portfolio.ts`.
+Performance: static geometry is merged or instanced, shadows are rendered once, edge smoothing happens in the final pass, and resolution drops (then bloom) if frames stay slow. Touch and narrow screens start in Light graphics; the pause menu switches modes. Nothing renders in a hidden tab, and the home preview runs only while visible, capped at 30 fps. Without WebGL, the page lists links to every section. Reduced motion calms the camera and animation.
 
-## Search and sharing
-
-The home page declares the canonical `https://sajjad-haider-portfolio.vercel.app/` URL, Open Graph and X metadata, and Person, WebSite, and BZU AI Assistant structured data. Next.js generates `/sitemap.xml`, `/robots.txt`, and a portfolio-specific `/opengraph-image`. Local portfolio screenshots use the Next.js image optimizer.
-
-## GitHub data
-
-The Home room requests the public GitHub profile and recently updated repositories from GitHub’s public API. If GitHub is unavailable or rate-limited, the profile link remains available and no statistics are invented.
-
-## Build and deploy
-
-```bash
-npm run build
-npm start
-```
-
-Deploy by importing this project into Vercel, selecting the Next.js framework preset, and adding `WEB3FORMS_ACCESS_KEY` to the Vercel Production environment. Do not commit `.env.local`.
+## Differences from the previous site
+- The "illustrated 3D world" of ten rooms is replaced by Signal Isles.
+- Project panels that expanded in place are now cards with their own pages.
+- The Studio B DTLA live preview is on its project page.
+- Projects without a screenshot show artwork made from their listed features. It is not a product screenshot.
+- "Multan, Pakistan" comes from your brief; the old site did not state a location.
+- Old `#section-…` and `#project-…` links still scroll to the right place.
+- The old generated social-share image is replaced by your portrait.

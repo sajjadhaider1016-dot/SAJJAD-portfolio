@@ -1,0 +1,101 @@
+[
+  {
+    "name": "Programming languages",
+    "description": "Languages used across application and AI work.",
+    "items": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "C++",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "name": "Frontend development",
+    "description": "Interfaces for web applications and products.",
+    "items": [
+      "HTML",
+      "CSS",
+      "React",
+      "Next.js",
+      "Tailwind CSS"
+    ]
+  },
+  {
+    "name": "Backend development",
+    "description": "Application logic, APIs, and authentication.",
+    "items": [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "Authentication systems"
+    ]
+  },
+  {
+    "name": "AI engineering",
+    "description": "Applied machine learning and document workflows.",
+    "items": [
+      "Machine learning",
+      "OCR",
+      "Document processing",
+      "Python"
+    ]
+  },
+  {
+    "name": "LLM applications",
+    "description": "Language-model features built around defined tasks.",
+    "items": [
+      "LLM applications",
+      "Groq",
+      "Gemini AI",
+      "Prompt engineering",
+      "AI chatbots"
+    ]
+  },
+  {
+    "name": "AI agents & automation",
+    "description": "Task-focused agents and repeatable automated workflows.",
+    "items": [
+      "AI agents",
+      "Automation systems"
+    ]
+  },
+  {
+    "name": "Databases",
+    "description": "Application persistence and structured data.",
+    "items": [
+      "PostgreSQL",
+      "SQLite",
+      "MongoDB"
+    ]
+  },
+  {
+    "name": "Cloud & deployment",
+    "description": "Application packaging and deployment.",
+    "items": [
+      "Vercel",
+      "Docker"
+    ]
+  },
+  {
+    "name": "Developer tools",
+    "description": "Source control and collaborative development.",
+    "items": [
+      "Git",
+      "GitHub"
+    ]
+  },
+  {
+    "name": "Product & business",
+    "description": "Product operations and digital services.",
+    "items": [
+      "Meta account recovery",
+      "Data recovery",
+      "Digital marketing",
+      "SEO",
+      "Cybersecurity",
+      "IT consulting",
+      "Custom software development"
+    ]
+  }
+]
