@@ -25,6 +25,8 @@ Everything lives in `src/data/`:
 | `certifications.json`, `achievements.json` | certificates and recognition |
 | `headings.json` | section titles and introductions |
 
+To change your CV, replace `public/CV.pdf`, and replace `public/cv-page-1.png` with an image of its first page: that is what the printer feeds out.
+
 `content.ts` types the data and defines the project filter categories. Assets are in `public/`: `CV.pdf`, `identity/` and `projects/`.
 
 The home page's first four projects are the ones that fly in from the top. Adding a project or category to the data updates the cards, filters, project pages, tape shelf, chat and terminal.

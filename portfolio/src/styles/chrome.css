@@ -85,12 +85,10 @@
 @keyframes rattle { 50% { translate: 1px 1px; } }
 @keyframes blink { 50% { opacity: .2; } }
 .printer__feed { position: absolute; z-index: 4; left: 36px; right: 36px; top: 108px; bottom: 0; overflow: hidden; pointer-events: none; }
-.paper { height: 100%; padding: 22px 20px; background: #fff; box-shadow: 0 24px 40px -20px rgba(20,20,19,.45); font-size: 9.5px; line-height: 1.5; color: #333; transform: translateY(-101%); overflow: hidden; }
+.paper { background: #fff; box-shadow: 0 24px 40px -20px rgba(20,20,19,.45); transform: translateY(-101%); }
+.paper img { display: block; width: 100%; height: auto; }
 .printer.is-printing .paper { transform: none; transition: transform 2.6s steps(34); }
 .printer.is-done .paper { transform: translateY(10px) rotate(-1.5deg); transition: transform .5s var(--pop); }
-.paper h3 { font-size: 18px; line-height: 1.2; color: #141413; }
-.paper h4 { margin: 10px 0 2px; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.paper p { margin: 0; }
 .cvd__status { min-height: 3em; text-align: center; font-size: .875rem; color: #57564F; }
 .cvd__status a { color: var(--accent); text-decoration: underline; }
 .cvd .btn--ink { background: #141413; color: #fff; }

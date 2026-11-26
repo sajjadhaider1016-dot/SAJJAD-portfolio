@@ -21,7 +21,7 @@
     ]
   },
   "portrait": "/identity/sajjad-haider.jpg",
-  "resume": { "url": "/CV.pdf", "fileName": "Sajjad-Haider-CV.pdf" },
+  "resume": { "url": "/CV.pdf", "fileName": "Sajjad-Haider-CV.pdf", "preview": "/cv-page-1.png" },
   "email": "sajjadhaider1016@gmail.com",
   "links": {
     "github": "https://github.com/sajjadhaider1016-dot",

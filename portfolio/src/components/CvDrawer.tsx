@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { education, experience, profile, projects, skills } from '../data/content';
+import { profile } from '../data/content';
 
-const { url, fileName } = profile.resume;
+const { url, fileName, preview } = profile.resume;
 const download = () => { const a = document.createElement('a'); a.href = url; a.download = fileName; document.body.appendChild(a); a.click(); a.remove(); };
 
 /** The paper tab on the right edge opens a drawer with a little printer. Printing feeds out the page, then downloads it. */
@@ -38,18 +38,12 @@ export function CvDrawer() {
           <div className={`printer is-${phase}`}>
             <div className="printer__body" />
             <div className="printer__feed">
-              <article className="paper">
-                <h3>{profile.name}</h3><p>{profile.role}</p><p>{profile.email}</p>
-                <h4>Experience</h4>{experience.map((x) => <p key={x.role + x.org}><b>{x.role}</b>, {x.org}</p>)}
-                <h4>Education</h4>{education.map((e) => <p key={e.degree}>{e.degree}, {e.school}</p>)}
-                <h4>Skills</h4><p>{[...new Set(skills.flatMap((g) => g.items))].join(', ')}</p>
-                <h4>Projects</h4><p>{projects.map((p) => p.title).join(', ')}</p>
-              </article>
+              <div className="paper"><img src={preview} alt={`${profile.name}’s CV, first page`} width={1000} height={1414} loading="lazy" /></div>
             </div>
           </div>
           <button className="btn btn--ink" type="button" onClick={print} disabled={phase === 'printing'}>{phase === 'done' ? 'Print again' : 'Print my resume'}</button>
           <p className="cvd__status" aria-live="polite">
-            {phase === 'idle' && 'Press the button to print my resume.'}
+            {phase === 'idle' && <>Press the button to print my resume. <a href={url} target="_blank" rel="noopener">View the full CV</a></>}
             {phase === 'printing' && 'Printing…'}
             {phase === 'done' && <>Printed. Check your downloads. Nothing there? <a href={url} download={fileName}>Grab the PDF</a></>}
           </p>
